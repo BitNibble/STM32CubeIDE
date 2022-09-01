@@ -1,0 +1,4 @@
+../Core/Src/Livrarias/74hc595.c:25:7:HC595enable	40	static
+../Core/Src/Livrarias/74hc595.c:51:6:HC595_shift_bit	16	static
+../Core/Src/Livrarias/74hc595.c:60:6:HC595_shift_byte	24	static
+../Core/Src/Livrarias/74hc595.c:67:6:HC595_shift_out	4	static

@@ -1,4 +1,0 @@
-C:/Users/sergi/Documents/STM32CubeIDE/workspace_1.10.1/uvisionexport/User Library/Src/74hc595.c:25:7:HC595enable	40	static
-C:/Users/sergi/Documents/STM32CubeIDE/workspace_1.10.1/uvisionexport/User Library/Src/74hc595.c:51:6:HC595_shift_bit	16	static
-C:/Users/sergi/Documents/STM32CubeIDE/workspace_1.10.1/uvisionexport/User Library/Src/74hc595.c:60:6:HC595_shift_byte	24	static
-C:/Users/sergi/Documents/STM32CubeIDE/workspace_1.10.1/uvisionexport/User Library/Src/74hc595.c:67:6:HC595_shift_out	4	static

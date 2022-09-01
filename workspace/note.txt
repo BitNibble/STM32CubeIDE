@@ -1,0 +1,6 @@
+NB:
+
+Remove stm32f4xx_it.h, in order for this template to work.
+
+It uses sytick already.
+

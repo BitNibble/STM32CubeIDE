@@ -576,6 +576,7 @@ void STM32446RtcHour(uint8_t hour)
 	
 	t = STM32446dec2bcd(hour / 10);
 	u = STM32446dec2bcd(hour % 10);
+	STM32446TimeTr = ret.rtc.reg->TR;
 	STM32446TimeTr &= (uint32_t) ~mask; // clear ht and hu 
 	// hu, ht
 	STM32446TimeTr |= (uint32_t) ((u << 16) | (t << 20));
@@ -589,6 +590,7 @@ void STM32446RtcMinute(uint8_t minute)
 	
 	t = STM32446dec2bcd(minute / 10);
 	u = STM32446dec2bcd(minute % 10);
+	STM32446TimeTr = ret.rtc.reg->TR;
 	STM32446TimeTr &= (uint32_t) ~mask; // clear mnt and mnu 
 	// mnu, mnt
 	STM32446TimeTr |= (uint32_t) ((u << 8) | (t << 12));
@@ -602,6 +604,7 @@ void STM32446RtcSecond(uint8_t second)
 	
 	t = STM32446dec2bcd(second / 10);
 	u = STM32446dec2bcd(second % 10);
+	STM32446TimeTr = ret.rtc.reg->TR;
 	STM32446TimeTr &= (uint32_t) ~mask; // clear st and su 
 	// su, st
 	STM32446TimeTr |= (uint32_t) ((u << 0) | (t << 4));

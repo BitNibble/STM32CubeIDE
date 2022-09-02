@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body
+  * @brief          : Calendario e temperatura
   ******************************************************************************
   * @attention
   *
@@ -17,7 +17,6 @@
 
 #include "main.h"
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +27,6 @@
 #include "explode.h"
 #include "74hc595.h"
 #include "lcd.h"
-
 
 static STM32446 stm;
 static FUNC func;
@@ -54,7 +52,6 @@ static char vec[24];
 
 void portinic(void);
 void tim9inic(void);
-void adc1inic(void);
 void calendario(void);
 
 void TIM1_BRK_TIM9_IRQHandler(void);
@@ -80,8 +77,10 @@ dir = 0;
 hc = HC595enable(&stm.gpioc.reg->MODER, &stm.gpioc.reg->ODR, 2, 1, 0);
 lcd = LCD0enable(stm.gpiob.reg);
 
+stm.adc1.single.inic();
+stm.adc1.single.temp();
+stm.adc1.single.start();
 
-stm.adc1.Ex1inic();
 stm.rtc.inic(1); // 0 - LSI, 1 - LSE
 
 stm.systick.delay_ms(10);
@@ -104,8 +103,8 @@ while (1)
 
 	lcd.gotoxy(1,4);
 	if(samples < n_samples){
-		temperature += stm.adc1.read();
-		stm.adc1.restart();
+		temperature += stm.adc1.single.read();
+		stm.adc1.single.restart();
 		samples++;
 	}else{
 		temperature /= n_samples;

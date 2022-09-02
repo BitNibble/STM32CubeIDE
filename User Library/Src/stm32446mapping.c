@@ -106,7 +106,10 @@ void STM32446Rtctr2vec(char* vect);
 void STM32446RtcRegWrite(volatile uint32_t* reg, uint32_t data);
 
 //ADC1
-void STM32446Adc1Ex1inic(void);
+void STM32446Adc1Inic(void);
+void STM32446Adc1VBAT(void);
+void STM32446Adc1TEMP(void);
+void STM32446Adc1Start(void);
 double STM32446Adc1Read(void);
 void STM32446Adc1Restart(void);
 void STM32446Adc1Stop(void);
@@ -261,10 +264,13 @@ STM32446 STM32446enable(void){
 	
 	//ADC1
 	ret.adc1.reg = (ADC_TypeDef*) ADC1_BASE;
-	ret.adc1.Ex1inic = STM32446Adc1Ex1inic;
-	ret.adc1.read = STM32446Adc1Read;
-	ret.adc1.restart = STM32446Adc1Restart;
-	ret.adc1.stop = STM32446Adc1Stop;
+	ret.adc1.single.inic = STM32446Adc1Inic;
+	ret.adc1.single.vbat = STM32446Adc1VBAT;
+	ret.adc1.single.temp = STM32446Adc1TEMP;
+	ret.adc1.single.start = STM32446Adc1Start;
+	ret.adc1.single.read = STM32446Adc1Read;
+	ret.adc1.single.restart = STM32446Adc1Restart;
+	ret.adc1.single.stop = STM32446Adc1Stop;
 	
 	//ADC COMMON
 	ret.adc123.reg =	(ADC_Common_TypeDef*) ADC123_COMMON_BASE;
@@ -950,7 +956,7 @@ void STM32446Rtctr2vec(char* vect)
 }
 
 //ADC1
-void STM32446Adc1Ex1inic(void)
+void STM32446Adc1Inic(void)
 {
 	/***ADC Clock***/
 	ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
@@ -961,13 +967,27 @@ void STM32446Adc1Ex1inic(void)
 	ret.adc1.reg->SMPR1 |= (7 << 24); // SMPx[2:0]: Channel x sampling time selection
 	ret.adc1.reg->CR1 |= (1 << 11); // DISCEN: Discontinuous mode on regular channels
 	ret.adc1.reg->SQR3 |= 18; // SQ1[4:0]: 1st conversion in regular sequence
+}
+
+void STM32446Adc1VBAT(void) // vbat overrides temperature
+{
+	ret.adc123.reg->CCR |= (1 << 22); // VBATE: VBAT enable
+}
+
+void STM32446Adc1TEMP(void)
+{
+	//Temperature (in �C) = {(VSENSE � V25) / Avg_Slope} + 25
+	ret.adc123.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
+}
+
+void STM32446Adc1Start()
+{
 	// turn on select source and start reading
 	ret.adc1.reg->CR2 |= (1 << 0); // ADON: A/D Converter ON / OFF
-	//Temperature (in �C) = {(VSENSE � V25) / Avg_Slope} + 25
-	ret.adc123.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable 
-	//stm.adc123.reg->CCR |= (1 << 22); // VBATE: VBAT enable
+	//
 	ret.adc1.reg->CR2 |= (1 << 30); // SWSTART: Start conversion of regular channels
 }
+
 
 double STM32446Adc1Read(void)
 {

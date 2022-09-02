@@ -207,13 +207,23 @@ typedef struct
 }STM32446TIM9obj;
 
 //ADC1
+/*** types of ADC1 applications ***/
 typedef struct
 {
-	ADC_TypeDef* reg;
-	void (*Ex1inic)(void);
+	void (*inic)(void);
+	void (*vbat)(void);
+	void (*temp)(void);
+	void (*start)(void);
 	double (*read)(void);
 	void (*restart)(void);
 	void (*stop)(void);
+}STM32446ADC1single;
+
+/*** Registry structs ***/
+typedef struct
+{
+	ADC_TypeDef* reg;
+	STM32446ADC1single single;
 }STM32446ADC1obj;
 
 //ADC COMMON

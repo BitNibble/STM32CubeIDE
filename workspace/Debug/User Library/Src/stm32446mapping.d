@@ -1,4 +1,4 @@
-Src/stm32446mapping.o: \
+User Library/Src/stm32446mapping.o: \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Src/stm32446mapping.c \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/stm32446mapping.h \
  C:/Users/sergi/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \

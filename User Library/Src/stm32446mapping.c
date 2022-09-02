@@ -36,10 +36,10 @@ uint8_t STM32446PeripheralInic(void);
 
 /***FUNC***/
 //GPIO
-//void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
+void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioSet( GPIO_TypeDef* regs, int data );
-//void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
+void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioReset( GPIO_TypeDef* regs, int data );
 void STM32446Gpiosetupreg(unsigned int blocksize, volatile unsigned int* reg, unsigned int data, unsigned int pin);
@@ -135,10 +135,10 @@ STM32446 STM32446enable(void){
 	STM32446temperature = 0;
 	/*****STM32446 OBJECTS******/
 	//FLASH
-	//ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
+	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
 	
 	//CRC
-	//ret.crc.reg = (CRC_TypeDef*) CRC_BASE;
+	ret.crc.reg = (CRC_TypeDef*) CRC_BASE;
 	
 	//PWR
 	ret.pwr.reg = (PWR_TypeDef*) PWR_BASE;
@@ -195,12 +195,12 @@ STM32446 STM32446enable(void){
 	ret.rtc.RegWrite = STM32446RtcRegWrite;
 	
 	//SYSCFG
-	//ret.syscfg.reg = (SYSCFG_TypeDef*) SYSCFG_BASE;
+	ret.syscfg.reg = (SYSCFG_TypeDef*) SYSCFG_BASE;
 	
 	//DMA1
-	//ret.dma1.reg = (DMA_TypeDef*) DMA1_BASE;
+	ret.dma1.reg = (DMA_TypeDef*) DMA1_BASE;
 	//DMA2
-	//ret.dma2.reg = (DMA_TypeDef*) DMA2_BASE;
+	ret.dma2.reg = (DMA_TypeDef*) DMA2_BASE;
 	
 	//NVIC
 	ret.nvic.reg = (NVIC_Type*) NVIC_BASE;
@@ -226,26 +226,26 @@ STM32446 STM32446enable(void){
 	ret.adc123.reg =	(ADC_Common_TypeDef*) ADC123_COMMON_BASE;
 	
 	//USART1
-	//ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
-	//ret.usart1.parameters = STM32446usart1parameters;
+	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
+	ret.usart1.parameters = STM32446usart1parameters;
 	
 	/*** INICS ***/
 	ret.inic.peripheral = STM32446PeripheralInic;
 	
 	/*** FUNCS ***/
-	//ret.func.bcd2dec = STM32446bcd2dec;
-	//ret.func.dec2bcd = STM32446dec2bcd;
-	//ret.func.triggerA = STM32446triggerA;
+	ret.func.bcd2dec = STM32446bcd2dec;
+	ret.func.dec2bcd = STM32446dec2bcd;
+	ret.func.triggerA = STM32446triggerA;
 	ret.func.triggerB = STM32446triggerB;
-	//ret.func.ReadHLByte = STM32ReadHLByte;
-	//ret.func.ReadLHByte = STM32ReadLHByte;
-	//ret.func.WriteHLByte = STM32WriteHLByte;
-	//ret.func.WriteLHByte = STM32WriteLHByte;
-	//ret.func.SwapByte = STM32SwapByte;
-	//ret.func.setpins = STM32446GpioSetpins;
+	ret.func.ReadHLByte = STM32ReadHLByte;
+	ret.func.ReadLHByte = STM32ReadLHByte;
+	ret.func.WriteHLByte = STM32WriteHLByte;
+	ret.func.WriteLHByte = STM32WriteLHByte;
+	ret.func.SwapByte = STM32SwapByte;
+	ret.func.setpins = STM32446GpioSetpins;
 	ret.func.setpin = STM32446GpioSetpin;
 	ret.func.set = STM32446GpioSet;
-	//ret.func.resetpins = STM32446GpioResetpins;
+	ret.func.resetpins = STM32446GpioResetpins;
 	ret.func.resetpin = STM32446GpioResetpin;
 	ret.func.reset = STM32446GpioReset;
 	ret.func.setupreg = STM32446Gpiosetupreg;
@@ -283,7 +283,7 @@ uint8_t STM32446PeripheralInic(void)
 /*************FUNCS*************/
 /*******************************/
 //GPIO
-/** To much resources **
+/** To much resources **/
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
 {
 	uint8_t i;
@@ -299,7 +299,7 @@ void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
 		regs->BSRR = pin;
 	}
 }
-** disabled **/
+/** disabled **/
 
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin )
 {
@@ -311,7 +311,7 @@ void STM32446GpioSet( GPIO_TypeDef* regs, int data )
 			regs->BSRR = (unsigned int) data;
 }
 
-/** To much resources **
+/** To much resources **/
 void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
 { // slow
 	uint8_t i;
@@ -327,7 +327,7 @@ void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
 		regs->BSRR = pin;
 	}
 }
-** disabled **/
+/** disabled **/
 
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin )
 {
@@ -745,7 +745,7 @@ void STM32446Adc1Ex1inic(void)
 	ret.adc1.reg->SQR3 |= 18; // SQ1[4:0]: 1st conversion in regular sequence
 	// turn on select source and start reading
 	ret.adc1.reg->CR2 |= (1 << 0); // ADON: A/D Converter ON / OFF
-	//Temperature (in °C) = {(VSENSE – V25) / Avg_Slope} + 25
+	//Temperature (in ï¿½C) = {(VSENSE ï¿½ V25) / Avg_Slope} + 25
 	ret.adc123.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable 
 	//stm.adc123.reg->CCR |= (1 << 22); // VBATE: VBAT enable
 	ret.adc1.reg->CR2 |= (1 << 30); // SWSTART: Start conversion of regular channels

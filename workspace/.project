@@ -31,9 +31,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Src</name>
+			<name>User Library</name>
 			<type>2</type>
-			<location>C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src</location>
+			<location>C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library</location>
 		</link>
 		<link>
 			<name>Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal.c</name>

@@ -1,4 +1,4 @@
-Src/lcd.o: \
+User Library/Src/lcd.o: \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Src/lcd.c \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/lcd.h \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/stm32446mapping.h \

@@ -4,3 +4,7 @@ Remove stm32f4xx_it.h, in order for this template to work.
 
 It uses sytick already.
 
+
+How to generate hex files:
+Project Properties > C/C++ Build > Settings > Build steps > Post-build steps > Command:
+arm-none-eabi-objcopy -O ihex ${ProjName}.elf ${ProjName}.hex

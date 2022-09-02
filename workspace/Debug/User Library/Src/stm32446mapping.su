@@ -1,7 +1,9 @@
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:128:10:STM32446enable	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:264:9:STM32446PeripheralInic	16	static
+C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:287:6:STM32446GpioSetpins	28	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:304:6:STM32446GpioSetpin	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:309:6:STM32446GpioSet	16	static
+C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:315:6:STM32446GpioResetpins	28	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:332:6:STM32446GpioResetpin	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:337:6:STM32446GpioReset	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/stm32446mapping.c:342:6:STM32446Gpiosetupreg	32	static

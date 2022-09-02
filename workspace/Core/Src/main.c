@@ -123,21 +123,14 @@ void portinic(void)
   	// GPIO of 16 pins each.
 	/**************************/
   	// PA5 or PB13 is green user led
-	stm.func.setupreg(2, &stm.gpioa.reg->MODER, 1, 5);
-	stm.func.setupreg(2, &stm.gpioa.reg->PUPDR, 0, 5);
-	//stm.func.setupreg(1, &stm.gpiob.reg->MODER, 1, 26);
+	stm.gpioa.moder(1,5);
+	stm.gpioa.pupdr(0,5);
+	//stm.gpiob.moder(1,13);
 
 	// PC13 is user button
-	stm.func.setupreg(2, &stm.gpioc.reg->MODER, 0, 13);
-	stm.func.setupreg(2, &stm.gpioc.reg->PUPDR, 1, 13);
+	stm.gpioc.moder(0,13);
+	stm.gpioc.pupdr(1,13);
 
-	// PC1 PC2 PC3 as output
-	stm.func.setupreg(2, &stm.gpioc.reg->MODER, 1, 0);
-	stm.func.setupreg(2, &stm.gpioc.reg->MODER, 1, 1);
-	stm.func.setupreg(2, &stm.gpioc.reg->MODER, 1, 2);
-	stm.func.setupreg(2, &stm.gpioc.reg->PUPDR, 0, 0);
-	stm.func.setupreg(2, &stm.gpioc.reg->PUPDR, 0, 1);
-	stm.func.setupreg(2, &stm.gpioc.reg->PUPDR, 0, 2);
 }
 
 void tim9inic(void)

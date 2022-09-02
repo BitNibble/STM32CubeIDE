@@ -2946,7 +2946,7 @@ LOAD c:/programs/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.id
  .debug_macro   0x0000000000021b38      0x292 ./User Library/Src/stm32446mapping.o
  .debug_macro   0x0000000000021dca       0x58 ./User Library/Src/stm32446mapping.o
 
-.debug_line     0x0000000000000000     0x75fb
+.debug_line     0x0000000000000000     0x75fe
  .debug_line    0x0000000000000000     0x112c ./Core/Src/main.o
  .debug_line    0x000000000000112c      0x821 ./Core/Src/syscalls.o
  .debug_line    0x000000000000194d      0x517 ./Core/Src/sysmem.o
@@ -2956,7 +2956,7 @@ LOAD c:/programs/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.id
  .debug_line    0x0000000000002d3c      0x674 ./User Library/Src/explode.o
  .debug_line    0x00000000000033b0      0xfe1 ./User Library/Src/function.o
  .debug_line    0x0000000000004391      0xdb2 ./User Library/Src/lcd.o
- .debug_line    0x0000000000005143     0x24b8 ./User Library/Src/stm32446mapping.o
+ .debug_line    0x0000000000005143     0x24bb ./User Library/Src/stm32446mapping.o
 
 .debug_str      0x0000000000000000    0xc82b3
  .debug_str     0x0000000000000000    0xc54e3 ./Core/Src/main.o

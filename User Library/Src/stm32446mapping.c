@@ -370,7 +370,7 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
 		default:
 			break;
 	}
-	return (ret.rcc.reg->CFGR & 12) >> 2;
+	return (ret.rcc.reg->CFGR >> 2) & 3;
 }
 
 /******************************************************************************

@@ -273,7 +273,7 @@ STM32446 STM32446enable(void){
 	ret.adc1.single.stop = STM32446Adc1Stop;
 	
 	//ADC COMMON
-	ret.adc123.reg =	(ADC_Common_TypeDef*) ADC123_COMMON_BASE;
+	ret.adc123.reg = (ADC_Common_TypeDef*) ADC123_COMMON_BASE;
 	
 	//USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;

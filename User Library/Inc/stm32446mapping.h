@@ -259,13 +259,13 @@ typedef struct
 	STM32HighLowByte (*WriteHLByte)(uint16_t val);
 	STM32HighLowByte (*WriteLHByte)(uint16_t val);
 	uint16_t (*SwapByte)(uint16_t num);
-	void (*setpins)( GPIO_TypeDef* regs, int n_pin, ... );
-	void (*setpin)( GPIO_TypeDef* regs, int pin );
-	void (*set)( GPIO_TypeDef* regs, int data );
-	void (*resetpins)( GPIO_TypeDef* regs, int n_pin, ... );
-	void (*resetpin)( GPIO_TypeDef* regs, int pin);
-	void (*reset)( GPIO_TypeDef* regs, int data);
-	void (*setupreg)(unsigned int blocksize, volatile unsigned int* reg, unsigned int data, unsigned int pin);
+	void (*setpins)( GPIO_TypeDef* regs, int n_pin, ... ); // BSRR
+	void (*setpin)( GPIO_TypeDef* regs, int pin ); // BSRR
+	void (*set)( GPIO_TypeDef* regs, int data ); // BSRR
+	void (*resetpins)( GPIO_TypeDef* regs, int n_pin, ... ); // BSRR
+	void (*resetpin)( GPIO_TypeDef* regs, int pin); // BSRR
+	void (*reset)( GPIO_TypeDef* regs, int data); // BSRR
+	void (*setupreg)(unsigned int blocksize, volatile unsigned int* reg, unsigned int data, unsigned int pin); // GENERIC &|
 	
 }STM32446function;
 

@@ -5889,7 +5889,7 @@ STM32446 STM32446enable(void){
  8002e4a:	f8c3 2124 	str.w	r2, [r3, #292]	; 0x124
 	
 	//ADC COMMON
-	ret.adc123.reg =	(ADC_Common_TypeDef*) ADC123_COMMON_BASE;
+	ret.adc123.reg = (ADC_Common_TypeDef*) ADC123_COMMON_BASE;
  8002e4e:	4b11      	ldr	r3, [pc, #68]	; (8002e94 <STM32446enable+0x278>)
  8002e50:	4a5b      	ldr	r2, [pc, #364]	; (8002fc0 <STM32446enable+0x3a4>)
  8002e52:	f8c3 2128 	str.w	r2, [r3, #296]	; 0x128

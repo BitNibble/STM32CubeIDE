@@ -8,3 +8,9 @@ It uses sytick already.
 How to generate hex files:
 Project Properties > C/C++ Build > Settings > Build steps > Post-build steps > Command:
 arm-none-eabi-objcopy -O ihex ${ProjName}.elf ${ProjName}.hex
+
+This package must be installed in order to create the hex, elf and other files needed 
+in order to upload the compilled programs to the microcontroller.
+
+ 
+arm-none-eabi

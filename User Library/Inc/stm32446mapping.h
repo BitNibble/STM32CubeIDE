@@ -109,11 +109,23 @@ typedef struct
 typedef struct
 {
 	GPIO_TypeDef* reg;
+	void (*moder)( unsigned int data, unsigned int pin );
+	void (*ospeedr)( unsigned int data, unsigned int pin );
+	void (*pupdr)( unsigned int data, unsigned int pin );
+	void (*reset)( unsigned int data );
+	void (*set)( unsigned int data );
+	void (*afr)( unsigned int data, unsigned int pin );
 }STM32446GpioDobj;
 // GPIOE
 typedef struct
 {
 	GPIO_TypeDef* reg;
+	void (*moder)( unsigned int data, unsigned int pin );
+	void (*ospeedr)( unsigned int data, unsigned int pin );
+	void (*pupdr)( unsigned int data, unsigned int pin );
+	void (*reset)( unsigned int data );
+	void (*set)( unsigned int data );
+	void (*afr)( unsigned int data, unsigned int pin );
 }STM32446GpioEobj;
 // GPIOF
 typedef struct
@@ -129,6 +141,12 @@ typedef struct
 typedef struct
 {
 	GPIO_TypeDef* reg;
+	void (*moder)( unsigned int data, unsigned int pin );
+	void (*ospeedr)( unsigned int data, unsigned int pin );
+	void (*pupdr)( unsigned int data, unsigned int pin );
+	void (*reset)( unsigned int data );
+	void (*set)( unsigned int data );
+	void (*afr)( unsigned int data, unsigned int pin );
 }STM32446GpioHobj;
 
 // RTC

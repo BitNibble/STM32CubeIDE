@@ -67,6 +67,8 @@ typedef struct
 typedef struct
 {
 	RCC_TypeDef* reg;
+	void (*henable)(unsigned int clock);
+	uint8_t (*hselect)(uint8_t sysclk);
 }STM32446RCCobj;
 
 // GPIOA

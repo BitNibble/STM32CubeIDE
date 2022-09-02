@@ -35,6 +35,9 @@ void SystickInic(void);
 uint8_t STM32446PeripheralInic(void);
 
 /***FUNC***/
+//RCC
+void STM32446RccHEnable(unsigned int clock);
+uint8_t STM32446RccHSelect(uint8_t sysclk);
 //GPIO
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
@@ -172,6 +175,8 @@ STM32446 STM32446enable(void){
 	
 	//RCC
 	ret.rcc.reg = (RCC_TypeDef*) RCC_BASE;
+	ret.rcc.henable = STM32446RccHEnable;
+	ret.rcc.hselect = STM32446RccHSelect;
 	
 	//GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
@@ -314,14 +319,11 @@ STM32446 STM32446enable(void){
 uint8_t STM32446PeripheralInic(void)
 {
 	uint8_t clkused; // First turn it on then select it or enable it.
+
 	// System Clock Source
-	ret.rcc.reg->CR |= (1 << 0); // 0 - HSI, 16 - HSE
-	for( ; !(ret.rcc.reg->CR & (1 << 1)) ; ); // // 1 - HSI, 17 - HSE
+	STM32446RccHEnable(0);
 	// System Clock Select or Enable
-	ret.rcc.reg->CFGR &= (uint32_t) ~(3 << 0); // SW[1:0]: System clock switch 00 - HSI, 01 - HSE pg133
-	// System Clock Selected
-	clkused = (uint8_t) (ret.rcc.reg->CFGR >> 2); // SWS[1:0]: System clock switch status pg133
-	clkused &= 3;
+	clkused = STM32446RccHSelect(0); // SW[1:0]: System clock switch 00 - HSI, 01 - HSE pg133
 	
 	// Low Speed Internal Clock turned on as default
 	ret.rcc.reg->CSR |= (1 << 0); // Internal low-speed oscillator enable
@@ -332,6 +334,113 @@ uint8_t STM32446PeripheralInic(void)
 /*******************************/
 /*************FUNCS*************/
 /*******************************/
+// RCC
+void STM32446RccHEnable(unsigned int hclock)
+{
+	unsigned int set;
+	unsigned int rdy;
+	for( set = 1, rdy = 1; rdy ; ){
+		if(hclock == 0){
+			if( set ){ ret.rcc.reg->CR |= ( 1 << 0); set = 0; }else{ if( ret.rcc.reg->CR & ( 1 << 1) ) rdy = 0; }
+		}
+		else if(hclock == 1){
+			if( set ){ ret.rcc.reg->CR |= ( 1 << 16); set = 0; }else{ if( ret.rcc.reg->CR & ( 1 << 17) ) rdy = 0; }
+		}
+		else if(hclock == 2){
+			if( set ) ret.rcc.reg->CR |= ( 1 << 18 );
+			hclock = 0;
+		}
+		else hclock = 0; // default
+	}
+}
+
+uint8_t STM32446RccHSelect(uint8_t sysclk)
+{
+	ret.rcc.reg->CFGR &= (unsigned int) ~(3);
+	switch(sysclk){
+		case 1:
+			ret.rcc.reg->CFGR |= 1;
+			break;
+		case 2:
+			ret.rcc.reg->CFGR |= 2;
+			break;
+		case 3:
+			ret.rcc.reg->CFGR |= 3;
+			break;
+		default:
+			break;
+	}
+	return (ret.rcc.reg->CFGR & 12) >> 2;
+}
+
+/******************************************************************************
+
+//3 - Select the RTC clock source RTC/AWU clock
+	switch(clock){
+		case 0:
+			ret.rcc.reg->CSR |= (1 << 0); // Internal low-speed oscillator turned on
+			for( ; !(ret.rcc.reg->CSR & (1 << 1)) ; ); // Internal low-speed oscillator ready
+			status = 0;
+			break;
+		case 1:
+			ret.rcc.reg->BDCR |= 1; // Activate LSEON
+			for( ; !(ret.rcc.reg->BDCR & 2) ; ); // check flag to see if ready (LSERDY)
+			status = 1;
+			break;
+		case 2:
+			//ret.rcc.reg->BDCR |= 4; // Activate LSEBYP
+			//ret.rcc.reg->BDCR |= 1; // Activate LSEON
+			//for( ; !(ret.rcc.reg->BDCR & 2) ; ); // check flag to see if ready (LSERDY)
+			status = 2;
+			break;
+		case 3:
+			// LSI
+			ret.rcc.reg->CSR |= (1 << 0); // Internal low-speed oscillator turned on
+			for( ; !(ret.rcc.reg->CSR & (1 << 1)) ; ); // Internal low-speed oscillator ready
+			// LSE
+			ret.rcc.reg->BDCR |= (1 << 0); // Activate LSEON
+			for( ; !(ret.rcc.reg->BDCR & (1 << 1)) ; ); // check flag to see if ready (LSERDY)
+			status = 3;
+			break;
+		default:
+			ret.rcc.reg->CSR |= (1 << 0); // Internal low-speed oscillator turned on
+			for( ; !(ret.rcc.reg->CSR & (1 << 1)) ; ); // Internal low-speed oscillator ready
+			status = 4;
+			break;
+	}
+
+	//4 - RTCSEL[1:0]: RTC clock source selection
+	switch(clock){
+		case 0:
+			ret.rcc.reg->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // RTCSEL[1:0]: RTC clock source selection
+			ret.rcc.reg->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
+			status = 5;
+			break;
+		case 1:
+			ret.rcc.reg->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // RTCSEL[1:0]: RTC clock source selection
+			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
+			status = 6;
+			break;
+		case 2:
+			ret.rcc.reg->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // RTCSEL[1:0]: RTC clock source selection
+			ret.rcc.reg->BDCR |= ((1 << 8) | (1 << 9)); // HSE oscillator clock divided by a programmable prescaler
+			status = 7;
+			break;
+		case 3:
+			ret.rcc.reg->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // RTCSEL[1:0]: RTC clock source selection
+			ret.rcc.reg->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
+			status = 8;
+			break;
+		default:
+			ret.rcc.reg->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // RTCSEL[1:0]: RTC clock source selection
+			ret.rcc.reg->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
+			break;
+	}
+
+*******************************************************************************/
+
+
+
 // GPIO
 /** To much resources **/
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )

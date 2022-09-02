@@ -36,7 +36,7 @@ void LCD0_reboot(void);
 /***Procedure & Function***/
 LCD0 LCD0enable(GPIO_TypeDef* reg)
 {
-	//ALLOCAÇÂO MEMORIA PARA Estrutura
+	//ALLOCAï¿½ï¿½O MEMORIA PARA Estrutura
 	LCD0 lcd0;
 	stm = STM32446enable(); // The entire stm32446
 	//LOCAL VARIABLES
@@ -70,6 +70,9 @@ void LCD0_inic(void)
 	
 	ireg->PUPDR &= (uint32_t) ~(3 << (NC * 2)); // pull up resistors
 	ireg->PUPDR |= (1 << (NC * 2)); // pull up resistors
+
+	ireg->OSPEEDR &= (uint32_t) ~( (3 << (RS * 2)) | (3 << (RW * 2)) | (3 << (EN * 2)) | (3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2)) ); // set speed
+	ireg->OSPEEDR |= ( (3 << (RS * 2)) | (3 << (RW * 2)) | (3 << (EN * 2)) | (3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2)) ); // set speed
 	 
 	lcd0_detect = ireg->IDR & (1 << NC);
 	

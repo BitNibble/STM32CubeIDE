@@ -46,6 +46,7 @@ void STM32446RccHEnable(unsigned int hclock);
 uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
 void STM32446RccLSelect(uint8_t lclock);
+void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
 //GPIO
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
@@ -187,6 +188,7 @@ STM32446 STM32446enable(void){
 	ret.rcc.hselect = STM32446RccHSelect;
 	ret.rcc.lenable = STM32446RccLEnable;
 	ret.rcc.lselect = STM32446RccLSelect;
+	ret.rcc.prescaler = STM32446Prescaler;
 	
 	//GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
@@ -329,6 +331,7 @@ STM32446 STM32446enable(void){
 uint8_t STM32446PeripheralInic(void)
 {
 	uint8_t clkused; // First turn it on then select it or enable it.
+	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
 	// System Clock Select or Enable
@@ -415,6 +418,78 @@ void STM32446RccLSelect(uint8_t lclock)
 		default:
 			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
 			break;
+	}
+}
+
+void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre)
+{
+	const unsigned int mask = 0x001FFCF0;
+	ret.rcc.reg->CFGR &= ~mask; // clear args
+
+	if(rtcpre > 1 && rtcpre < 32) // 16
+		ret.rcc.reg->CFGR |= (rtcpre << 16);
+
+	switch(ppre2){ // 13
+		case 2:
+			ret.rcc.reg->CFGR |= (4 << 13);
+			break;
+		case 4:
+			ret.rcc.reg->CFGR |= (5 << 13);
+			break;
+		case 8:
+			ret.rcc.reg->CFGR |= (6 << 13);
+			break;
+		case 16:
+			ret.rcc.reg->CFGR |= (7 << 13);
+			break;
+		default:
+			break;
+	}
+
+	switch(ppre1){ // 10
+	case 2:
+		ret.rcc.reg->CFGR |= (4 << 10);
+		break;
+	case 4:
+		ret.rcc.reg->CFGR |= (5 << 10);
+		break;
+	case 8:
+		ret.rcc.reg->CFGR |= (6 << 10);
+		break;
+	case 16:
+		ret.rcc.reg->CFGR |= (7 << 10);
+		break;
+	default:
+		break;
+	}
+
+	switch(ahbpre){ // 4
+	case 2:
+		ret.rcc.reg->CFGR |= (8 << 4);
+		break;
+	case 4:
+		ret.rcc.reg->CFGR |= (9 << 4);
+		break;
+	case 8:
+		ret.rcc.reg->CFGR |= (10 << 4);
+		break;
+	case 16:
+		ret.rcc.reg->CFGR |= (11 << 4);
+		break;
+	case 64:
+		ret.rcc.reg->CFGR |= (12 << 4);
+		break;
+	case 128:
+		ret.rcc.reg->CFGR |= (13 << 4);
+		break;
+	case 256:
+		ret.rcc.reg->CFGR |= (14 << 4);
+		break;
+	case 512:
+		ret.rcc.reg->CFGR |= (15 << 4);
+		break;
+	default:
+		break;
 	}
 }
 

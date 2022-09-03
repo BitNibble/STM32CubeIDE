@@ -71,6 +71,7 @@ typedef struct
 	uint8_t (*hselect)(uint8_t sysclk);
 	void (*lenable)(unsigned int lclock);
 	void (*lselect)(uint8_t lclock);
+	void (*prescaler)(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
 }STM32446RCCobj;
 
 // GPIOA

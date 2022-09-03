@@ -81,7 +81,7 @@ stm.adc1.single.inic();
 stm.adc1.single.temp();
 stm.adc1.single.start();
 
-stm.rtc.inic(1); // 0 - LSI, 1 - LSE
+stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 
 stm.systick.delay_ms(10);
 

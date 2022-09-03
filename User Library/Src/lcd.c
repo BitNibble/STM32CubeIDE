@@ -76,21 +76,32 @@ void LCD0_inic(void)
 	 
 	lcd0_detect = ireg->IDR & (1 << NC);
 	
-	/***INICIALIZACAO LCD**datasheet*/
-	stm.systick.delay_ms(40);
-	LCD0_write(0x33, INST); //function set
+	/***INICIALIZACAO LCD**datasheet******/
+	stm.systick.delay_ms(20);
+	LCD0_write(0x38, INST); //function set
 	stm.systick.delay_10us(4);
-	LCD0_write(0x33, INST); //function set
-	stm.systick.delay_10us(4);
-	LCD0_write(0x2B, INST); //function set
-	stm.systick.delay_10us(4);
+	LCD0_write(0x38, INST); //function set
+	stm.systick.delay_10us(10);
+	LCD0_write(0x38, INST); //function set
+	/**************************************/
+	LCD0_BF(); // repeat twice in 4 bit length
+	LCD0_write(0x28, INST); //function set 2B
+	LCD0_BF();
+	LCD0_write(0x28, INST); //function set 2B
+	LCD0_BF();
 	LCD0_write(0x0C, INST);// display on/off control
-	stm.systick.delay_10us(4);
+	LCD0_BF();
+	LCD0_write(0x0C, INST);// display on/off control
+	LCD0_BF();
 	LCD0_write(0x01, INST);// clear display
-	stm.systick.delay_ms(2);
+	LCD0_BF();
+	LCD0_write(0x01, INST);// clear display
+	LCD0_BF();
 	LCD0_write(0x06, INST);// entry mode set (crazy settings)
-	stm.systick.delay_10us(4);
-	/***INICIALIZATION END***/
+	LCD0_BF();
+	LCD0_write(0x06, INST);// entry mode set (crazy settings)
+	LCD0_BF();
+	/**********INICIALIZATION END**********/
 	//LCD0_write(0x1F, INST);// cursor or display shift
 	//stm.systick.delay_10us(4);
 	//LCD0_write(0x03, INST);// return home

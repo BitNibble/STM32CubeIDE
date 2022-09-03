@@ -14,7 +14,13 @@ Comment:
 #include "stm32446mapping.h"
 #include <stdarg.h>
 #include <math.h>
-
+/*
+*** Constant and Macros
+*/
+#define sperm ~0
+#define ass (1)
+#define tits (.|.)
+#define cameltoe (\/)
 /*
 *** File Variable
 */
@@ -471,7 +477,7 @@ void STM32446Gpiosetupreg(unsigned int blocksize, volatile unsigned int* reg, un
 	data &= mask;
 	*reg &= ~(mask << (pin * blocksize));
 	*reg |= (data << (pin * blocksize));
-	*reg &= (unsigned int) ~0;
+	*reg &= (unsigned int) sperm;
 }
 
 // GPIOA
@@ -482,7 +488,7 @@ void STM32446GpioAmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioa.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpioa.reg->MODER |= (data << (pin * blocksize));
-	ret.gpioa.reg->MODER &= (unsigned int) ~0;
+	ret.gpioa.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioAospeedr( unsigned int data, unsigned int pin )
@@ -492,7 +498,7 @@ void STM32446GpioAospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioa.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpioa.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpioa.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpioa.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioApupdr( unsigned int data, unsigned int pin )
@@ -502,7 +508,7 @@ void STM32446GpioApupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioa.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpioa.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpioa.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpioa.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioAreset( unsigned int data )
@@ -518,16 +524,13 @@ void STM32446GpioAset( unsigned int data )
 void STM32446GpioAafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpioa.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpioa.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpioa.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpioa.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpioa.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpioa.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpioa.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpioa.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioa.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -539,7 +542,7 @@ void STM32446GpioBmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiob.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpiob.reg->MODER |= (data << (pin * blocksize));
-	ret.gpiob.reg->MODER &= (unsigned int) ~0;
+	ret.gpiob.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioBospeedr( unsigned int data, unsigned int pin )
@@ -549,7 +552,7 @@ void STM32446GpioBospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiob.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpiob.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpiob.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpiob.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioBpupdr( unsigned int data, unsigned int pin )
@@ -559,7 +562,7 @@ void STM32446GpioBpupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiob.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpiob.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpiob.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpiob.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioBreset( unsigned int data )
@@ -575,16 +578,13 @@ void STM32446GpioBset( unsigned int data )
 void STM32446GpioBafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpiob.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpiob.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpiob.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpiob.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpiob.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpiob.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpiob.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpiob.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpiob.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -596,7 +596,7 @@ void STM32446GpioCmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioc.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpioc.reg->MODER |= (data << (pin * blocksize));
-	ret.gpioc.reg->MODER &= (unsigned int) ~0;
+	ret.gpioc.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioCospeedr( unsigned int data, unsigned int pin )
@@ -606,7 +606,7 @@ void STM32446GpioCospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioc.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpioc.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpioc.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpioc.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioCpupdr( unsigned int data, unsigned int pin )
@@ -616,7 +616,7 @@ void STM32446GpioCpupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioc.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpioc.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpioc.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpioc.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioCreset( unsigned int data )
@@ -632,16 +632,13 @@ void STM32446GpioCset( unsigned int data )
 void STM32446GpioCafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpioc.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpioc.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpioc.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpioc.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpioc.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpioc.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpioc.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpioc.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioc.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -653,7 +650,7 @@ void STM32446GpioDmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiod.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpiod.reg->MODER |= (data << (pin * blocksize));
-	ret.gpiod.reg->MODER &= (unsigned int) ~0;
+	ret.gpiod.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioDospeedr( unsigned int data, unsigned int pin )
@@ -663,7 +660,7 @@ void STM32446GpioDospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiod.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpiod.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpiod.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpiod.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioDpupdr( unsigned int data, unsigned int pin )
@@ -673,7 +670,7 @@ void STM32446GpioDpupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpiod.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpiod.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpiod.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpiod.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioDreset( unsigned int data )
@@ -689,16 +686,13 @@ void STM32446GpioDset( unsigned int data )
 void STM32446GpioDafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpiod.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpiod.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpiod.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpiod.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpiod.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpiod.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpiod.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpiod.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpiod.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -710,7 +704,7 @@ void STM32446GpioEmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioe.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpioe.reg->MODER |= (data << (pin * blocksize));
-	ret.gpioe.reg->MODER &= (unsigned int) ~0;
+	ret.gpioe.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioEospeedr( unsigned int data, unsigned int pin )
@@ -720,7 +714,7 @@ void STM32446GpioEospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioe.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpioe.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpioe.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpioe.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioEpupdr( unsigned int data, unsigned int pin )
@@ -730,7 +724,7 @@ void STM32446GpioEpupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioe.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpioe.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpioe.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpioe.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioEreset( unsigned int data )
@@ -746,16 +740,13 @@ void STM32446GpioEset( unsigned int data )
 void STM32446GpioEafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpioe.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpioe.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpioe.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpioe.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpioe.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpioe.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpioe.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpioe.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioe.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -767,7 +758,7 @@ void STM32446GpioHmoder( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioh.reg->MODER &= ~(mask << (pin * blocksize));
 	ret.gpioh.reg->MODER |= (data << (pin * blocksize));
-	ret.gpioh.reg->MODER &= (unsigned int) ~0;
+	ret.gpioh.reg->MODER &= (unsigned int) sperm;
 }
 
 void STM32446GpioHospeedr( unsigned int data, unsigned int pin )
@@ -777,7 +768,7 @@ void STM32446GpioHospeedr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioh.reg->OSPEEDR &= ~(mask << (pin * blocksize));
 	ret.gpioh.reg->OSPEEDR |= (data << (pin * blocksize));
-	ret.gpioh.reg->OSPEEDR &= (unsigned int) ~0;
+	ret.gpioh.reg->OSPEEDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioHpupdr( unsigned int data, unsigned int pin )
@@ -787,7 +778,7 @@ void STM32446GpioHpupdr( unsigned int data, unsigned int pin )
 	data &= mask;
 	ret.gpioh.reg->PUPDR &= ~(mask << (pin * blocksize));
 	ret.gpioh.reg->PUPDR |= (data << (pin * blocksize));
-	ret.gpioh.reg->PUPDR &= (unsigned int) ~0;
+	ret.gpioh.reg->PUPDR &= (unsigned int) sperm;
 }
 
 void STM32446GpioHreset( unsigned int data )
@@ -803,16 +794,13 @@ void STM32446GpioHset( unsigned int data )
 void STM32446GpioHafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
+	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
 	data &= mask;
-	if(pin < 8){
-		ret.gpioh.reg->AFR[0] &= ~(mask << (pin * blocksize));
-		ret.gpioh.reg->AFR[0] |= (data << (pin * blocksize));
-		ret.gpioh.reg->AFR[0] &= (unsigned int) ~0;
-	}else{
-		ret.gpioh.reg->AFR[1] &= ~(mask << (pin * blocksize));
-		ret.gpioh.reg->AFR[1] |= (data << (pin * blocksize));
-		ret.gpioh.reg->AFR[1] &= (unsigned int) ~0;
+	if(index < 2){
+		ret.gpioh.reg->AFR[index] &= ~(mask << (pin * blocksize));
+		ret.gpioh.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioh.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
 
@@ -1239,7 +1227,7 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
 				if((mem[2] + 1) > mem[1]){
 					mem[3] = mem[2] - mem[1];
 				}else{
-					mem[3] = ((uint32_t)~(0) - mem[1]) + mem[2];
+					mem[3] = ((uint32_t) sperm - mem[1]) + mem[2];
 				}
 				mem[0] = 0;
 			}
@@ -1268,7 +1256,7 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
 				if((nen[2] + 1) > nen[1]){
 					nen[3] = nen[2] - nen[1];
 				}else{
-					nen[3] = ((uint32_t)~(0) - nen[1]) + nen[2];
+					nen[3] = ((uint32_t) sperm - nen[1]) + nen[2];
 				}
 				nen[0] = 0;
 			}

@@ -83,7 +83,7 @@ stm.adc1.single.start();
 
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 
-stm.systick.delay_ms(10);
+//stm.systick.delay_ms(10);
 
 stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, (('\0' << 24) | ('B' << 16) | ('U' << 8) | ('C' << 0)) );
 
@@ -99,7 +99,6 @@ while (1)
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
-
 
 	lcd.gotoxy(1,4);
 	if(samples < n_samples){
@@ -389,7 +388,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 
 }
 
-/******************************************************************************
+/******************************************************************************/
 void Error_Handler(void)
 {
   __disable_irq();
@@ -406,5 +405,5 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 }
 #endif
-******************************************************************************/
+/******************************************************************************/
 

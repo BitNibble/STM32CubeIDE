@@ -53,7 +53,7 @@ void STM32446GpioSet( GPIO_TypeDef* regs, int data );
 void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioReset( GPIO_TypeDef* regs, int data );
-void STM32446Gpiosetupreg(unsigned int blocksize, volatile unsigned int* reg, unsigned int data, unsigned int pin);
+void STM32446Gpiosetupreg(unsigned int blocksize, volatile uint32_t* reg, unsigned int data, unsigned int pin);
 
 //GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin );
@@ -471,7 +471,7 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data )
 			regs->BSRR = (unsigned int)(data << 16);
 }
 
-void STM32446Gpiosetupreg(unsigned int blocksize, volatile unsigned int* reg, unsigned int data, unsigned int pin)
+void STM32446Gpiosetupreg(unsigned int blocksize, volatile uint32_t* reg, unsigned int data, unsigned int pin)
 {
 	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
 	data &= mask;
@@ -513,12 +513,12 @@ void STM32446GpioApupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioAreset( unsigned int data )
 {
-			ret.gpioa.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpioa.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioAset( unsigned int data )
 {
-			ret.gpioa.reg->BSRR = (unsigned int)( data );
+	ret.gpioa.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioAafr( unsigned int data, unsigned int pin )
@@ -567,12 +567,12 @@ void STM32446GpioBpupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioBreset( unsigned int data )
 {
-			ret.gpiob.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpiob.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioBset( unsigned int data )
 {
-			ret.gpiob.reg->BSRR = (unsigned int)( data );
+	ret.gpiob.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioBafr( unsigned int data, unsigned int pin )
@@ -621,12 +621,12 @@ void STM32446GpioCpupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioCreset( unsigned int data )
 {
-			ret.gpioc.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpioc.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioCset( unsigned int data )
 {
-			ret.gpioc.reg->BSRR = (unsigned int)( data );
+	ret.gpioc.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioCafr( unsigned int data, unsigned int pin )
@@ -675,12 +675,12 @@ void STM32446GpioDpupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioDreset( unsigned int data )
 {
-			ret.gpiod.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpiod.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioDset( unsigned int data )
 {
-			ret.gpiod.reg->BSRR = (unsigned int)( data );
+	ret.gpiod.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioDafr( unsigned int data, unsigned int pin )
@@ -729,12 +729,12 @@ void STM32446GpioEpupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioEreset( unsigned int data )
 {
-			ret.gpioe.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpioe.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioEset( unsigned int data )
 {
-			ret.gpioe.reg->BSRR = (unsigned int)( data );
+	ret.gpioe.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioEafr( unsigned int data, unsigned int pin )
@@ -783,12 +783,12 @@ void STM32446GpioHpupdr( unsigned int data, unsigned int pin )
 
 void STM32446GpioHreset( unsigned int data )
 {
-			ret.gpioh.reg->BSRR = (unsigned int)(data << 16);
+	ret.gpioh.reg->BSRR = (unsigned int)(data << 16);
 }
 
 void STM32446GpioHset( unsigned int data )
 {
-			ret.gpioh.reg->BSRR = (unsigned int)( data );
+	ret.gpioh.reg->BSRR = (unsigned int)( data );
 }
 
 void STM32446GpioHafr( unsigned int data, unsigned int pin )

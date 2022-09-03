@@ -66,7 +66,10 @@ typedef struct
 // RCC
 typedef struct
 {
-	void (*division)(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp);
+	void (*division)(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
+	void (*pllclk)(uint8_t onoff);
+	void (*plli2s)(uint8_t onoff);
+	void (*pllsai)(uint8_t onoff);
 }STM32446RCCPLL;
 
 typedef struct

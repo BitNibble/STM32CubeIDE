@@ -47,7 +47,11 @@ uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
 void STM32446RccLSelect(uint8_t lclock);
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
-void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp);
+/***PLL***/
+void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
+void STM32446RccPLLCLKEnable(uint8_t onoff);
+void STM32446RccPLLI2SEnable(uint8_t onoff);
+void STM32446RccPLLSAIEnable(uint8_t onoff);
 
 //GPIO
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
@@ -191,7 +195,12 @@ STM32446 STM32446enable(void){
 	ret.rcc.lenable = STM32446RccLEnable;
 	ret.rcc.lselect = STM32446RccLSelect;
 	ret.rcc.prescaler = STM32446Prescaler;
+	/****PLL****/
 	ret.rcc.pll.division = STM32446PLLDivision;
+	ret.rcc.pll.pllclk = STM32446RccPLLCLKEnable;
+	ret.rcc.pll.plli2s = STM32446RccPLLI2SEnable;
+	ret.rcc.pll.pllsai = STM32446RccPLLSAIEnable;
+
 	
 	//GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
@@ -335,10 +344,20 @@ uint8_t STM32446PeripheralInic(void)
 {
 	uint8_t clkused; // First turn it on then select it or enable it.
 	// Setup PLL
-	STM32446PLLDivision(0, 0, 0, 0, 0, 0);
+	/**************************************************************************
+	PLLDIVISIO parameters
+	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
+	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
+	**************************************************************************/
+	STM32446PLLDivision(0, 8, 400, 2, 8, 4);
 	// Enable PLL
-
-
+	STM32446RccPLLCLKEnable(0); // Only enable when Division is configured correctly.
+	/**************************************************************************
+	SysClock prescaler parameters
+	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
+	RTC 2 to 31
+	**************************************************************************/
+	//STM32446Prescaler(16, 1, 1, 0); // using PLL at 25Mhz [16 a must]
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -358,13 +377,13 @@ void STM32446RccHEnable(unsigned int hclock)
 	unsigned int set;
 	unsigned int rdy;
 	for( set = 1, rdy = 1; rdy ; ){
-		if(hclock == 0){
+		if(hclock == 0){ // HSION: Internal high-speed clock enable
 			if( set ){ ret.rcc.reg->CR |= ( 1 << 0); set = 0; }else if( ret.rcc.reg->CR & ( 1 << 1) ) rdy = 0;
 		}
-		else if(hclock == 1){
+		else if(hclock == 1){ // HSEON: HSE clock enable
 			if( set ){ ret.rcc.reg->CR |= ( 1 << 16); set = 0; }else if( ret.rcc.reg->CR & ( 1 << 17) ) rdy = 0;
 		}
-		else if(hclock == 2){
+		else if(hclock == 2){ // HSEBYP: HSE clock bypass
 			if( set ) ret.rcc.reg->CR |= ( 1 << 18 );
 			hclock = 1;
 		}
@@ -374,16 +393,16 @@ void STM32446RccHEnable(unsigned int hclock)
 
 uint8_t STM32446RccHSelect(uint8_t sysclk)
 {
-	ret.rcc.reg->CFGR &= (unsigned int) ~(3);
+	ret.rcc.reg->CFGR &= (unsigned int) ~(3); // 00: HSI oscillator selected as system clock
 	switch(sysclk){
 		case 1:
-			ret.rcc.reg->CFGR |= 1;
+			ret.rcc.reg->CFGR |= 1; // HSE oscillator selected as system clock
 			break;
 		case 2:
-			ret.rcc.reg->CFGR |= 2;
+			ret.rcc.reg->CFGR |= 2; // PLL_P selected as system clock
 			break;
 		case 3:
-			ret.rcc.reg->CFGR |= 3;
+			ret.rcc.reg->CFGR |= 3; // PLL_R selected as system clock
 			break;
 		default:
 			break;
@@ -396,13 +415,13 @@ void STM32446RccLEnable(unsigned int lclock)
 	unsigned int set;
 	unsigned int rdy;
 	for( set = 1, rdy = 1; rdy ; ){
-		if(lclock == 2){
+		if(lclock == 2){ // LSION: Internal low-speed oscillator enable
 			if( set ){ ret.rcc.reg->CSR |= ( 1 << 0); set = 0; }else if( ret.rcc.reg->CSR & ( 1 << 1) ) rdy = 0;
 		}
-		else if(lclock == 1){
+		else if(lclock == 1){ // LSEON: External low-speed oscillator enable
 			if( set ){ ret.rcc.reg->BDCR |= ( 1 << 0); set = 0; }else if( ret.rcc.reg->BDCR & ( 1 << 1) ) rdy = 0;
 		}
-		else if(lclock == 4){
+		else if(lclock == 4){ // LSEBYP: External low-speed oscillator bypass
 			if( set ) ret.rcc.reg->BDCR |= ( 1 << 2 );
 			lclock = 1;
 		}
@@ -501,42 +520,70 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 	}
 }
 
-void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp)
+/****PLL****/
+
+void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr)
 {
 	const unsigned int mask = 0x7F437FFF;
 	ret.rcc.reg->PLLCFGR |= mask; // set mask bits high
 
 	if(pllr > 1 && pllr < 8) // PLLR[28]: Main PLL division factor for I2Ss, SAIs, SYSTEM and SPDIF-Rx clocks
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(7 << 28) & mask) | (pllr << 28);
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(7 << 28)) | (pllr << 28);
 
 	if(pllq > 1 && pllq < 16) // PLLQ[24]: Main PLL (PLL) division factor for USB OTG FS, SDIOclocks
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(15 << 24) & mask) | (pllq << 24);
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(15 << 24)) | (pllq << 24);
 
 	if(pllsrc == 1) // PLLSRC[22]: Main PLL(PLL) and audio PLL (PLLI2S) entry clock source
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(1 << 22) & mask) | (pllsrc << 22);
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(1 << 22)) | (pllsrc << 22);
+	else
+		ret.rcc.reg->PLLCFGR &= (unsigned int) ~(1 << 22);
 
 	switch(pllp){ // PLLP[16]: Main PLL (PLL) division factor for main system clock
 		case 2:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask);
+			ret.rcc.reg->PLLCFGR &= (unsigned int) ~(3 << 16);
 			break;
 		case 4:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (1 << 16);
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (1 << 16);
 			break;
 		case 6:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (2 << 16);
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (2 << 16);
 			break;
 		case 8:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (3 << 16);
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (3 << 16);
 			break;
 		default:
 			break;
 	}
 
 	if(plln > 49 && plln < 433) // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(511 << 6) & mask) | (plln << 6);
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(511 << 6)) | (plln << 6);
 
-	if(pllm > 1 && pllm < 64) // PLLM[0]: Division factor for the main PLL (PLL) input clock
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(63 << 6) & mask) | pllm;
+	if(pllm > 1 && pllm < 64) // PLLM[0]: Division factor for the main PLL (PLL) input clock [2Mhz]
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(63)) | pllm;
+}
+
+void STM32446RccPLLCLKEnable(uint8_t onoff)
+{
+	if(onoff)
+		for( ret.rcc.reg->CR |= (1 << 24) ; !(ret.rcc.reg->CR & (1 << 25)) ; ); // PLLON: Main PLL (PLL) enable
+	else
+		ret.rcc.reg->CR &= (unsigned int) ~(1 << 24);
+}
+
+void STM32446RccPLLI2SEnable(uint8_t onoff)
+{
+	if(onoff)
+		for( ret.rcc.reg->CR |= (1 << 26) ; !(ret.rcc.reg->CR & (1 << 27)) ; ); // PLLI2SON: PLLI2S enable
+	else
+		ret.rcc.reg->CR &= (unsigned int) ~(1 << 26);
+}
+
+void STM32446RccPLLSAIEnable(uint8_t onoff)
+{
+	if(onoff)
+		for( ret.rcc.reg->CR |= (1 << 28) ; !(ret.rcc.reg->CR & (1 << 29)) ; ); // PLLSAION: PLLSAI enable
+	else
+		ret.rcc.reg->CR &= (unsigned int) ~(1 << 28);
 }
 
 // GPIO

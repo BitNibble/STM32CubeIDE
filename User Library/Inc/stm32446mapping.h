@@ -66,12 +66,18 @@ typedef struct
 // RCC
 typedef struct
 {
+	void (*division)(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp);
+}STM32446RCCPLL;
+
+typedef struct
+{
 	RCC_TypeDef* reg;
 	void (*henable)(unsigned int hclock);
 	uint8_t (*hselect)(uint8_t sysclk);
 	void (*lenable)(unsigned int lclock);
 	void (*lselect)(uint8_t lclock);
 	void (*prescaler)(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
+	STM32446RCCPLL pll;
 }STM32446RCCobj;
 
 // GPIOA

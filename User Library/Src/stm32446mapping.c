@@ -47,6 +47,8 @@ uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
 void STM32446RccLSelect(uint8_t lclock);
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
+void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp);
+
 //GPIO
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
@@ -189,6 +191,7 @@ STM32446 STM32446enable(void){
 	ret.rcc.lenable = STM32446RccLEnable;
 	ret.rcc.lselect = STM32446RccLSelect;
 	ret.rcc.prescaler = STM32446Prescaler;
+	ret.rcc.pll.division = STM32446PLLDivision;
 	
 	//GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
@@ -331,6 +334,11 @@ STM32446 STM32446enable(void){
 uint8_t STM32446PeripheralInic(void)
 {
 	uint8_t clkused; // First turn it on then select it or enable it.
+	// Setup PLL
+	STM32446PLLDivision(0, 0, 0, 0, 0, 0);
+	// Enable PLL
+
+
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -491,6 +499,44 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 	default:
 		break;
 	}
+}
+
+void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllr, unsigned int pllq, unsigned int pllp)
+{
+	const unsigned int mask = 0x7F437FFF;
+	ret.rcc.reg->PLLCFGR |= mask; // set mask bits high
+
+	if(pllr > 1 && pllr < 8) // PLLR[28]: Main PLL division factor for I2Ss, SAIs, SYSTEM and SPDIF-Rx clocks
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(7 << 28) & mask) | (pllr << 28);
+
+	if(pllq > 1 && pllq < 16) // PLLQ[24]: Main PLL (PLL) division factor for USB OTG FS, SDIOclocks
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(15 << 24) & mask) | (pllq << 24);
+
+	if(pllsrc == 1) // PLLSRC[22]: Main PLL(PLL) and audio PLL (PLLI2S) entry clock source
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(1 << 22) & mask) | (pllsrc << 22);
+
+	switch(pllp){ // PLLP[16]: Main PLL (PLL) division factor for main system clock
+		case 2:
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask);
+			break;
+		case 4:
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (1 << 16);
+			break;
+		case 6:
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (2 << 16);
+			break;
+		case 8:
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16) & mask) | (3 << 16);
+			break;
+		default:
+			break;
+	}
+
+	if(plln > 49 && plln < 433) // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(511 << 6) & mask) | (plln << 6);
+
+	if(pllm > 1 && pllm < 64) // PLLM[0]: Division factor for the main PLL (PLL) input clock
+		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(63 << 6) & mask) | pllm;
 }
 
 // GPIO

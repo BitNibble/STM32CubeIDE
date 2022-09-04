@@ -33,10 +33,11 @@ static FUNC func;
 static EXPLODE PINA;
 static EXPLODE PINB;
 static EXPLODE PINC;
+static EXPLODE zone;
 static HC595 hc;
 static LCD0 lcd;
 
-static volatile unsigned int workspace;
+static unsigned int workspace;
 static uint8_t choice;
 static uint8_t hour = 0;
 static uint8_t minute = 0;
@@ -70,10 +71,13 @@ func = FUNCenable();
 PINA = EXPLODEenable();
 PINB = EXPLODEenable();
 PINC = EXPLODEenable();
+zone = EXPLODEenable();
+
 choice = 3;
 count1 = 0;
 count2 = 0;
 dir = 0;
+
 // Initialize objects after portinic()
 hc = HC595enable(&stm.gpioc.reg->MODER, &stm.gpioc.reg->ODR, 2, 1, 0);
 lcd = LCD0enable(stm.gpiob.reg);
@@ -83,31 +87,27 @@ stm.adc1.single.temp();
 stm.adc1.single.start();
 
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
-
 //stm.systick.delay_ms(10);
-
 stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, (('\0' << 24) | ('B' << 16) | ('U' << 8) | ('C' << 0)) );
 
+/******************************************************************************/
+/******************************************************************************/
 for ( workspace = 0 ; 1 ; workspace++)
-{
-// workspace 0
-// Preamble
-PINA.update(&PINA, stm.gpioa.reg->IDR);
-PINB.update(&PINB, stm.gpiob.reg->IDR);
-PINC.update(&PINC, stm.gpioc.reg->IDR);
-lcd.reboot();
-/***************/
+{// COMMON
+zone.update(&zone, workspace); // for jumping workspaces
 
-if(workspace & 1)
-{// workspace 1
-
-	calendario();
-
+if(zone.LL & 2 && zone.LH & 1)
+{// PREAMBLE
+	PINA.update(&PINA, stm.gpioa.reg->IDR);
+	PINB.update(&PINB, stm.gpiob.reg->IDR);
+	PINC.update(&PINC, stm.gpioc.reg->IDR);
+	lcd.reboot();
+	// Detect for all workspaces only once
 } // if
-/***********************/
-/***********************/
-if(workspace & 2)
-{// workspace 2
+/******************************************************************************/
+/******************************************************************************/
+if(zone.LH & 2 && zone.HL & 1)
+{// workspace 1
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
@@ -125,17 +125,25 @@ if(workspace & 2)
 	  }
 
 } // if
-/***********************/
-/***********************/
-if(workspace == 3)
+/******************************************************************************/
+/******************************************************************************/
+if(zone.HH & 2 && zone.LH & 1)
 {// workspace 2
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
 
 } // if
-/***********************/
-/***********************/
+/******************************************************************************/
+/******************************************************************************/
+if(zone.HL & 2 && zone.HL & 1)
+{// workspace 3
+
+	calendario();
+
+} // if
+/******************************************************************************/
+/******************************************************************************/
 } // for
 } // main
 
@@ -156,7 +164,7 @@ void portinic(void)
 	stm.gpioc.pupdr(1,13);
 
 }
-
+/******************************************************************************/
 void tim9inic(void)
 {
 	stm.rcc.reg->APB2ENR |= (1 << 16); //timer 9 clock enabled
@@ -172,7 +180,7 @@ void tim9inic(void)
 	//stm.tim9.reg->CCER |= 1;
 	stm.tim9.reg->CR1 |= 1 | (1 << 7);
 }
-
+/******************************************************************************/
 void calendario(void)
 {
 	/******MENU*****/
@@ -209,7 +217,7 @@ void calendario(void)
 
 		case 3: // message
 			lcd.gotoxy(0,0);
-			lcd.string_size("Calendario",16);
+			lcd.string_size("Calendario",10);
 
 			stm.rtc.dr2vec(vec);
 			lcd.gotoxy(2,0);

@@ -77,6 +77,7 @@ choice = 3;
 count1 = 0;
 count2 = 0;
 dir = 0;
+
 // Initialize objects after portinic()
 hc = HC595enable(&stm.gpioc.reg->MODER, &stm.gpioc.reg->ODR, 2, 1, 0);
 lcd = LCD0enable(stm.gpiob.reg);
@@ -86,31 +87,27 @@ stm.adc1.single.temp();
 stm.adc1.single.start();
 
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
-
 //stm.systick.delay_ms(10);
-
 stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, (('\0' << 24) | ('B' << 16) | ('U' << 8) | ('C' << 0)) );
 
+/******************************************************************************/
+/******************************************************************************/
 for ( workspace = 0 ; 1 ; workspace++)
-{
-// workspace 0
-// Preamble
-PINA.update(&PINA, stm.gpioa.reg->IDR);
-PINB.update(&PINB, stm.gpiob.reg->IDR);
-PINC.update(&PINC, stm.gpioc.reg->IDR);
-zone.update(&zone, workspace);
-lcd.reboot();
-/***************/
+{// COMMON
+zone.update(&zone, workspace); // for jumping workspaces
+
 if(zone.LL & 2 && zone.LH & 1)
-{// workspace 1
-
-	calendario();
-
+{// PREAMBLE
+	PINA.update(&PINA, stm.gpioa.reg->IDR);
+	PINB.update(&PINB, stm.gpiob.reg->IDR);
+	PINC.update(&PINC, stm.gpioc.reg->IDR);
+	lcd.reboot();
+	// Detect for all workspaces only once
 } // if
 /******************************************************************************/
 /******************************************************************************/
 if(zone.LH & 2 && zone.HL & 1)
-{// workspace 2
+{// workspace 1
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
@@ -131,7 +128,7 @@ if(zone.LH & 2 && zone.HL & 1)
 /******************************************************************************/
 /******************************************************************************/
 if(zone.HH & 2 && zone.LH & 1)
-{// workspace 3
+{// workspace 2
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
@@ -140,10 +137,9 @@ if(zone.HH & 2 && zone.LH & 1)
 /******************************************************************************/
 /******************************************************************************/
 if(zone.HL & 2 && zone.HL & 1)
-{// workspace 4
+{// workspace 3
 
-	lcd.gotoxy(0,12);
-	lcd.string("OOOOOO");
+	calendario();
 
 } // if
 /******************************************************************************/

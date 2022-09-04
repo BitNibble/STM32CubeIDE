@@ -200,7 +200,6 @@ STM32446 STM32446enable(void){
 	ret.rcc.pll.enable = STM32446RccPLLCLKEnable;
 	ret.rcc.plli2s.enable = STM32446RccPLLI2SEnable;
 	ret.rcc.pllsai.enable = STM32446RccPLLSAIEnable;
-
 	
 	//GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
@@ -308,6 +307,7 @@ STM32446 STM32446enable(void){
 	//USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
 	ret.usart1.parameters = STM32446usart1parameters;
+	ret.usart1.test = STM32446usart1transmitsetup;
 	
 	/*** INICS ***/
 	ret.inic.peripheral = STM32446PeripheralInic;
@@ -693,12 +693,13 @@ void STM32446GpioAset( unsigned int data )
 void STM32446GpioAafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpioa.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpioa.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioa.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpioa.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpioa.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -747,12 +748,13 @@ void STM32446GpioBset( unsigned int data )
 void STM32446GpioBafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpiob.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpiob.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpiob.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpiob.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpiob.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -801,12 +803,13 @@ void STM32446GpioCset( unsigned int data )
 void STM32446GpioCafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpioc.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpioc.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioc.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpioc.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpioc.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -855,12 +858,13 @@ void STM32446GpioDset( unsigned int data )
 void STM32446GpioDafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpiod.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpiod.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpiod.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpiod.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpiod.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -909,12 +913,13 @@ void STM32446GpioEset( unsigned int data )
 void STM32446GpioEafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpioe.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpioe.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioe.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpioe.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpioe.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -963,12 +968,13 @@ void STM32446GpioHset( unsigned int data )
 void STM32446GpioHafr( unsigned int data, unsigned int pin )
 {
 	const unsigned int blocksize = 4;
+	const unsigned int n_bits = sizeof(unsigned int) * 8;
 	const unsigned int mask = (unsigned int) (pow(2, blocksize) - 1);
-	unsigned int index = pin / ((sizeof(unsigned int) * 8) / blocksize);
+	unsigned int index = (pin * blocksize) / n_bits;
 	data &= mask;
 	if(index < 2){
-		ret.gpioh.reg->AFR[index] &= ~(mask << (pin * blocksize));
-		ret.gpioh.reg->AFR[index] |= (data << (pin * blocksize));
+		ret.gpioh.reg->AFR[index] &= ~( mask << ((pin * blocksize) - (index * n_bits)) );
+		ret.gpioh.reg->AFR[index] |= ( data << ((pin * blocksize) - (index * n_bits)) );
 		ret.gpioh.reg->AFR[index] &= (unsigned int) sperm;
 	}
 }
@@ -1267,25 +1273,26 @@ void STM32446usart1transmitsetup(void) //RM0390 pg801
 	ret.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
 	
 	// Choose GPIO
-	
-	
-	
-	
-	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
-	
-	//ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
-	
-	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
-	
-	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
-	
-	ret.usart1.reg->DR = 'A';
+	/*****************************************************************
+		PA9 - TX		PA10 - RX
+		PA11 - CTS		PA12 - RTS
 
+		AF7 and AF8, activation. therfore
+	 *****************************************************************/
+	ret.gpioa.moder(2,9);
+	ret.gpioa.afr(7,9);
+	ret.gpioa.afr(7,10);
+	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
+	ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
+	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
+	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
+	ret.usart1.reg->DR = 'A';
 	//on real application, use fall threw method in main
-	for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
-	
+	//for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 	// added this as disable after confirmed end of transmission [9]
-	ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+	//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+
+
 }
 
 void STM32446usart1recievesetup(void) //RM0390 pg804

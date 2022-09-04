@@ -261,6 +261,7 @@ typedef struct
 {
 	USART_TypeDef* reg;
 	void (*parameters)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+	void (*test)(void);
 }STM32446USART1obj;
 /*
 *** INIC

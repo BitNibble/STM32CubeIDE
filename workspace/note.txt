@@ -1,6 +1,6 @@
 NB:
 
-Remove stm32f4xx_it.h, in order for this template to work.
+Remove stm32f4xx_it.c, in order for this template to work.
 
 It uses sytick already.
 
@@ -12,5 +12,3 @@ arm-none-eabi-objcopy -O ihex ${ProjName}.elf ${ProjName}.hex
 This package must be installed in order to create the hex, elf and other files needed 
 in order to upload the compilled programs to the microcontroller.
 
- 
-arm-none-eabi

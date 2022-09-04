@@ -80,7 +80,7 @@ void LCD0_inic(void)
 	lcd0_detect = ireg->IDR & (1 << NC);
 	
 	/***INICIALIZACAO LCD**datasheet******/
-	stm.systick.delay_ms(20); // using clock at 16Mhz
+	stm.systick.delay_ms(20);
 	LCD0_write(0x38, INST); //function set
 	stm.systick.delay_10us(4);
 	LCD0_write(0x38, INST); //function set
@@ -119,6 +119,9 @@ void LCD0_write(char c, unsigned short D_I)
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 *2)) | (3 << (DB5* 2)) | (3 << (DB6* 2)) | (3 << (DB7 * 2))); // mcu as output
 	ireg->MODER |= ((1 << (DB4 *2)) | (1 << (DB5* 2)) | (1 << (DB6* 2)) | (1 << (DB7 * 2))); // mcu as output
 	
+	// this sequence is not needed because output disables pupdr by default
+	//ireg->PUPDR &= (uint32_t) ~((3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2))); // disable pull up resistors up resistors
+	
 	stm.func.setpin(ireg, EN); // lcd enabled
 	
 	if(c & 0x80) stm.func.setpin(ireg,DB7); else stm.func.resetpin(ireg,DB7);
@@ -148,6 +151,10 @@ char LCD0_read(unsigned short D_I)
 	uint32_t data = 0;
 	uint8_t c = 0;
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2))); // mcu as input
+	
+	//not needed already setup on inic function
+	//ireg->PUPDR &= (uint32_t) ~((3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2))); // enable pull up resistors
+	//ireg->PUPDR |= ((1 << (DB4 * 2)) | (1 << (DB5 * 2)) | (1 << (DB6 * 2)) | (1 << (DB7 * 2))); // enable pull up resistors
 	
 	//First nibble
 	stm.func.setpin(ireg, RW); // lcd as output
@@ -269,6 +276,18 @@ void LCD0_reboot(void)
 }
 /***Interrupt***/
 /******************************************************************************
+void LCD0_BF(void)
+//	It has to read at minimum one equal and exit
+//	immediately if not equal, weird property.
+{
+	uint8_t i;
+	char inst = 0x80;
+	for(i=0; 0x80 & inst; i++){
+		inst = LCD0_read(INST);
+		if(i > 1)
+			break;
+	}
+}
 *******************************************************************************/
 /******************************************************************************
 void LCD0_BF(void)
@@ -278,8 +297,6 @@ void LCD0_BF(void)
 	for( ; 0x80 & LCD0_read(INST) ; );
 }
 *******************************************************************************/
-/******************************************************************************
-	In search of perfection
-*******************************************************************************/
+
 /***EOF***/
 

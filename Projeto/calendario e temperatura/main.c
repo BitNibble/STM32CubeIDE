@@ -36,6 +36,7 @@ static EXPLODE PINC;
 static HC595 hc;
 static LCD0 lcd;
 
+static volatile unsigned int workspace;
 static uint8_t choice;
 static uint8_t hour = 0;
 static uint8_t minute = 0;
@@ -81,25 +82,35 @@ stm.adc1.single.inic();
 stm.adc1.single.temp();
 stm.adc1.single.start();
 
-stm.rtc.inic(1); // 0 - LSI, 1 - LSE
+stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 
-stm.systick.delay_ms(10);
+//stm.systick.delay_ms(10);
 
 stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, (('\0' << 24) | ('B' << 16) | ('U' << 8) | ('C' << 0)) );
 
-while (1)
+for ( workspace = 0 ; 1 ; workspace++)
 {
-	// Preamble
-	PINA.update(&PINA, stm.gpioa.reg->IDR);
-	PINB.update(&PINB, stm.gpiob.reg->IDR);
-	PINC.update(&PINC, stm.gpioc.reg->IDR);
-	lcd.reboot();
-	/***************/
+// workspace 0
+// Preamble
+PINA.update(&PINA, stm.gpioa.reg->IDR);
+PINB.update(&PINB, stm.gpiob.reg->IDR);
+PINC.update(&PINC, stm.gpioc.reg->IDR);
+lcd.reboot();
+/***************/
+
+if(workspace & 1)
+{// workspace 1
+
 	calendario();
+
+} // if
+/***********************/
+/***********************/
+if(workspace & 2)
+{// workspace 2
 
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
-
 
 	lcd.gotoxy(1,4);
 	if(samples < n_samples){
@@ -112,9 +123,23 @@ while (1)
 		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 7);
 		samples=0;
 	  }
-}
-}
 
+} // if
+/***********************/
+/***********************/
+if(workspace == 3)
+{// workspace 2
+
+	lcd.gotoxy(1,0);
+	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
+
+} // if
+/***********************/
+/***********************/
+} // for
+} // main
+
+/******************************************************************************/
 void portinic(void)
 {
 	//Enable clock for IO peripherals
@@ -389,7 +414,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 
 }
 
-/******************************************************************************
+/******************************************************************************/
 void Error_Handler(void)
 {
   __disable_irq();
@@ -398,9 +423,9 @@ void Error_Handler(void)
 
   }
 }
-
+/******************************************************************************/
+/******************************************************************************
 #ifdef  USE_FULL_ASSERT
-
 void assert_failed(uint8_t *file, uint32_t line)
 {
 

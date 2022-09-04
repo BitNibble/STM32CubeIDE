@@ -185,13 +185,7 @@ void LCD0_BF(void)
 //	It has to read at minimum one equal and exit
 //	immediately if not equal, weird property.
 {
-	uint8_t i;
-	char inst = 0x80;
-	for(i=0; 0x80 & inst; i++){
-		inst = LCD0_read(INST);
-		if(i > 1)
-			break;
-	}
+	for( ; 0x80 & LCD0_read(INST) ; );
 }
 char LCD0_getch(void)
 {

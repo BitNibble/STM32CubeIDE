@@ -67,10 +67,18 @@ typedef struct
 typedef struct
 {
 	void (*division)(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
-	void (*pllclk)(uint8_t onoff);
-	void (*plli2s)(uint8_t onoff);
-	void (*pllsai)(uint8_t onoff);
+	void (*enable)(uint8_t onoff);
 }STM32446RCCPLL;
+
+typedef struct
+{
+	void (*enable)(uint8_t onoff);
+}STM32446RCCPLLI2S;
+
+typedef struct
+{
+	void (*enable)(uint8_t onoff);
+}STM32446RCCPLLSAI;
 
 typedef struct
 {
@@ -81,6 +89,8 @@ typedef struct
 	void (*lselect)(uint8_t lclock);
 	void (*prescaler)(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
 	STM32446RCCPLL pll;
+	STM32446RCCPLL plli2s;
+	STM32446RCCPLL pllsai;
 }STM32446RCCobj;
 
 // GPIOA

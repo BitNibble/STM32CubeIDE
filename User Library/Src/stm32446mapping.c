@@ -197,9 +197,9 @@ STM32446 STM32446enable(void){
 	ret.rcc.prescaler = STM32446Prescaler;
 	/****PLL****/
 	ret.rcc.pll.division = STM32446PLLDivision;
-	ret.rcc.pll.pllclk = STM32446RccPLLCLKEnable;
-	ret.rcc.pll.plli2s = STM32446RccPLLI2SEnable;
-	ret.rcc.pll.pllsai = STM32446RccPLLSAIEnable;
+	ret.rcc.pll.enable = STM32446RccPLLCLKEnable;
+	ret.rcc.plli2s.enable = STM32446RccPLLI2SEnable;
+	ret.rcc.pllsai.enable = STM32446RccPLLSAIEnable;
 
 	
 	//GPIOA
@@ -293,6 +293,7 @@ STM32446 STM32446enable(void){
 	
 	//ADC1
 	ret.adc1.reg = (ADC_TypeDef*) ADC1_BASE;
+	/****single****/
 	ret.adc1.single.inic = STM32446Adc1Inic;
 	ret.adc1.single.vbat = STM32446Adc1VBAT;
 	ret.adc1.single.temp = STM32446Adc1TEMP;

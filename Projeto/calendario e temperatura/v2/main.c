@@ -46,7 +46,7 @@ static EXPLODE PINC;
 static HC595 hc;
 static LCD0 lcd;
 
-static unsigned int workspace;
+
 static uint8_t choice;
 static uint8_t hour = 0;
 static uint8_t minute = 0;
@@ -70,13 +70,15 @@ void TIM1_BRK_TIM9_IRQHandler(void);
 
 int main(void)
 {
+unsigned int workspace;
+unsigned int zone;
 double temperature = 0;
 unsigned int samples = 0;
 const int n_samples = 60;
 vect[0] = 0;
 vect[1] = 0;
 vect[2] = 0;
-unsigned int zone;
+
 stm = STM32446enable(); // stm object
 stm.inic.peripheral();
 portinic();
@@ -153,7 +155,7 @@ stm.usart1.reg->DR = 'A';
 /******************************************************************************/
 				/************************************/
 /******************************************************************************/
-for ( workspace = 0 ; ass ; workspace++)
+for ( zone = 0, workspace = 0 ; ass ; workspace++)
 {// COMMON
 zone = workspace & 7;
 

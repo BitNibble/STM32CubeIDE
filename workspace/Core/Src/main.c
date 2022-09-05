@@ -148,7 +148,7 @@ stm.usart1.reg->DR = 'A';
 // added this as disable after confirmed end of transmission [9]
 //ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
 
-
+//printf("what happens\n");
 
 /******************************************************************************/
 /*****************************  TEST STUFF END  *******************************/
@@ -516,10 +516,12 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 void Error_Handler(void)
 {
   __disable_irq();
-  while (1)
-  {
 
-  }
+  perror("error\n");
+  //while (1)
+  //{
+
+  //}
 }
 /******************************************************************************/
 /******************************************************************************
@@ -530,4 +532,10 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif
 ******************************************************************************/
+/******************************** COMMENT ************************************
+	The LCD is the most important part of a project, there is no better way to
+	troubleshoot and validate a project.
 
+
+ *****************************************************************************/
+/***EOF***/

@@ -290,7 +290,8 @@ typedef struct
 	void (*resetpins)( GPIO_TypeDef* regs, int n_pin, ... ); // BSRR
 	void (*resetpin)( GPIO_TypeDef* regs, int pin); // BSRR
 	void (*reset)( GPIO_TypeDef* regs, int data); // BSRR
-	void (*setupreg)(unsigned int blocksize, volatile uint32_t* reg, unsigned int data, unsigned int pin); // GENERIC &|
+	void (*setupreg)(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin); // GENERIC & |
+	void (*setup)( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n ); // GENERIN [] & |
 	
 }STM32446function;
 

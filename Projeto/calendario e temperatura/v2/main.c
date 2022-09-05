@@ -60,6 +60,7 @@ static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
 static char vec[24];
+static volatile uint32_t vect[8];
 
 void portinic(void);
 void tim9inic(void);
@@ -72,6 +73,9 @@ int main(void)
 double temperature = 0;
 unsigned int samples = 0;
 const int n_samples = 60;
+vect[0] = 0;
+vect[1] = 0;
+vect[2] = 0;
 unsigned int zone;
 stm = STM32446enable(); // stm object
 stm.inic.peripheral();
@@ -97,14 +101,35 @@ stm.adc1.single.start();
 
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 //stm.systick.delay_ms(10);
-stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, (('\0' << 24) | ('B' << 16) | ('U' << 8) | ('C' << 0)) );
 
-//stm.usart1.parameters(8,16,1,9600);
-//stm.usart1.test();
+/******************************************************************************/
+/***************************** TEST STUFF START *******************************/
+/******************************************************************************/
 
-//lcd.gotoxy(0,11);
-//lcd.string_size( func.print("%d         ",stm.gpioa.reg->AFR[1]) , 9); // [1904]
+//1 - Enable access to the RTC registers
+stm.pwr.reg->CR |= (1 << 8); // Disable backup domain write protection
+//2 - Enter the "key" to unlock write protection
+stm.rtc.reg->WPR |= 0xCA;
+stm.rtc.reg->WPR |= 0x53;
+//3 - Write
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, 'S', 0);
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, 'E', 1);
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, 'T', 2);
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, 'H', 3);
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, 'S', 4);
+stm.func.setup(&stm.rtc.reg->BKP0R, 8, '\0', 5);
+//stm.rtc.RegWrite( &stm.rtc.reg->BKP0R, ( ('\0' << 24) | ('T' << 16) | ('E' << 8) | ('S' << 0)) );
+//4 - Disable access to RTC registers
+stm.pwr.reg->CR &= (uint32_t) ~(1 << 8);
 
+
+//stm.func.setup(vect, 16, 1, 0);
+//stm.func.setup(vect, 16, 1, 2);
+//lcd.gotoxy(0,14);
+//lcd.string_size( func.print("%d", vect[0]), 9);
+
+//lcd.gotoxy(1,14);
+//lcd.string_size( func.print("%d", vect[1]), 9);
 
 stm.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
 stm.gpioa.moder(2,9);
@@ -123,6 +148,8 @@ stm.usart1.reg->DR = 'A';
 
 
 
+/******************************************************************************/
+/*****************************  TEST STUFF END  *******************************/
 /******************************************************************************/
 				/************************************/
 /******************************************************************************/
@@ -143,11 +170,10 @@ if(zone == 0)
 /******************************************************************************/
 if(zone == 1)
 {// workspace 1
-
 	lcd.gotoxy(1,0);
 	lcd.string( func.print("%s", &stm.rtc.reg->BKP0R ));
 
-	lcd.gotoxy(1,4);
+	lcd.gotoxy(1,7);
 	if(samples < n_samples){
 		temperature += stm.adc1.single.read();
 		stm.adc1.single.restart();
@@ -155,13 +181,10 @@ if(zone == 1)
 	}else{
 		temperature /= n_samples;
 		temperature = (temperature/3.1 - 943/3.1) + 25;
-		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 7);
+		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
 		samples=0;
 	  }
-
-
 	continue;
-
 } // if
 /******************************************************************************/
 /******************************************************************************/
@@ -187,22 +210,30 @@ if(zone == 3)
 /******************************************************************************/
 if(zone == 4)
 {// workspace 4
+	//stm.usart1.parameters(8,16,1,9600);
+	//stm.usart1.test();
+
 
 	if( stm.usart1.reg->SR & (1 << 6) ){ // TC: Transmission complete
 		//stm.usart1.reg->DR = 'B';
-		lcd.gotoxy(0,11);
-		lcd.string_size( func.print("done %d",zone), 9);
-	}else{
-		lcd.gotoxy(0,11);
-		lcd.string_size( func.print("failed %d",zone), 9);
+		//lcd.gotoxy(0,17);
+		//lcd.string_size( func.print("%d",zone), 3);
 	}
 
 	continue;
 } // if
 /******************************************************************************/
+
+
 /******************************************************************************/
 } // for
 } // main
+/******************************************************************************/
+		/*************************************************************/
+/******************************************************************************/
+/******************************************************************************/
+		/*************************************************************/
+/******************************************************************************/
 /******************************************************************************/
 		/*************************************************************/
 /******************************************************************************/
@@ -477,7 +508,6 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 	/***/
 	//stm.tim9.reg->SR &=  (uint32_t) ~1;
 	//stm.tim9.reg->SR &=  (uint32_t) ~2;
-
 }
 
 /******************************************************************************/

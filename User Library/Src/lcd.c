@@ -86,20 +86,24 @@ void LCD0_inic(void)
 	LCD0_write(0x38, INST); //function set
 	stm.systick.delay_10us(10);
 	LCD0_write(0x38, INST); //function set
+	stm.systick.delay_10us(4);
 	/**************************************/
-	LCD0_BF(); // repeat twice in 4 bit length
+	// repeat twice in 4 bit length
 	LCD0_write(0x28, INST); //function set 2B
 	LCD0_BF();
 	LCD0_write(0x28, INST); //function set 2B
 	LCD0_BF();
+
 	LCD0_write(0x0C, INST);// display on/off control
 	LCD0_BF();
 	LCD0_write(0x0C, INST);// display on/off control
 	LCD0_BF();
+
 	LCD0_write(0x01, INST);// clear display
 	LCD0_BF();
 	LCD0_write(0x01, INST);// clear display
 	LCD0_BF();
+
 	LCD0_write(0x06, INST);// entry mode set (crazy settings)
 	LCD0_BF();
 	LCD0_write(0x06, INST);// entry mode set (crazy settings)
@@ -230,7 +234,8 @@ void LCD0_hspace(uint32_t n)
 void LCD0_clear(void)
 {
 	LCD0_write(0x01, INST);
-    stm.systick.delay_ms(2);
+	LCD0_BF();
+	stm.systick.delay_ms(2);
 }
 void LCD0_gotoxy(unsigned int y, unsigned int x)
 {

@@ -47,20 +47,12 @@ uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
 void STM32446RccLSelect(uint8_t lclock);
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
+
 /***PLL***/
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
 void STM32446RccPLLCLKEnable(uint8_t onoff);
 void STM32446RccPLLI2SEnable(uint8_t onoff);
 void STM32446RccPLLSAIEnable(uint8_t onoff);
-
-//GPIO
-void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
-void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
-void STM32446GpioSet( GPIO_TypeDef* regs, int data );
-void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
-void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
-void STM32446GpioReset( GPIO_TypeDef* regs, int data );
-void STM32446Gpiosetupreg(unsigned int blocksize, volatile uint32_t* reg, unsigned int data, unsigned int pin);
 
 //GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin );
@@ -137,18 +129,31 @@ void STM32446usart1transmitsetup(void);
 void STM32446usart1recievesetup(void);
 void STM32446usart1parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 
-//MISCELLANEOUS
+// MISCELLANEOUS
 char STM32446bcd2dec(char num);
 char STM32446dec2bcd(char num);
+/*** SYSTICK ***/
 void STM32446delay_ms(uint32_t ms);
 void STM32446delay_10us(uint32_t us);
+/*** BUTTON ***/
 uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
+/*** BYTE ***/
 uint16_t STM32ReadHLByte(STM32HighLowByte reg);
 uint16_t STM32ReadLHByte(STM32HighLowByte reg);
 STM32HighLowByte STM32WriteHLByte(uint16_t val);
 STM32HighLowByte STM32WriteLHByte(uint16_t val);
 uint16_t STM32SwapByte(uint16_t num);
+/*** GPIO ***/
+void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
+void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
+void STM32446GpioSet( GPIO_TypeDef* regs, int data );
+void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
+void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
+void STM32446GpioReset( GPIO_TypeDef* regs, int data );
+/*** GENERIC ***/
+void STM32446Gpiosetupreg(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin);
+void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n );
 
 /***FILE FUNC***/
 void STM32446RtcSetTr(void);
@@ -329,6 +334,7 @@ STM32446 STM32446enable(void){
 	ret.func.resetpin = STM32446GpioResetpin;
 	ret.func.reset = STM32446GpioReset;
 	ret.func.setupreg = STM32446Gpiosetupreg;
+	ret.func.setup = STM32446GpioSetup;
 	
 	/****************************************************************************/
 	SystickInic(); // Polling delay source.
@@ -640,14 +646,27 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data )
 			regs->BSRR = (unsigned int)(data << 16);
 }
 
-void STM32446Gpiosetupreg(unsigned int blocksize, volatile uint32_t* reg, unsigned int data, unsigned int pin)
+/***generic***/
+void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin )
 {
-	unsigned int mask = (unsigned int)(pow(2, blocksize) - 1);
+	unsigned int mask = (unsigned int)(pow(2, size_block) - 1);
 	data &= mask;
-	*reg &= ~(mask << (pin * blocksize));
-	*reg |= (data << (pin * blocksize));
+	*reg &= ~(mask << (pin * size_block));
+	*reg |= (data << (pin * size_block));
 	*reg &= (unsigned int) sperm;
 }
+
+void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n )
+{
+	const unsigned int n_bits = sizeof(data) * 8;
+	const unsigned int mask = (unsigned int) (pow(2, size_block) - 1);
+	unsigned int index = (block_n * size_block) / n_bits;
+	data &= mask;
+	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
+	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
+	vec[index] &= (unsigned int) sperm;
+}
+/***generic***/
 
 // GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin )
@@ -1198,7 +1217,7 @@ void STM32446Rtctr2vec(char* vect)
 void STM32446Adc1Inic(void)
 {
 	/***ADC Clock***/
-	ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
+	//ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
 	ret.rcc.reg->APB2ENR |= (1 << 8); // ADC1EN: ADC1 clock enable
 	/***ADC CONFIG***/
 	ret.adc1.reg->CR2 |= (1 << 10); // EOCS: End of conversion selection

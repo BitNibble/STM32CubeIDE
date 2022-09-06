@@ -62,7 +62,7 @@ uint16_t FUNCReadLHByte(FUNCHighLowByte reg);
 FUNCHighLowByte FUNCWriteHLByte(uint16_t val);
 FUNCHighLowByte FUNCWriteLHByte(uint16_t val);
 uint16_t FUNCSwapByte(uint16_t num);
-char* FUNCprint(char *format, ... );
+char* FUNCprint(const char *format, ... );
 /***pc use***
 char* FUNCfltos(FILE* stream);
 char* FUNCftos(FILE* stream);
@@ -85,42 +85,42 @@ FUNC FUNCenable( void )
 	// Inic FUNCstr
 	FUNCstr[FUNCSTRSIZE] = '\0';
 	// function pointers
-	//func.stringlength = StringLength;
-	//func.reverse = Reverse;
-	//func.mayia = FUNCmayia;
-	//func.swap = FUNCswap;
-	//func.copy = FUNCcopy;
-	//func.squeeze = FUNCsqueeze;
-	//func.shellsort = FUNCshellsort;
-	//func.i16toa = FUNCi16toa;
-	//func.ui16toa = FUNCui16toa;
-	//func.i32toa = FUNCi32toa;
-	//func.trim = FUNCtrim;
-	//func.pmax = FUNCpmax;
-	//func.gcd = FUNCgcd;
-	//func.strToInt = FUNCstrToInt;
-	//func.filter = FUNCfilter;
-	//func.ticks = FUNCticks;
-	//func.twocomptoint8bit = FUNCtwocomptoint8bit;
-	//func.twocomptoint10bit = FUNCtwocomptoint10bit;
-	//func.twocomptointnbit = FUNCtwocomptointnbit;
-	//func.dec2bcd = FUNCdec2bcd;
-	//func.bcd2dec = FUNCbcd2dec;
-	//func.resizestr = FUNCresizestr;
-	//func.trimmer = FUNCtrimmer;
-	//func.bcd2bin = FUNCbcd2bin;
-	//func.bin2bcd = FUNCbin2bcd;
-	//func.gcd1 = FUNCgcd1;
-	//func.pincheck = FUNCpincheck;
-	//func.print_binary = FUNCprint_binary;
+	func.stringlength = StringLength;
+	func.reverse = Reverse;
+	func.mayia = FUNCmayia;
+	func.swap = FUNCswap;
+	func.copy = FUNCcopy;
+	func.squeeze = FUNCsqueeze;
+	func.shellsort = FUNCshellsort;
+	func.i16toa = FUNCi16toa;
+	func.ui16toa = FUNCui16toa;
+	func.i32toa = FUNCi32toa;
+	func.trim = FUNCtrim;
+	func.pmax = FUNCpmax;
+	func.gcd = FUNCgcd;
+	func.strToInt = FUNCstrToInt;
+	func.filter = FUNCfilter;
+	func.ticks = FUNCticks;
+	func.twocomptoint8bit = FUNCtwocomptoint8bit;
+	func.twocomptoint10bit = FUNCtwocomptoint10bit;
+	func.twocomptointnbit = FUNCtwocomptointnbit;
+	func.dec2bcd = FUNCdec2bcd;
+	func.bcd2dec = FUNCbcd2dec;
+	func.resizestr = FUNCresizestr;
+	func.trimmer = FUNCtrimmer;
+	func.bcd2bin = FUNCbcd2bin;
+	func.bin2bcd = FUNCbin2bcd;
+	func.gcd1 = FUNCgcd1;
+	func.pincheck = FUNCpincheck;
+	func.print_binary = FUNCprint_binary;
 	func.ftoa = FUNCftoa;
-	//func.dectohex = FUNCdectohex;
+	func.dectohex = FUNCdectohex;
 	// Low Byte High Byte
-	//func.ReadHLByte = FUNCReadHLByte;
-	//func.ReadLHByte = FUNCReadLHByte;
-	//func.WriteHLByte = FUNCWriteHLByte;
-	//func.WriteLHByte = FUNCWriteLHByte;
-	//func.SwapByte = FUNCSwapByte;
+	func.ReadHLByte = FUNCReadHLByte;
+	func.ReadLHByte = FUNCReadLHByte;
+	func.WriteHLByte = FUNCWriteHLByte;
+	func.WriteLHByte = FUNCWriteLHByte;
+	func.SwapByte = FUNCSwapByte;
 	func.print = FUNCprint;
 	/***pc use***
 	func.fltos = FUNCfltos;
@@ -527,7 +527,7 @@ uint16_t FUNCSwapByte(uint16_t num)
 }
 
 /***print***/
-char* FUNCprint( char* format, ... )
+char* FUNCprint( const char* format, ... )
 {
 	va_list aptr;
 	int ret;

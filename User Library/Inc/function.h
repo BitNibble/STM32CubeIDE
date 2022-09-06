@@ -66,7 +66,7 @@ typedef struct
 	FUNCHighLowByte (*WriteHLByte)(uint16_t val);
 	FUNCHighLowByte (*WriteLHByte)(uint16_t val);
 	uint16_t (*SwapByte)(uint16_t num);
-	char* (*print)( char *format, ... );
+	char* (*print)( const char *format, ... );
 	/***pc use***
 	char* (*fltos)(FILE* stream);
 	char* (*ftos)(FILE* stream);

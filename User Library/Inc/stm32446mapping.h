@@ -260,8 +260,11 @@ typedef struct
 typedef struct
 {
 	USART_TypeDef* reg;
+	void (*inic)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+	void (*transmit)(void);
+	void (*receive)(void);
 	void (*parameters)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
-	void (*test)(void);
+	void (*stop)(void);
 }STM32446USART1obj;
 /*
 *** INIC
@@ -292,7 +295,7 @@ typedef struct
 	void (*reset)( GPIO_TypeDef* regs, int data); // BSRR
 	void (*setupreg)(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin); // GENERIC & |
 	void (*setup)( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n ); // GENERIN [] & |
-	
+	void (*test)(void);
 }STM32446function;
 
 /******************************************************************************/

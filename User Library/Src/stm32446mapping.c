@@ -125,9 +125,11 @@ void STM32446Adc1Restart(void);
 void STM32446Adc1Stop(void);
 
 //USART1
-void STM32446usart1transmitsetup(void);
-void STM32446usart1recievesetup(void);
-void STM32446usart1parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+void STM32446Usart1Transmit(void);
+void STM32446Usart1Receive(void);
+void STM32446Usart1Parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+void STM32446Usart1Stop(void);
 
 // MISCELLANEOUS
 char STM32446bcd2dec(char num);
@@ -311,8 +313,11 @@ STM32446 STM32446enable(void){
 	
 	//USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
-	ret.usart1.parameters = STM32446usart1parameters;
-	ret.usart1.test = STM32446usart1transmitsetup;
+	ret.usart1.inic = STM32446Usart1Inic;
+	ret.usart1.transmit = STM32446Usart1Transmit;
+	ret.usart1.receive = STM32446Usart1Receive;
+	ret.usart1.parameters = STM32446Usart1Parameters;
+	ret.usart1.stop = STM32446Usart1Stop;
 	
 	/*** INICS ***/
 	ret.inic.peripheral = STM32446PeripheralInic;
@@ -335,6 +340,7 @@ STM32446 STM32446enable(void){
 	ret.func.reset = STM32446GpioReset;
 	ret.func.setupreg = STM32446Gpiosetupreg;
 	ret.func.setup = STM32446GpioSetup;
+	ret.func.test = template;
 	
 	/****************************************************************************/
 	SystickInic(); // Polling delay source.
@@ -1270,27 +1276,10 @@ void STM32446Adc1Stop(void)
 }
 
 //USART1
-void STM32446usart1transmitsetup(void) //RM0390 pg801
+void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 {
-/******************************************************************************
-	Procedure:
-1. Enable the USART by writing the UE bit in USART_CR1 register to 1.
-2. Program the M bit in USART_CR1 to define the word length.
-3. Program the number of stop bits in USART_CR2.
-4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
-   place. Configure the DMA register as explained in multibuffer communication.
-5. Select the desired baud rate using the USART_BRR register.
-6. Set the TE bit in USART_CR1 to send an idle frame as first transmission.
-7. Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
-   for each data to be transmitted in case of single buffer.
-8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
-   that the transmission of the last frame is complete. This is required for instance when
-   the USART is disabled or enters the Halt mode to avoid corrupting the last
-   transmission.
-*******************************************************************************/
 	// RCC
 	ret.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
-	
 	// Choose GPIO
 	/*****************************************************************
 		PA9 - TX		PA10 - RX
@@ -1299,45 +1288,54 @@ void STM32446usart1transmitsetup(void) //RM0390 pg801
 		AF7 and AF8, activation. therfore
 	 *****************************************************************/
 	ret.gpioa.moder(2,9);
+	ret.gpioa.moder(2,10);
 	ret.gpioa.afr(7,9);
 	ret.gpioa.afr(7,10);
+	/******************************************************************************
+		Procedure:
+	1. Enable the USART by writing the UE bit in USART_CR1 register to 1.
+	2. Program the M bit in USART_CR1 to define the word length.
+	3. Program the number of stop bits in USART_CR2.
+	4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
+	   place. Configure the DMA register as explained in multibuffer communication.
+	5. Select the desired baud rate using the USART_BRR register.
+	*******************************************************************************/
 	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
-	ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
+	STM32446Usart1Parameters( wordlength, samplingmode, stopbits, baudrate ); // Default
+
+}
+void STM32446Usart1Transmit(void) //RM0390 pg801
+{
+	/******************************************************************************
+		Procedure:
+	6. Set the TE bit in USART_CR1 to send an idle frame as first transmission.
+	7. Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
+		for each data to be transmitted in case of single buffer.
+	8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
+		that the transmission of the last frame is complete. This is required for instance when
+		the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
+	*******************************************************************************/
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
 	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
-	ret.usart1.reg->DR = 'A';
+	//ret.usart1.reg->DR = 'A';
 	//on real application, use fall threw method in main
 	//for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 	// added this as disable after confirmed end of transmission [9]
 	//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
-
-
 }
 
-void STM32446usart1recievesetup(void) //RM0390 pg804
+void STM32446Usart1Receive(void) //RM0390 pg804
 {
-/******************************************************************************
-	Procedure:
-1.	Enable the USART by writing the UE bit in USART_CR1 register to 1.
-2.	Program the M bit in USART_CR1 to define the word length.
-3.	Program the number of stop bits in USART_CR2.
-4.	Select DMA enable (DMAR) in USART_CR3 if multibuffer communication is to take
-		place. Configure the DMA register as explained in multibuffer communication. STEP 3
-5.	Select the desired baud rate using the baud rate register USART_BRR
-6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
+	/******************************************************************************
+		Procedure: baud rate register USART_BRR
+	6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
 		bit.
-*******************************************************************************/
-	
-	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
-	
-	//ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
-	
+	 *******************************************************************************/
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 6); // DMAR: DMA enable receiver - disabled
-	
-	ret.usart1.reg->CR1 |= (1 << 2); // RE: Receiver enable	
+	ret.usart1.reg->CR1 |= (1 << 2); // RE: Receiver enable
 }
 
-void STM32446usart1parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
+void STM32446Usart1Parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 /******************************************************************************
 Sets the usart parameters, using real values.
 *******************************************************************************/
@@ -1389,6 +1387,10 @@ Sets the usart parameters, using real values.
 	}
 }
 
+void STM32446Usart1Stop(void){
+	// added this as disable after confirmed end of transmission [9]
+	ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+}
 //MISCELLANEOUS
 
 
@@ -1578,7 +1580,15 @@ void STM32446SramAccess(void)
 // TEMPLATE
 void template(void)
 { // the best procedure ever does absolutely nothing
-	
+	ret.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
+	ret.gpioa.moder(2,9);
+	ret.gpioa.moder(2,10);
+	ret.gpioa.afr(7,9);
+	ret.gpioa.afr(7,10);
+	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
+	ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
+	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
+	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
 }
 /*******************************************************************************/
 /*******************************************************************************/

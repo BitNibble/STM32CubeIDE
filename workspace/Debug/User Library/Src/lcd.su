@@ -1,4 +1,4 @@
-C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/lcd.c:37:6:LCD0enable	496	static
+C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/lcd.c:37:6:LCD0enable	512	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/lcd.c:63:6:LCD0_inic	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/lcd.c:120:6:LCD0_write	16	static
 C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src/lcd.c:153:6:LCD0_read	24	static

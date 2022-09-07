@@ -21,7 +21,7 @@
   *
   ******************************************************************************
   */
-
+/******************************************************************************/
 #include "main.h"
 
 #include <stdio.h>
@@ -69,7 +69,7 @@ void tim9inic(void);
 void calendario(void);
 
 void TIM1_BRK_TIM9_IRQHandler(void);
-
+/******************************************************************************/
 int main(void)
 {
 unsigned int workspace;
@@ -86,6 +86,7 @@ stm = STM32446enable(); // stm object
 stm.inic.peripheral();
 portinic();
 tim9inic();
+
 func = FUNCenable();
 PINA = EXPLODEenable();
 PINB = EXPLODEenable();
@@ -106,7 +107,11 @@ stm.adc1.single.temp();
 stm.adc1.single.start();
 
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
+
 //stm.systick.delay_ms(10);
+
+stm.usart1.inic(8, 16, 1, 9600);
+stm.usart1.transmit();
 
 /******************************************************************************/
 /***************************** TEST STUFF START *******************************/
@@ -128,7 +133,6 @@ stm.func.setup(&stm.rtc.reg->BKP0R, 8, '\0', 5);
 //4 - Disable access to RTC registers
 stm.pwr.reg->CR &= (uint32_t) ~(1 << 8);
 
-
 //stm.func.setup(vect, 16, 1, 0);
 //stm.func.setup(vect, 16, 1, 2);
 //lcd.gotoxy(0,14);
@@ -136,31 +140,6 @@ stm.pwr.reg->CR &= (uint32_t) ~(1 << 8);
 
 //lcd.gotoxy(1,14);
 //lcd.string_size( func.print("%d", vect[1]), 9);
-
-
-//lcd.gotoxy(0,14);
-//lcd.string_size( func.print("%ud", *circ.head), 9);
-
-//lcd.gotoxy(1,14);
-//lcd.string_size( func.print("%ud", *circ.tail), 9);
-
-
-stm.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
-stm.gpioa.moder(2,9);
-stm.gpioa.moder(2,10);
-stm.gpioa.afr(7,9);
-stm.gpioa.afr(7,10);
-stm.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
-stm.usart1.parameters( 8, 16, 1, 9600 ); // Default
-stm.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
-stm.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
-//stm.usart1.reg->DR = 'A';
-//on real application, use fall threw method in main
-//for( ; stm.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
-// added this as disable after confirmed end of transmission [9]
-//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
-
-//printf("what happens\n");
 
 /******************************************************************************/
 /*****************************  TEST STUFF END  *******************************/

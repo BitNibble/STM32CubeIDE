@@ -30,7 +30,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/explode.h \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/74hc595.h \
  C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/lcd.h \
- C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/stm32446mapping.h
+ C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/stm32446mapping.h \
+ C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/circbuffer.h
 ../Core/Inc/main.h:
 C:/Users/sergi/STM32Cube/Repository/STM32Cube_FW_F4_V1.27.1/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -64,3 +65,4 @@ C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/explode.h:
 C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/74hc595.h:
 C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/lcd.h:
 C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/stm32446mapping.h:
+C:/Users/sergi/Documents/GitHub\ 2022/STM32CubeIDE/User\ Library/Inc/circbuffer.h:

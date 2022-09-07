@@ -34,6 +34,7 @@
 #include "explode.h"
 #include "74hc595.h"
 #include "lcd.h"
+#include "circbuffer.h"
 
 #define sperm ~0
 #define ass (1)
@@ -45,7 +46,7 @@ static EXPLODE PINB;
 static EXPLODE PINC;
 static HC595 hc;
 static LCD0 lcd;
-
+static circbuff circ;
 
 static uint8_t choice;
 static uint8_t hour = 0;
@@ -59,6 +60,7 @@ static uint32_t value = 0;
 static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
+uint8_t buffer[32];
 static char vec[24];
 static volatile uint32_t vect[8];
 
@@ -72,6 +74,7 @@ int main(void)
 {
 unsigned int workspace;
 unsigned int zone;
+
 double temperature = 0;
 unsigned int samples = 0;
 const int n_samples = 60;
@@ -87,6 +90,7 @@ func = FUNCenable();
 PINA = EXPLODEenable();
 PINB = EXPLODEenable();
 PINC = EXPLODEenable();
+circ = CIRCBUFFenable(32, buffer);
 
 choice = 3;
 count1 = 0;
@@ -133,6 +137,14 @@ stm.pwr.reg->CR &= (uint32_t) ~(1 << 8);
 //lcd.gotoxy(1,14);
 //lcd.string_size( func.print("%d", vect[1]), 9);
 
+
+//lcd.gotoxy(0,14);
+//lcd.string_size( func.print("%ud", *circ.head), 9);
+
+//lcd.gotoxy(1,14);
+//lcd.string_size( func.print("%ud", *circ.tail), 9);
+
+
 stm.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
 stm.gpioa.moder(2,9);
 stm.gpioa.moder(2,10);
@@ -142,7 +154,7 @@ stm.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
 stm.usart1.parameters( 8, 16, 1, 9600 ); // Default
 stm.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
 stm.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
-stm.usart1.reg->DR = 'A';
+//stm.usart1.reg->DR = 'A';
 //on real application, use fall threw method in main
 //for( ; stm.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 // added this as disable after confirmed end of transmission [9]
@@ -166,6 +178,7 @@ if(zone == 0)
 	PINC.update(&PINC, stm.gpioc.reg->IDR);
 	lcd.reboot();
 	// Detect for all workspaces only once
+	circ.fstring(&circ, "Ola manuel\r\n");
 	continue;
 } // if
 /******************************************************************************/
@@ -217,7 +230,7 @@ if(zone == 4)
 
 
 	if( stm.usart1.reg->SR & (1 << 6) ){ // TC: Transmission complete
-		//stm.usart1.reg->DR = 'B';
+		stm.usart1.reg->DR = circ.get(&circ);
 		//lcd.gotoxy(0,17);
 		//lcd.string_size( func.print("%d",zone), 3);
 	}
@@ -299,12 +312,18 @@ void calendario(void)
 			lcd.gotoxy(3,0);
 			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
-			if( value > 5 && value < 11 )
+			if( value > 5 && value < 11 ){
+				circ.string(&circ, "Data\r\n");
 				choice = 2;
-			if( value > 10 && value < 30 )
+			}
+			if( value > 10 && value < 30 ){
+				circ.string(&circ, "acertar hora\r\n");
 				choice = 4;
-			if( value > 40 )
+			}
+			if( value > 40 ){
+				circ.string(&circ, "Calendario\r\n");
 				choice = 3;
+			}
 			break;
 
 		case 2: // show date
@@ -314,12 +333,18 @@ void calendario(void)
 			lcd.gotoxy(3,0);
 			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
-			if( value > 5 && value < 11 )
+			if( value > 5 && value < 11 ){
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
-			if( value > 10 && value < 30 )
+			}
+			if( value > 10 && value < 30 ){
+				circ.string(&circ, "acertar ano\r\n");
 				choice = 7;
-			if( value > 40 )
+			}
+			if( value > 40 ){
+				circ.string(&circ, "Calendario\r\n");
 				choice = 3;
+			}
 			break;
 
 		case 3: // message
@@ -339,6 +364,7 @@ void calendario(void)
 				lcd.string_size(" ",17);
 				lcd.gotoxy(3,0);
 				lcd.string_size(" ",15);
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
 			}
 			break;
@@ -358,11 +384,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "acertar minutos\r\n");
 				choice = 5;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Hour(hour);
 			}
@@ -382,11 +410,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "acertar segundos\r\n");
 				choice = 6;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Minute(minute);
 			}
@@ -406,11 +436,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Second(second);
 			}
@@ -431,11 +463,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "acertar mes\r\n");
 				choice = 8;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Year(ano);
 			}
@@ -455,11 +489,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "acertar dia\r\n");
 				choice = 9;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Month(mes);
 			}
@@ -479,11 +515,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Data\r\n");
 				choice = 2;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
+				circ.string(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Day(dia);
 			}

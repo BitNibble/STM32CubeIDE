@@ -1620,7 +1620,7 @@ void SysTick_Handler(void)
 On all periferals, always have to take in cosideration the POWER [pwr] rail, the CLOCK rail [rcc] 
 then the pin configuration.
 
-Also be aware of the interupt flags have to be cleared after being fired and the interrupt been
+Also be aware of the interrupt flags have to be cleared after being fired and the interrupt been
 received.
 
 uvision trial limitation to 32Kb.

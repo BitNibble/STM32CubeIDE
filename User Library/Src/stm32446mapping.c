@@ -1322,6 +1322,7 @@ void STM32446Usart1Transmit(void) //RM0390 pg801
 	//for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 	// added this as disable after confirmed end of transmission [9]
 	//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+	ret.usart1.reg->SR &= ~(1 << 6); // TC: Transmission complete
 }
 
 void STM32446Usart1Receive(void) //RM0390 pg804
@@ -1333,6 +1334,7 @@ void STM32446Usart1Receive(void) //RM0390 pg804
 	 *******************************************************************************/
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 6); // DMAR: DMA enable receiver - disabled
 	ret.usart1.reg->CR1 |= (1 << 2); // RE: Receiver enable
+	ret.usart1.reg->SR &= ~(1 << 5); // RXNE: Read data register not empty
 }
 
 void STM32446Usart1Parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )

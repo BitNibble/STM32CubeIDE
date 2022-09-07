@@ -19,9 +19,10 @@ static volatile uint8_t CIRCi;
 /******************************************************************************/
 uint8_t CIRC_get(struct circ_buf_template* circ);
 void CIRC_put(struct circ_buf_template* circ, uint8_t data);
-void CIRC_string(struct circ_buf_template* circ, const char* str);
-void CIRC_fstring(struct circ_buf_template* circ, const char* str);
+void CIRC_putstr(struct circ_buf_template* circ, const char* str);
+void CIRC_fputstr(struct circ_buf_template* circ, const char* str);
 void CIRC_freset(void);
+void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str);
 /***Procedure & Function***/
 /******************************************************************************/
 circbuff CIRCBUFFenable( uint8_t size_buff, uint8_t* buff )
@@ -36,8 +37,8 @@ circbuff CIRCBUFFenable( uint8_t size_buff, uint8_t* buff )
 	// function pointers
 	circ.get = CIRC_get;
 	circ.put = CIRC_put;
-	circ.string = CIRC_string;
-	circ.fstring = CIRC_fstring;
+	circ.putstr = CIRC_putstr;
+	circ.getstr = CIRC_getstr;
 	/******/
 	return circ; // return copy
 }
@@ -80,14 +81,20 @@ void CIRC_put( struct circ_buf_template* circ, uint8_t data ){
 	}
 }
 
-void CIRC_string(struct circ_buf_template* circ, const char* str){
+void CIRC_putstr(struct circ_buf_template* circ, const char* str){
 	uint8_t i;
 	for(i = 0; i < (strlen(str)+1) ; i++){
 		CIRC_put(circ, str[i]);	
 	}
 }
 
-void CIRC_fstring(struct circ_buf_template* circ, const char* str){
+void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str){
+	uint8_t i;
+	for(i = 0; (str[i] = CIRC_get(circ)) ; i++);
+	str[--i] = ' '; // remove '\0', making it raw string
+}
+
+void CIRC_fputstr(struct circ_buf_template* circ, const char* str){
 	if( CIRCi < (strlen(str)+1)){
 		CIRC_put(circ, str[CIRCi++]);
 	}
@@ -100,7 +107,8 @@ void CIRC_freset(void){
 
 /******************************************************************************/
 /***Interrupt***/
-/******************************Comment****************************************
+/******************************Comment*****************************************
+	Simple and concise, nice.
 *******************************************************************************/
 /***EOF***/
 

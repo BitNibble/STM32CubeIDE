@@ -23,8 +23,8 @@ struct circ_buf_template
 	uint8_t* end;
 	uint8_t (*get)(struct circ_buf_template* circ);
 	void (*put)(struct circ_buf_template* circ, uint8_t data);
-	void (*string)(struct circ_buf_template* circ, const char* str);
-	void (*fstring)(struct circ_buf_template* circ, const char* str);
+	void (*putstr)(struct circ_buf_template* circ, const char* str);
+	void (*getstr)(struct circ_buf_template* circ, uint8_t* str);
 } ;
 typedef struct circ_buf_template circbuff;
 /***Header***/

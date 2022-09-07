@@ -19,8 +19,7 @@
   * PA 5     ---> Led indicator
   * PC 13    ---> user button
   *
-  ******************************************************************************
-  */
+  *****************************************************************************/
 /******************************************************************************/
 #include "main.h"
 
@@ -47,6 +46,7 @@ static EXPLODE PINC;
 static HC595 hc;
 static LCD0 lcd;
 static circbuff circ;
+static circbuff circ2;
 
 static uint8_t choice;
 static uint8_t hour = 0;
@@ -61,6 +61,8 @@ static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
 uint8_t buffer[32]; // for circular buffer
+uint8_t buffer2[32]; // for circular buffer
+uint8_t received[32]; // for circular buffer
 static char vec[24]; // for calendar
 static volatile uint32_t vect[8];
 
@@ -74,6 +76,7 @@ int main(void)
 {
 unsigned int workspace;
 unsigned int zone;
+uint8_t transmit;
 uint8_t receive;
 
 double temperature = 0;
@@ -93,6 +96,7 @@ PINA = EXPLODEenable();
 PINB = EXPLODEenable();
 PINC = EXPLODEenable();
 circ = CIRCBUFFenable(32, buffer);
+circ2 = CIRCBUFFenable(32, buffer2);
 
 choice = 3;
 count1 = 0;
@@ -111,8 +115,9 @@ stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 
 //stm.systick.delay_ms(10);
 
-stm.usart1.inic(8, 16, 1, 9600);
+stm.usart1.inic(8, 16, 1, 115200);
 stm.usart1.transmit();
+stm.usart1.receive();
 
 /******************************************************************************/
 /***************************** TEST STUFF START *******************************/
@@ -158,7 +163,6 @@ if(zone == 0)
 	PINC.update(&PINC, stm.gpioc.reg->IDR);
 	lcd.reboot();
 	// Detect for all workspaces only once
-	circ.fstring(&circ, "Ola manuel\r\n");
 	continue;
 } // if
 /******************************************************************************/
@@ -205,16 +209,27 @@ if(zone == 3)
 /******************************************************************************/
 if(zone == 4)
 {// workspace 4
-	//stm.usart1.parameters(8,16,1,9600);
-	//stm.usart1.test();
-
 
 	if( stm.usart1.reg->SR & (1 << 6) ){ // TC: Transmission complete
 
-		receive = circ.get(&circ);
-		if(receive)
-			stm.usart1.reg->DR = receive;
+		transmit = circ.get(&circ);
+		if(transmit)
+			stm.usart1.reg->DR = transmit;
+	}
 
+	if(stm.usart1.reg->SR & (1 << 5)){ // RXNE: Read data register not empty
+			receive = stm.usart1.reg->DR;
+			if(receive){
+				circ2.put(&circ2, receive);
+
+				if(receive == 13 ){
+					circ2.getstr(&circ2, received);
+					lcd.gotoxy(1,16);
+					lcd.string_size((char*)received, 6);
+				}
+
+			}
+			stm.usart1.reg->SR &=  ~(1 << 5);
 	}
 
 	continue;
@@ -295,15 +310,15 @@ void calendario(void)
 			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.string(&circ, "Data\r\n");
+				circ.putstr(&circ, "Data\r\n");
 				choice = 2;
 			}
 			if( value > 10 && value < 30 ){
-				circ.string(&circ, "acertar hora\r\n");
+				circ.putstr(&circ, "acertar hora\r\n");
 				choice = 4;
 			}
 			if( value > 40 ){
-				circ.string(&circ, "Calendario\r\n");
+				circ.putstr(&circ, "Calendario\r\n");
 				choice = 3;
 			}
 			break;
@@ -316,15 +331,15 @@ void calendario(void)
 			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 			}
 			if( value > 10 && value < 30 ){
-				circ.string(&circ, "acertar ano\r\n");
+				circ.putstr(&circ, "acertar ano\r\n");
 				choice = 7;
 			}
 			if( value > 40 ){
-				circ.string(&circ, "Calendario\r\n");
+				circ.putstr(&circ, "Calendario\r\n");
 				choice = 3;
 			}
 			break;
@@ -346,7 +361,7 @@ void calendario(void)
 				lcd.string_size(" ",17);
 				lcd.gotoxy(3,0);
 				lcd.string_size(" ",15);
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 			}
 			break;
@@ -366,13 +381,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "acertar minutos\r\n");
+				circ.putstr(&circ, "acertar minutos\r\n");
 				choice = 5;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Hour(hour);
 			}
@@ -392,13 +407,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "acertar segundos\r\n");
+				circ.putstr(&circ, "acertar segundos\r\n");
 				choice = 6;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Minute(minute);
 			}
@@ -418,13 +433,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Relogio\r\n");
+				circ.putstr(&circ, "Relogio\r\n");
 				choice = 1;
 				stm.rtc.Second(second);
 			}
@@ -445,13 +460,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "acertar mes\r\n");
+				circ.putstr(&circ, "acertar mes\r\n");
 				choice = 8;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Data\r\n");
+				circ.putstr(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Year(ano);
 			}
@@ -471,13 +486,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "acertar dia\r\n");
+				circ.putstr(&circ, "acertar dia\r\n");
 				choice = 9;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Data\r\n");
+				circ.putstr(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Month(mes);
 			}
@@ -497,13 +512,13 @@ void calendario(void)
 			if( value > 10 && value < 20){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Data\r\n");
+				circ.putstr(&circ, "Data\r\n");
 				choice = 2;
 			}
 			if( value > 19){
 				lcd.gotoxy(2,0);
 				lcd.string_size(" ",16);
-				circ.string(&circ, "Data\r\n");
+				circ.putstr(&circ, "Data\r\n");
 				choice = 2;
 				stm.rtc.Day(dia);
 			}

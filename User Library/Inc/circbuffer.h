@@ -1,12 +1,12 @@
 /******************************************************************************
-	EXPLODE
+	CIRCBUFFER
 Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 16032021
+Date: 07092022
 Comment:
-	Pin Analysis
+	Circular Buffer
 *******************************************************************************/
 #ifndef _CIRCBUFFER_H_
 	#define _CIRCBUFFER_H_

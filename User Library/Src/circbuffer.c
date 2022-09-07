@@ -53,7 +53,7 @@ uint8_t CIRC_get( struct circ_buf_template* circ ){
 	}
 
 	if( (tail == circ->head)  ){
-		*tail = '\0';
+		*tail = 0;
 	}else{
 		circ->tail = next;
 		tail = next;

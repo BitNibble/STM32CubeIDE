@@ -2,7 +2,7 @@ NB:
 
 Remove stm32f4xx_it.c, in order for this template to work.
 
-It uses sytick already.
+It uses systick already.
 
 
 How to generate hex files:

@@ -60,8 +60,8 @@ static uint32_t value = 0;
 static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
-uint8_t buffer[32];
-static char vec[24];
+uint8_t buffer[32]; // for circular buffer
+static char vec[24]; // for calendar
 static volatile uint32_t vect[8];
 
 void portinic(void);
@@ -74,6 +74,7 @@ int main(void)
 {
 unsigned int workspace;
 unsigned int zone;
+uint8_t receive;
 
 double temperature = 0;
 unsigned int samples = 0;
@@ -209,9 +210,11 @@ if(zone == 4)
 
 
 	if( stm.usart1.reg->SR & (1 << 6) ){ // TC: Transmission complete
-		stm.usart1.reg->DR = circ.get(&circ);
-		//lcd.gotoxy(0,17);
-		//lcd.string_size( func.print("%d",zone), 3);
+
+		receive = circ.get(&circ);
+		if(receive)
+			stm.usart1.reg->DR = receive;
+
 	}
 
 	continue;

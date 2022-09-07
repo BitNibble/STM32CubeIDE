@@ -11,7 +11,6 @@ Comment:
 /***Library***/
 #include <stdio.h>
 #include <string.h>
-#include <inttypes.h>
 #include "circbuffer.h"
 /***Constant & Macro***/
 /***Global File Variable***/

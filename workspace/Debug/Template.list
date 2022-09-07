@@ -1245,7 +1245,9 @@ stm.rtc.inic(1); // 2 - LSI, 1 - LSE
  8000ec6:	f8d3 30e0 	ldr.w	r3, [r3, #224]	; 0xe0
  8000eca:	2001      	movs	r0, #1
  8000ecc:	4798      	blx	r3
+
 //stm.systick.delay_ms(10);
+
 stm.usart1.inic(8, 16, 1, 9600);
  8000ece:	4b59      	ldr	r3, [pc, #356]	; (8001034 <main+0x2fc>)
  8000ed0:	f8d3 3154 	ldr.w	r3, [r3, #340]	; 0x154

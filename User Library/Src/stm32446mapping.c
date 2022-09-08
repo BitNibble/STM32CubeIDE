@@ -136,7 +136,8 @@ char STM32446bcd2dec(char num);
 char STM32446dec2bcd(char num);
 /*** SYSTICK ***/
 void STM32446delay_ms(uint32_t ms);
-void STM32446delay_10us(uint32_t us);
+void STM32446delay_10us(uint32_t ten_us);
+void STM32446delay_us(uint32_t us);
 /*** BUTTON ***/
 uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
@@ -291,6 +292,7 @@ STM32446 STM32446enable(void){
 	ret.systick.reg = (SysTick_Type*) SysTick_BASE;
 	ret.systick.delay_ms = STM32446delay_ms;
 	ret.systick.delay_10us = STM32446delay_10us;
+	ret.systick.delay_us = STM32446delay_us;
 	
 	/**random order**/
 	
@@ -1612,9 +1614,21 @@ void STM32446delay_ms(uint32_t ms)
 	// Disable the SysTick timer
 	ret.systick.reg->CTRL &= (uint32_t) ~(1 << 0);
 }
-void STM32446delay_10us(uint32_t us)
+void STM32446delay_10us(uint32_t ten_us)
 {
 	ret.systick.reg->LOAD = (uint32_t)((SystemCoreClock / 100000) - 1);
+	// Enable the SysTick timer
+	ret.systick.reg->CTRL |= (1 << 0);
+	// Wait for a specified number of milliseconds
+	DelayCounter = 0;
+	while (DelayCounter < ten_us);
+	// Disable the SysTick timer
+	ret.systick.reg->CTRL &= (uint32_t) ~(1 << 0);
+}
+
+void STM32446delay_us(uint32_t us)
+{
+	ret.systick.reg->LOAD = (uint32_t)((SystemCoreClock / 1000000) - 1);
 	// Enable the SysTick timer
 	ret.systick.reg->CTRL |= (1 << 0);
 	// Wait for a specified number of milliseconds
@@ -1623,6 +1637,7 @@ void STM32446delay_10us(uint32_t us)
 	// Disable the SysTick timer
 	ret.systick.reg->CTRL &= (uint32_t) ~(1 << 0);
 }
+
 /***Interrupt Procedure***/
 void SysTick_Handler(void)
 { // count down to zero systick interrupt and reload.

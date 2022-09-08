@@ -219,7 +219,8 @@ typedef struct
 {
 	SysTick_Type* reg;
 	void (*delay_ms)(uint32_t ms); // It uses Systick
-	void (*delay_10us)(uint32_t us); // It uses Systick
+	void (*delay_10us)(uint32_t ten_us); // It uses Systick
+	void (*delay_us)(uint32_t us);
 }STM32446SysTickobj;
 
 /**random order**/

@@ -88,6 +88,10 @@ void LCD0_inic(void)
 	stm.systick.delay_10us(10);
 	LCD0_write(0x38, INST); //function set
 	stm.systick.delay_10us(4);
+	LCD0_write(0x28, INST); //function set 2B
+	stm.systick.delay_10us(4);
+	LCD0_write(0x28, INST); //function set 2B
+	stm.systick.delay_10us(4);
 	/**************************************/
 	for(repeat = 2 ; repeat ; repeat--){
 		// repeat twice in 4 bit length

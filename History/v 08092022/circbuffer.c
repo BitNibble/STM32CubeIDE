@@ -13,6 +13,7 @@ Comment:
 #include <string.h>
 #include "circbuffer.h"
 /***Constant & Macro***/
+#define CIRC_NULL 0
 /***Global File Variable***/
 static volatile uint8_t CIRCi;
 /***Header***/
@@ -54,7 +55,7 @@ uint8_t CIRC_get( struct circ_buf_template* circ ){
 	}
 
 	if( (tail == circ->head)  ){
-		*tail = 0;
+		*tail = CIRC_NULL; // flag null
 	}else{
 		circ->tail = next;
 		tail = next;
@@ -83,19 +84,18 @@ void CIRC_put( struct circ_buf_template* circ, uint8_t data ){
 
 void CIRC_putstr(struct circ_buf_template* circ, const char* str){
 	uint8_t i;
-	for(i = 0; i < (strlen(str)+1) ; i++){
-		CIRC_put(circ, str[i]);	
+	for(i = 0; i < (strlen(str)+1) ; ){
+		CIRC_put(circ, str[i++]);
 	}
 }
 
 void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str){
 	uint8_t i;
-	for(i = 0; (str[i] = CIRC_get(circ)) ; i++);
-	str[--i] = ' '; // remove '\0', making it raw string
+	for(i = 0; (str[i++] = CIRC_get(circ)) ; );
 }
 
 void CIRC_fputstr(struct circ_buf_template* circ, const char* str){
-	if( CIRCi < (strlen(str)+1)){
+	if( CIRCi < (strlen(str)+1) ){
 		CIRC_put(circ, str[CIRCi++]);
 	}
 }

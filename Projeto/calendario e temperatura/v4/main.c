@@ -176,6 +176,7 @@ if(zone == 3)
 		transmit = circ.get(&circ);
 		if(transmit)
 			stm.usart1.reg->DR = transmit;
+
 	}
 
 	if(stm.usart1.reg->SR & (1 << 5)){ // RXNE: Read data register not empty
@@ -186,6 +187,7 @@ if(zone == 3)
 			if(receive == 13 ){
 				circ2.getstr(&circ2, received);
 				lcd.gotoxy(1,6);
+				received[strlen((char*)received)-1] = '\0';
 				lcd.string_size((char*)received, 14);
 			}
 

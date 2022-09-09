@@ -187,7 +187,7 @@ if(zone == 3)
 			if(receive == 13 ){
 				circ2.getstr(&circ2, received);
 				lcd.gotoxy(1,6);
-				received[strlen((char*)received)-1] = '\0';
+				received[strlen((char*)received)-1] = '\0'; //remove enter key
 				lcd.string_size((char*)received, 14);
 			}
 
@@ -231,6 +231,7 @@ if(zone == 7)
 /******************************************************************************/
 		/*************************************************************/
 /******************************************************************************/
+
 void portinic(void)
 {
 	//Enable clock for IO peripherals
@@ -247,7 +248,9 @@ void portinic(void)
 	stm.gpioc.pupdr(1,13);
 
 }
+
 /******************************************************************************/
+
 void tim9inic(void)
 {
 	stm.rcc.reg->APB2ENR |= (1 << 16); //timer 9 clock enabled
@@ -263,7 +266,9 @@ void tim9inic(void)
 	//stm.tim9.reg->CCER |= 1;
 	stm.tim9.reg->CR1 |= 1 | (1 << 7);
 }
+
 /******************************************************************************/
+
 void calendario(void)
 {
 	/******MENU*****/

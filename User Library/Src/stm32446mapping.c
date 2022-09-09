@@ -19,8 +19,6 @@ Comment:
 */
 #define sperm ~0
 #define ass (1)
-#define tits (.|.)
-#define cameltoe (\/)
 /*
 *** File Variable
 */

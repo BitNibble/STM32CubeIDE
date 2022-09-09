@@ -3073,7 +3073,7 @@ LOAD c:/programs/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.id
  .debug_ranges  0x0000000000000300       0x70 ./User Library/Src/lcd.o
  .debug_ranges  0x0000000000000370      0x310 ./User Library/Src/stm32446mapping.o
 
-.debug_macro    0x0000000000000000    0x2234b
+.debug_macro    0x0000000000000000    0x22339
  .debug_macro   0x0000000000000000      0x3ed ./Core/Src/main.o
  .debug_macro   0x00000000000003ed      0xa78 ./Core/Src/main.o
  .debug_macro   0x0000000000000e65      0x28f ./Core/Src/main.o
@@ -3168,20 +3168,20 @@ LOAD c:/programs/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.id
  .debug_macro   0x0000000000020ee6       0xb9 ./User Library/Src/74hc595.o
  .debug_macro   0x0000000000020f9f       0x3a ./User Library/Src/74hc595.o
  .debug_macro   0x0000000000020fd9       0x82 ./User Library/Src/74hc595.o
- .debug_macro   0x000000000002105b      0x219 ./User Library/Src/circbuffer.o
- .debug_macro   0x0000000000021274       0x97 ./User Library/Src/circbuffer.o
- .debug_macro   0x000000000002130b       0xfd ./User Library/Src/circbuffer.o
- .debug_macro   0x0000000000021408      0x1e5 ./User Library/Src/circbuffer.o
- .debug_macro   0x00000000000215ed      0x16c ./User Library/Src/explode.o
- .debug_macro   0x0000000000021759      0x10e ./User Library/Src/explode.o
- .debug_macro   0x0000000000021867       0x8d ./User Library/Src/explode.o
- .debug_macro   0x00000000000218f4      0x23b ./User Library/Src/function.o
- .debug_macro   0x0000000000021b2f       0x4c ./User Library/Src/function.o
- .debug_macro   0x0000000000021b7b      0x19b ./User Library/Src/function.o
- .debug_macro   0x0000000000021d16      0x22f ./User Library/Src/lcd.o
- .debug_macro   0x0000000000021f45      0x104 ./User Library/Src/lcd.o
- .debug_macro   0x0000000000022049      0x2aa ./User Library/Src/stm32446mapping.o
- .debug_macro   0x00000000000222f3       0x58 ./User Library/Src/stm32446mapping.o
+ .debug_macro   0x000000000002105b      0x213 ./User Library/Src/circbuffer.o
+ .debug_macro   0x000000000002126e       0x97 ./User Library/Src/circbuffer.o
+ .debug_macro   0x0000000000021305       0xfd ./User Library/Src/circbuffer.o
+ .debug_macro   0x0000000000021402      0x1e5 ./User Library/Src/circbuffer.o
+ .debug_macro   0x00000000000215e7      0x16c ./User Library/Src/explode.o
+ .debug_macro   0x0000000000021753      0x10e ./User Library/Src/explode.o
+ .debug_macro   0x0000000000021861       0x8d ./User Library/Src/explode.o
+ .debug_macro   0x00000000000218ee      0x23b ./User Library/Src/function.o
+ .debug_macro   0x0000000000021b29       0x4c ./User Library/Src/function.o
+ .debug_macro   0x0000000000021b75      0x19b ./User Library/Src/function.o
+ .debug_macro   0x0000000000021d10      0x22f ./User Library/Src/lcd.o
+ .debug_macro   0x0000000000021f3f      0x104 ./User Library/Src/lcd.o
+ .debug_macro   0x0000000000022043      0x29e ./User Library/Src/stm32446mapping.o
+ .debug_macro   0x00000000000222e1       0x58 ./User Library/Src/stm32446mapping.o
 
 .debug_line     0x0000000000000000     0x82de
  .debug_line    0x0000000000000000     0x1271 ./Core/Src/main.o
@@ -3196,29 +3196,29 @@ LOAD c:/programs/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.id
  .debug_line    0x0000000000004cde      0xe04 ./User Library/Src/lcd.o
  .debug_line    0x0000000000005ae2     0x27fc ./User Library/Src/stm32446mapping.o
 
-.debug_str      0x0000000000000000    0xc85e2
- .debug_str     0x0000000000000000    0xc5621 ./Core/Src/main.o
+.debug_str      0x0000000000000000    0xc85c5
+ .debug_str     0x0000000000000000    0xc5629 ./Core/Src/main.o
                                       0xc5bb0 (size before relaxing)
- .debug_str     0x00000000000c5621     0x166b ./Core/Src/syscalls.o
+ .debug_str     0x00000000000c5629     0x166b ./Core/Src/syscalls.o
                                        0x8a7a (size before relaxing)
- .debug_str     0x00000000000c6c8c       0x6b ./Core/Src/sysmem.o
+ .debug_str     0x00000000000c6c94       0x6b ./Core/Src/sysmem.o
                                        0x5db6 (size before relaxing)
- .debug_str     0x00000000000c6cf7       0xdb ./Core/Src/system_stm32f4xx.o
+ .debug_str     0x00000000000c6cff       0xdb ./Core/Src/system_stm32f4xx.o
                                       0xc031b (size before relaxing)
- .debug_str     0x00000000000c6dd2       0x36 ./Core/Startup/startup_stm32f446retx.o
+ .debug_str     0x00000000000c6dda       0x36 ./Core/Startup/startup_stm32f446retx.o
                                          0x78 (size before relaxing)
- .debug_str     0x00000000000c6e08       0xcb ./User Library/Src/74hc595.o
+ .debug_str     0x00000000000c6e10       0xcb ./User Library/Src/74hc595.o
                                        0x515c (size before relaxing)
- .debug_str     0x00000000000c6ed3       0xb9 ./User Library/Src/circbuffer.o
-                                       0x8e75 (size before relaxing)
- .debug_str     0x00000000000c6f8c       0x97 ./User Library/Src/explode.o
+ .debug_str     0x00000000000c6edb       0xad ./User Library/Src/circbuffer.o
+                                       0x8e69 (size before relaxing)
+ .debug_str     0x00000000000c6f88       0x97 ./User Library/Src/explode.o
                                        0x7ee0 (size before relaxing)
- .debug_str     0x00000000000c7023      0xc0f ./User Library/Src/function.o
+ .debug_str     0x00000000000c701f      0xc0f ./User Library/Src/function.o
                                        0x9baf (size before relaxing)
- .debug_str     0x00000000000c7c32      0x12c ./User Library/Src/lcd.o
+ .debug_str     0x00000000000c7c2e      0x12c ./User Library/Src/lcd.o
                                       0xc1e1b (size before relaxing)
- .debug_str     0x00000000000c7d5e      0x884 ./User Library/Src/stm32446mapping.o
-                                      0xc597b (size before relaxing)
+ .debug_str     0x00000000000c7d5a      0x86b ./User Library/Src/stm32446mapping.o
+                                      0xc5962 (size before relaxing)
 
 .comment        0x0000000000000000       0x50
  .comment       0x0000000000000000       0x50 ./Core/Src/main.o

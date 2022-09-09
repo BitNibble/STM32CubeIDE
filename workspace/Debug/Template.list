@@ -35,15 +35,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00000680  00000000  00000000  0002b320  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002234b  00000000  00000000  0002b9a0  2**0
+ 16 .debug_macro  00022339  00000000  00000000  0002b9a0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000082de  00000000  00000000  0004dceb  2**0
+ 17 .debug_line   000082de  00000000  00000000  0004dcd9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c85e2  00000000  00000000  00055fc9  2**0
+ 18 .debug_str    000c85c5  00000000  00000000  00055fb7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0011e5ab  2**0
+ 19 .comment      00000050  00000000  00000000  0011e57c  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000036e8  00000000  00000000  0011e5fc  2**2
+ 20 .debug_frame  000036e8  00000000  00000000  0011e5cc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1545,7 +1545,7 @@ if(zone == 3)
  800111c:	2106      	movs	r1, #6
  800111e:	2001      	movs	r0, #1
  8001120:	4798      	blx	r3
-				received[strlen((char*)received)-1] = '\0';
+				received[strlen((char*)received)-1] = '\0'; //remove enter key
  8001122:	4822      	ldr	r0, [pc, #136]	; (80011ac <main+0x474>)
  8001124:	f7ff f874 	bl	8000210 <strlen>
  8001128:	4603      	mov	r3, r0
@@ -1641,9 +1641,9 @@ zone = workspace & 7;
 
 080011c0 <portinic>:
 /******************************************************************************/
-/******************************************************************************/
 		/*************************************************************/
 /******************************************************************************/
+
 void portinic(void)
 {
  80011c0:	b580      	push	{r7, lr}
@@ -1694,7 +1694,9 @@ void portinic(void)
  8001200:	200001fc 	.word	0x200001fc
 
 08001204 <tim9inic>:
+
 /******************************************************************************/
+
 void tim9inic(void)
 {
  8001204:	b480      	push	{r7}
@@ -1759,7 +1761,9 @@ void tim9inic(void)
  8001280:	200001fc 	.word	0x200001fc
 
 08001284 <calendario>:
+
 /******************************************************************************/
+
 void calendario(void)
 {
  8001284:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -4164,13 +4168,13 @@ uint8_t CIRC_get( struct circ_buf_template* circ ){
  8002298:	60bb      	str	r3, [r7, #8]
 	}
 
-	if( (tail == circ->head)  ){
+	if( tail == circ->head ){
  800229a:	687b      	ldr	r3, [r7, #4]
  800229c:	685b      	ldr	r3, [r3, #4]
  800229e:	68fa      	ldr	r2, [r7, #12]
  80022a0:	429a      	cmp	r2, r3
  80022a2:	d103      	bne.n	80022ac <CIRC_get+0x38>
-		*tail = CIRC_NULL; // flag null
+		*tail = 0; // flag null
  80022a4:	68fb      	ldr	r3, [r7, #12]
  80022a6:	2200      	movs	r2, #0
  80022a8:	701a      	strb	r2, [r3, #0]
@@ -4301,7 +4305,7 @@ void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str){
  8002358:	6078      	str	r0, [r7, #4]
  800235a:	6039      	str	r1, [r7, #0]
 	uint8_t i;
-	for(i = 0; (str[i++] = CIRC_get(circ)) ; );
+	for(i = 0; (str[i++] = CIRC_get(circ))  ; );
  800235c:	2300      	movs	r3, #0
  800235e:	73fb      	strb	r3, [r7, #15]
  8002360:	bf00      	nop

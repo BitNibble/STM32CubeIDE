@@ -59,7 +59,8 @@ static uint32_t value = 0;
 static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
-static char vec[24]; // for calendar
+static char vecT[6]; // for calendar
+static char vecD[6]; // for calendar
 
 void portinic(void);
 void tim9inic(void);
@@ -272,12 +273,12 @@ void calendario(void)
 		case 1: // show time
 			lcd.gotoxy(0,0);
 			lcd.string_size("Relogio",16);
-			stm.rtc.tr2vec(vec);
+			stm.rtc.tr2vec(vecT);
 			lcd.gotoxy(3,0);
-			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]),17);
+			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.putstr(&circ, func.print("data: %d%d:%d%d:20%d%d\r\n", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]) );
+				circ.putstr(&circ, func.print("data: %d%d:%d%d:20%d%d\r\n", vecD[5],vecD[6],vecD[3],vecD[4],vecD[0],vecD[1]) );
 				choice = 2;
 			}
 			if( value > 10 && value < 30 ){
@@ -293,12 +294,12 @@ void calendario(void)
 		case 2: // show date
 			lcd.gotoxy(0,0);
 			lcd.string_size("Data",16);
-			stm.rtc.dr2vec(vec);
+			stm.rtc.dr2vec(vecD);
 			lcd.gotoxy(3,0);
-			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]),17);
+			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vecD[5],vecD[6],vecD[3],vecD[4],vecD[0],vecD[1]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.putstr(&circ, func.print("hora: %d%d:%d%d:%d%d\r\n", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]) );
+				circ.putstr(&circ, func.print("hora: %d%d:%d%d:%d%d\r\n", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]) );
 				choice = 1;
 			}
 			if( value > 10 && value < 30 ){
@@ -315,13 +316,13 @@ void calendario(void)
 			lcd.gotoxy(0,0);
 			lcd.string_size("Calendario",10);
 
-			stm.rtc.dr2vec(vec);
+			stm.rtc.dr2vec(vecD);
 			lcd.gotoxy(2,0);
-			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]),17);
+			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vecD[5],vecD[6],vecD[3],vecD[4],vecD[0],vecD[1]), 17);
 
-			stm.rtc.tr2vec(vec);
+			stm.rtc.tr2vec(vecT);
 			lcd.gotoxy(3,0);
-			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]),17);
+			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]), 17);
 
 			if(stm.func.triggerB(PINC.HL,PINC.LH,13,count2) > 40){
 				lcd.gotoxy(2,0);

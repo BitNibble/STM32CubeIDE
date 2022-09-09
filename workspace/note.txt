@@ -11,3 +11,7 @@ then link -> Includes
 
 
 
+To generate hex files:
+Project -> Properties -> C/C++ Build -> Settings -> MCU Post build outputs
+then tick the box corresponding "Convert to Intel Hex file"
+

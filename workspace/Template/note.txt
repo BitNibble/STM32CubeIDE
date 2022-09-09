@@ -1,0 +1,13 @@
+NB:
+
+Remove stm32f4xx_it.h, in order to work.
+
+sytick already in use.
+
+
+After go to Project -> Properties -> C/C++ General -> Paths and Symbols
+then link -> Includes
+          -> Source Location
+
+
+

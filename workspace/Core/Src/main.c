@@ -1,7 +1,7 @@
 /******************************************************************************
   * @file           : main.c
   * @brief          : Calendario e temperatura
-  *****************************************************************************
+ ******************************************************************************
   * @attention
   *
   * Copyright (c) 2022 STMicroelectronics.
@@ -17,7 +17,7 @@
   * PB 0...7 ---> LCD 4x20
   * PA 5     ---> Led indicator
   * PC 13    ---> user button
-  *	PA9 and PA10 	--->	USART1
+  * PA9 and PA10 	--->	USART1
 *******************************************************************************/
 /******************************************************************************/
 #include "main.h"
@@ -59,11 +59,7 @@ static uint32_t value = 0;
 static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
-uint8_t buffer[32]; // for circular buffer
-uint8_t buffer2[32]; // for circular buffer
-uint8_t received[32]; // for circular buffer
 static char vec[24]; // for calendar
-static volatile uint32_t vect[8];
 
 void portinic(void);
 void tim9inic(void);
@@ -81,9 +77,10 @@ uint8_t receive;
 double temperature = 0;
 unsigned int samples = 0;
 const int n_samples = 60;
-vect[0] = 0;
-vect[1] = 0;
-vect[2] = 0;
+
+uint8_t buffer[32]; // for circular buffer
+uint8_t buffer2[32]; // for circular buffer
+uint8_t received[32]; // for circular buffer
 
 stm = STM32446enable(); // stm object
 stm.inic.peripheral();
@@ -128,7 +125,7 @@ for ( zone = 0, workspace = 0 ; ass ; workspace++)
 zone = workspace & 7;
 
 if(zone == 0)
-{// PREAMBLE
+{// PREAMBLE PREAMBLE COMMON
 
 	PINA.update(&PINA, stm.gpioa.reg->IDR);
 	PINB.update(&PINB, stm.gpiob.reg->IDR);
@@ -141,7 +138,7 @@ if(zone == 0)
 /******************************************************************************/
 /******************************************************************************/
 if(zone == 1)
-{// workspace 1
+{// workspace 1 RTC CALENDAR
 
 	calendario();
 
@@ -150,7 +147,7 @@ if(zone == 1)
 /******************************************************************************/
 /******************************************************************************/
 if(zone == 2)
-{// workspace 2
+{// workspace 2 ADC1 TEMPERATURE
 
 	lcd.gotoxy(1,0);
 	if(samples < n_samples){
@@ -169,7 +166,7 @@ if(zone == 2)
 /******************************************************************************/
 /******************************************************************************/
 if(zone == 3)
-{// workspace 3
+{// workspace 3 USART1 TX RX
 
 	if( stm.usart1.reg->SR & (1 << 6) ){ // TC: Transmission complete
 
@@ -187,7 +184,7 @@ if(zone == 3)
 			if(receive == 13 ){
 				circ2.getstr(&circ2, received);
 				lcd.gotoxy(1,6);
-				received[strlen((char*)received)-1] = '\0'; //remove enter key
+				received[strlen((char*)received)-1] = '\0'; //remove enter key [13]
 				lcd.string_size((char*)received, 14);
 			}
 
@@ -246,7 +243,6 @@ void portinic(void)
 	// PC13 is user button
 	stm.gpioc.moder(0,13);
 	stm.gpioc.pupdr(1,13);
-
 }
 
 /******************************************************************************/
@@ -281,7 +277,7 @@ void calendario(void)
 			lcd.string_size(func.print("hora: %d%d:%d%d:%d%d", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.putstr(&circ, "Data\r\n");
+				circ.putstr(&circ, func.print("data: %d%d:%d%d:20%d%d\r\n", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]) );
 				choice = 2;
 			}
 			if( value > 10 && value < 30 ){
@@ -302,7 +298,7 @@ void calendario(void)
 			lcd.string_size(func.print("data: %d%d:%d%d:20%d%d", vec[5],vec[6],vec[3],vec[4],vec[0],vec[1]),17);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
 			if( value > 5 && value < 11 ){
-				circ.putstr(&circ, "Relogio\r\n");
+				circ.putstr(&circ, func.print("hora: %d%d:%d%d:%d%d\r\n", vec[0],vec[1],vec[2],vec[3],vec[4],vec[5]) );
 				choice = 1;
 			}
 			if( value > 10 && value < 30 ){
@@ -417,7 +413,7 @@ void calendario(void)
 			break;
 
 			// Calendario
-			case 7: // Set Year
+		case 7: // Set Year
 			lcd.gotoxy(0,0);
 			lcd.string_size("Acertar Ano",16);
 			value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);

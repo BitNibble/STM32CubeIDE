@@ -17,7 +17,7 @@
   * PB 0...7 ---> LCD 4x20
   * PA 5     ---> Led indicator
   * PC 13    ---> user button
-  *	PA9 and PA10 	--->	USART1
+  * PA9 and PA10 	--->	USART1
 *******************************************************************************/
 /******************************************************************************/
 #include "main.h"
@@ -59,9 +59,6 @@ static uint32_t value = 0;
 static int8_t count1;
 static uint16_t count2;
 static uint8_t dir;
-uint8_t buffer[32]; // for circular buffer
-uint8_t buffer2[32]; // for circular buffer
-uint8_t received[32]; // for circular buffer
 static char vec[24]; // for calendar
 static volatile uint32_t vect[8];
 
@@ -81,6 +78,11 @@ uint8_t receive;
 double temperature = 0;
 unsigned int samples = 0;
 const int n_samples = 60;
+
+uint8_t buffer[32]; // for circular buffer
+uint8_t buffer2[32]; // for circular buffer
+uint8_t received[32]; // for circular buffer
+
 vect[0] = 0;
 vect[1] = 0;
 vect[2] = 0;
@@ -187,7 +189,7 @@ if(zone == 3)
 			if(receive == 13 ){
 				circ2.getstr(&circ2, received);
 				lcd.gotoxy(1,6);
-				received[strlen((char*)received)-1] = '\0';
+				received[strlen((char*)received)-1] = '\0'; //remove enter key [13]
 				lcd.string_size((char*)received, 14);
 			}
 
@@ -231,6 +233,7 @@ if(zone == 7)
 /******************************************************************************/
 		/*************************************************************/
 /******************************************************************************/
+
 void portinic(void)
 {
 	//Enable clock for IO peripherals
@@ -247,7 +250,9 @@ void portinic(void)
 	stm.gpioc.pupdr(1,13);
 
 }
+
 /******************************************************************************/
+
 void tim9inic(void)
 {
 	stm.rcc.reg->APB2ENR |= (1 << 16); //timer 9 clock enabled
@@ -263,7 +268,9 @@ void tim9inic(void)
 	//stm.tim9.reg->CCER |= 1;
 	stm.tim9.reg->CR1 |= 1 | (1 << 7);
 }
+
 /******************************************************************************/
+
 void calendario(void)
 {
 	/******MENU*****/

@@ -161,6 +161,7 @@ void STM32446RtcSetTr(void);
 void STM32446RtcSetDr(void);
 uint8_t STM32446RtcAccess(uint8_t clock);
 void STM32446SramAccess(void);
+uint32_t SystemClock(void);
 
 // Template
 void template(void);
@@ -1579,18 +1580,30 @@ void STM32446SramAccess(void)
 	ret.rcc.reg->AHB1ENR |= (1 << 18); // BKPSRAMEN: Backup SRAM interface clock enable
 }
 
+uint32_t SystemClock(void)
+{
+	uint32_t sysclk = 16000000; // HSI default value
+	switch((ret.rcc.reg->CFGR >> 2) & 3) // SWS[2]: System clock switch status
+	{
+		case 0: // 00: HSI oscillator used as the system clock
+			break;
+		case 1: // 01: HSE oscillator used as the system clock
+			sysclk = 25000000;
+			break;
+		case 2: // 10: PLL used as the system clock
+			break;
+		case 3: // 11: PLL_R used as the system clock
+			break;
+		default:
+			break;
+	}
+	return sysclk;
+}
+
 // TEMPLATE
 void template(void)
 { // the best procedure ever does absolutely nothing
-	ret.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
-	ret.gpioa.moder(2,9);
-	ret.gpioa.moder(2,10);
-	ret.gpioa.afr(7,9);
-	ret.gpioa.afr(7,10);
-	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
-	ret.usart1.parameters( 8, 16, 1, 9600 ); // Default
-	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
-	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
+
 }
 /*******************************************************************************/
 /*******************************************************************************/

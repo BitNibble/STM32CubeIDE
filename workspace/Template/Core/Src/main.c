@@ -83,6 +83,8 @@ uint8_t buffer[32]; // for circular buffer
 uint8_t buffer2[32]; // for circular buffer
 uint8_t received[32]; // for circular buffer
 
+//char message[16];
+
 stm = STM32446enable(); // stm object
 stm.inic.peripheral();
 portinic();
@@ -111,7 +113,7 @@ stm.adc1.single.start();
 stm.rtc.inic(1); // 2 - LSI, 1 - LSE
 
 
-stm.usart1.inic(8, 16, 1, 115200);
+stm.usart1.inic(8, 16, 1, 9600);
 stm.usart1.transmit();
 stm.usart1.receive();
 
@@ -159,7 +161,7 @@ if(zone == 2)
 		temperature /= n_samples;
 		temperature = (temperature/3.1 - 943/3.1) + 25;
 		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
-		//lcd.string_size( func.print("%ld", stm.rcc.systemclock() ), 14);
+		//lcd.string_size( func.ftoa(temperature,message,4) , 14);
 		samples=0;
 	}
 

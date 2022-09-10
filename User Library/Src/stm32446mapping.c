@@ -203,6 +203,8 @@ STM32446 STM32446enable(void){
 	PLL_parameter.Q = 15; // 48Mhz
 	PLL_parameter.R = 6; // 120Mhz
 	PLLI2S_parameter = PLLSAI_parameter = PLL_parameter;
+	// PLL setup Default
+	STM32446PLLDivision(0, PLL_parameter.M, PLL_parameter.N, PLL_parameter.P, PLL_parameter.Q, PLL_parameter.R);
 	/*****STM32446 OBJECTS******/
 	//FLASH
 	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
@@ -300,8 +302,11 @@ STM32446 STM32446enable(void){
 	
 	//DMA1
 	ret.dma1.reg = (DMA_TypeDef*) DMA1_BASE;
+	ret.dma1.stream[0].reg = (DMA_Stream_TypeDef*) DMA1_Stream0_BASE;
+
 	//DMA2
 	ret.dma2.reg = (DMA_TypeDef*) DMA2_BASE;
+	ret.dma2.stream[0].reg = (DMA_Stream_TypeDef*) DMA2_Stream0_BASE;
 	
 	//NVIC
 	ret.nvic.reg = (NVIC_Type*) NVIC_BASE;
@@ -319,6 +324,7 @@ STM32446 STM32446enable(void){
 	
 	//ADC1
 	ret.adc1.reg = (ADC_TypeDef*) ADC1_BASE;
+	ret.adc1.common.reg = (ADC_Common_TypeDef*) ADC123_COMMON_BASE;
 	/****single****/
 	ret.adc1.single.inic = STM32446Adc1Inic;
 	ret.adc1.single.vbat = STM32446Adc1VBAT;
@@ -327,9 +333,6 @@ STM32446 STM32446enable(void){
 	ret.adc1.single.read = STM32446Adc1Read;
 	ret.adc1.single.restart = STM32446Adc1Restart;
 	ret.adc1.single.stop = STM32446Adc1Stop;
-	
-	//ADC COMMON
-	ret.adc123.reg = (ADC_Common_TypeDef*) ADC123_COMMON_BASE;
 	
 	//USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
@@ -382,15 +385,15 @@ uint8_t STM32446PeripheralInic(void)
 	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
 	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
 	**************************************************************************/
-	STM32446PLLDivision(0, 8, 360, 2, 15, 6); // 0,8,360,4,15,6.
+	STM32446PLLDivision(0, 8, 360, 4, 15, 6); // 0,8,360,4,15,6.
 	// Enable PLL
-	STM32446RccPLLCLKEnable(1); // Only enable when Division is configured correctly.
+	STM32446RccPLLCLKEnable(0); // Only enable when Division is configured correctly.
 	/**************************************************************************
 	SysClock prescaler parameters
 	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
 	RTC 2 to 31
 	**************************************************************************/
-	//STM32446Prescaler(8, 1, 1, 0); // using PLL at 25Mhz [16 a must]
+	//STM32446Prescaler(4, 2, 1, 0);
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -1292,7 +1295,7 @@ void STM32446Adc1Inic(void)
 	ret.rcc.reg->APB2ENR |= (1 << 8); // ADC1EN: ADC1 clock enable
 	/***ADC CONFIG***/
 	ret.adc1.reg->CR2 |= (1 << 10); // EOCS: End of conversion selection
-	ret.adc123.reg->CCR |= (3 << 16); // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
+	ret.adc1.common.reg->CCR |= (3 << 16); // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 	ret.adc1.reg->SMPR1 |= (7 << 24); // SMPx[2:0]: Channel x sampling time selection
 	ret.adc1.reg->CR1 |= (1 << 11); // DISCEN: Discontinuous mode on regular channels
 	ret.adc1.reg->SQR3 |= 18; // SQ1[4:0]: 1st conversion in regular sequence
@@ -1300,13 +1303,13 @@ void STM32446Adc1Inic(void)
 
 void STM32446Adc1VBAT(void) // vbat overrides temperature
 {
-	ret.adc123.reg->CCR |= (1 << 22); // VBATE: VBAT enable
+	ret.adc1.common.reg->CCR |= (1 << 22); // VBATE: VBAT enable
 }
 
 void STM32446Adc1TEMP(void)
 {
 	//Temperature (in ºC) = {(VSENSE V25) / Avg_Slope} + 25
-	ret.adc123.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
+	ret.adc1.common.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
 }
 
 void STM32446Adc1Start()
@@ -1320,7 +1323,7 @@ void STM32446Adc1Start()
 
 double STM32446Adc1Read(void)
 {
-	if(ret.adc123.reg->CSR & (1 << 1)){ // EOC1: End of conversion of ADC1
+	if(ret.adc1.common.reg->CSR & (1 << 1)){ // EOC1: End of conversion of ADC1
 		STM32446temperature = ret.adc1.reg->DR;
 		ret.adc1.reg->SR &= (unsigned int) ~(1 << 4); // STRT: Regular channel start flag
 	}
@@ -1329,7 +1332,7 @@ double STM32446Adc1Read(void)
 
 void STM32446Adc1Restart(void)
 {
-	if(ret.adc123.reg->CSR & (1 << 4)) // STRT1: Regular channel Start flag of ADC1
+	if(ret.adc1.common.reg->CSR & (1 << 4)) // STRT1: Regular channel Start flag of ADC1
 		;
 	else
 		ret.adc1.reg->CR2 |= (1 << 30); // SWSTART: Start conversion of regular channels;
@@ -1438,7 +1441,7 @@ Sets the usart parameters, using real values.
 	else if(fabs(stopbits - 2) < 0.00001) // STOP: STOP bits, 10: 2 Stop bits
 		ret.usart1.reg->CR2 |= (1 << 13);
 	
-	value = (double) SystemCoreClock / ( sampling * baudrate );
+	value = (double) SystemClock() / ( sampling * baudrate );
 	fracpart = modf(value, &intpart);
 	
 	ret.usart1.reg->BRR = 0; // clean slate, reset.

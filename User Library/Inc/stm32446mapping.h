@@ -197,16 +197,24 @@ typedef struct
 	SYSCFG_TypeDef* reg;
 }STM32446SYSCFGobj;
 
+// DMA
+typedef struct
+{
+	DMA_Stream_TypeDef* reg;
+}STM32446DMAStream;
+
 // DMA1
 typedef struct
 {
 	DMA_TypeDef* reg;
+	STM32446DMAStream stream[8];
 }STM32446DMA1obj;
 
 // DMA2
 typedef struct
 {
 	DMA_TypeDef* reg;
+	STM32446DMAStream stream[8];
 }STM32446DMA2obj;
 
 // NVIC
@@ -232,6 +240,12 @@ typedef struct
 	TIM_TypeDef* reg;
 }STM32446TIM9obj;
 
+//ADC COMMON
+typedef struct
+{
+	ADC_Common_TypeDef* reg;
+}STM32446ADCCOMMONobj;
+
 //ADC1
 /*** types of ADC1 applications ***/
 typedef struct
@@ -249,14 +263,9 @@ typedef struct
 typedef struct
 {
 	ADC_TypeDef* reg;
+	STM32446ADCCOMMONobj common;
 	STM32446ADC1single single;
 }STM32446ADC1obj;
-
-//ADC COMMON
-typedef struct
-{
-	ADC_Common_TypeDef* reg;
-}STM32446ADCCOMMONobj;
 
 //USART1
 typedef struct
@@ -268,6 +277,7 @@ typedef struct
 	void (*parameters)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 	void (*stop)(void);
 }STM32446USART1obj;
+
 /*
 *** INIC
 */

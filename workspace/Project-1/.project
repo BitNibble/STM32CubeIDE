@@ -31,6 +31,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>Inc</name>
+			<type>2</type>
+			<location>C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Inc</location>
+		</link>
+		<link>
 			<name>Src</name>
 			<type>2</type>
 			<location>C:/Users/sergi/Documents/GitHub 2022/STM32CubeIDE/User Library/Src</location>

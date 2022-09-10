@@ -359,7 +359,7 @@ uint8_t STM32446PeripheralInic(void)
 	uint8_t clkused; // First turn it on then select it or enable it.
 	// Setup PLL
 	/**************************************************************************
-	PLLDIVISIO parameters
+	PLLDIVISION parameters
 	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
 	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
 	**************************************************************************/
@@ -1286,7 +1286,7 @@ void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbi
 		PA9 - TX		PA10 - RX
 		PA11 - CTS		PA12 - RTS
 
-		AF7 and AF8, activation. therfore
+		AF7 and AF8, activation. therefore
 	 *****************************************************************/
 	ret.gpioa.moder(2,9);
 	ret.gpioa.moder(2,10);

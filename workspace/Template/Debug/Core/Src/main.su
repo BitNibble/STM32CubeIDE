@@ -1,6 +1,6 @@
-../Core/Src/main.c:71:5:main	592	static
-../Core/Src/main.c:233:6:portinic	8	static
-../Core/Src/main.c:251:6:tim9inic	4	static
-../Core/Src/main.c:269:6:calendario	40	static
-../Core/Src/main.c:504:6:TIM1_BRK_TIM9_IRQHandler	8	static
-../Core/Src/main.c:535:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:71:5:main	600	static
+../Core/Src/main.c:234:6:portinic	8	static
+../Core/Src/main.c:252:6:tim9inic	4	static
+../Core/Src/main.c:270:6:calendario	40	static
+../Core/Src/main.c:505:6:TIM1_BRK_TIM9_IRQHandler	8	static
+../Core/Src/main.c:536:6:Error_Handler	8	static,ignoring_inline_asm

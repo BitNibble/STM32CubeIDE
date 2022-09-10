@@ -29,6 +29,15 @@ static uint32_t STM32446DateDr;
 static volatile uint32_t mem[4];
 static volatile uint32_t nen[4];
 static double STM32446temperature;
+static struct PLLparameters
+{
+	uint32_t Source;
+	uint8_t M;
+	uint16_t N;
+	uint8_t P;
+	uint8_t Q;
+	uint8_t R;
+}PLL_parameter,PLLSAI_parameter,PLLI2S_parameter;
 /*
 ***Procedure and Functions Prototypes
 */
@@ -45,6 +54,7 @@ uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
 void STM32446RccLSelect(uint8_t lclock);
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
+uint32_t SystemClock(void);
 
 /***PLL***/
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
@@ -185,6 +195,14 @@ STM32446 STM32446enable(void){
 	mem[0] = 0;
 	nen[0] = 0;
 	STM32446temperature = 0;
+	// PLL Default
+	PLL_parameter.Source = 16000000;
+	PLL_parameter.M = 8; // 2Mhz
+	PLL_parameter.N = 360; // 720Mhz PLL
+	PLL_parameter.P = 4; // 180Mhz
+	PLL_parameter.Q = 15; // 48Mhz
+	PLL_parameter.R = 6; // 120Mhz
+	PLLI2S_parameter = PLLSAI_parameter = PLL_parameter;
 	/*****STM32446 OBJECTS******/
 	//FLASH
 	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
@@ -202,6 +220,7 @@ STM32446 STM32446enable(void){
 	ret.rcc.lenable = STM32446RccLEnable;
 	ret.rcc.lselect = STM32446RccLSelect;
 	ret.rcc.prescaler = STM32446Prescaler;
+	ret.rcc.systemclock = SystemClock;
 	/****PLL****/
 	ret.rcc.pll.division = STM32446PLLDivision;
 	ret.rcc.pll.enable = STM32446RccPLLCLKEnable;
@@ -363,15 +382,15 @@ uint8_t STM32446PeripheralInic(void)
 	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
 	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
 	**************************************************************************/
-	STM32446PLLDivision(0, 8, 400, 2, 8, 4);
+	STM32446PLLDivision(0, 8, 360, 2, 15, 6); // 0,8,360,4,15,6.
 	// Enable PLL
-	STM32446RccPLLCLKEnable(0); // Only enable when Division is configured correctly.
+	STM32446RccPLLCLKEnable(1); // Only enable when Division is configured correctly.
 	/**************************************************************************
 	SysClock prescaler parameters
 	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
 	RTC 2 to 31
 	**************************************************************************/
-	//STM32446Prescaler(16, 1, 1, 0); // using PLL at 25Mhz [16 a must]
+	//STM32446Prescaler(8, 1, 1, 0); // using PLL at 25Mhz [16 a must]
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -541,47 +560,67 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
 	const unsigned int mask = 0x7F437FFF;
 	ret.rcc.reg->PLLCFGR |= mask; // set mask bits high
 
-	if(pllr > 1 && pllr < 8) // PLLR[28]: Main PLL division factor for I2Ss, SAIs, SYSTEM and SPDIF-Rx clocks
+
+	if(pllr > 1 && pllr < 8){ // PLLR[28]: Main PLL division factor for I2Ss, SAIs, SYSTEM and SPDIF-Rx clocks
 		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(7 << 28)) | (pllr << 28);
+		PLL_parameter.R = pllr;
+	}
 
-	if(pllq > 1 && pllq < 16) // PLLQ[24]: Main PLL (PLL) division factor for USB OTG FS, SDIOclocks
+	if(pllq > 1 && pllq < 16){ // PLLQ[24]: Main PLL (PLL) division factor for USB OTG FS, SDIOclocks
 		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(15 << 24)) | (pllq << 24);
+		PLL_parameter.Q = pllq;
+	}
 
-	if(pllsrc == 1) // PLLSRC[22]: Main PLL(PLL) and audio PLL (PLLI2S) entry clock source
+	if(pllsrc == 1){ // PLLSRC[22]: Main PLL(PLL) and audio PLL (PLLI2S) entry clock source
 		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(1 << 22)) | (pllsrc << 22);
-	else
+		PLL_parameter.Source = 25000000;
+	}else{
 		ret.rcc.reg->PLLCFGR &= (unsigned int) ~(1 << 22);
+		PLL_parameter.Source = 16000000;
+	}
 
 	switch(pllp){ // PLLP[16]: Main PLL (PLL) division factor for main system clock
 		case 2:
 			ret.rcc.reg->PLLCFGR &= (unsigned int) ~(3 << 16);
+			PLL_parameter.P = pllp;
 			break;
 		case 4:
 			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (1 << 16);
+			PLL_parameter.P = pllp;
 			break;
 		case 6:
 			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (2 << 16);
+			PLL_parameter.P = pllp;
 			break;
 		case 8:
 			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (3 << 16);
+			PLL_parameter.P = pllp;
 			break;
 		default:
+			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (1 << 16);
+			PLL_parameter.P = 4;
 			break;
 	}
 
-	if(plln > 49 && plln < 433) // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
+	if(plln > 49 && plln < 433){ // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
 		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(511 << 6)) | (plln << 6);
+		PLL_parameter.N = plln;
+	}
 
-	if(pllm > 1 && pllm < 64) // PLLM[0]: Division factor for the main PLL (PLL) input clock [2Mhz]
+	if(pllm > 1 && pllm < 64){ // PLLM[0]: Division factor for the main PLL (PLL) input clock [2Mhz]
 		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(63)) | pllm;
+		PLL_parameter.M = pllm;
+	}
 }
+
 
 void STM32446RccPLLCLKEnable(uint8_t onoff)
 {
-	if(onoff)
+	if(onoff){
 		for( ret.rcc.reg->CR |= (1 << 24) ; !(ret.rcc.reg->CR & (1 << 25)) ; ); // PLLON: Main PLL (PLL) enable
-	else
+	}else{
 		ret.rcc.reg->CR &= (unsigned int) ~(1 << 24);
+	}
 }
 
 void STM32446RccPLLI2SEnable(uint8_t onoff)
@@ -598,6 +637,31 @@ void STM32446RccPLLSAIEnable(uint8_t onoff)
 		for( ret.rcc.reg->CR |= (1 << 28) ; !(ret.rcc.reg->CR & (1 << 29)) ; ); // PLLSAION: PLLSAI enable
 	else
 		ret.rcc.reg->CR &= (unsigned int) ~(1 << 28);
+}
+
+uint32_t SystemClock(void)
+{
+	uint32_t sysclk;
+	switch((ret.rcc.reg->CFGR >> 2) & 3) // SWS[2]: System clock switch status
+	{
+		case 0: // 00: HSI oscillator used as the system clock
+			PLL_parameter.Source = 16000000;
+			sysclk= 16000000;
+			break;
+		case 1: // 01: HSE oscillator used as the system clock
+			PLL_parameter.Source = 25000000;
+			sysclk = 25000000;
+			break;
+		case 2: // 10: PLL used as the system clock
+			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.P );
+			break;
+		case 3: // 11: PLL_R used as the system clock
+			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.R );
+			break;
+		default:
+			break;
+	}
+	return sysclk;
 }
 
 // GPIO
@@ -1580,26 +1644,6 @@ void STM32446SramAccess(void)
 	ret.rcc.reg->AHB1ENR |= (1 << 18); // BKPSRAMEN: Backup SRAM interface clock enable
 }
 
-uint32_t SystemClock(void)
-{
-	uint32_t sysclk = 16000000; // HSI default value
-	switch((ret.rcc.reg->CFGR >> 2) & 3) // SWS[2]: System clock switch status
-	{
-		case 0: // 00: HSI oscillator used as the system clock
-			break;
-		case 1: // 01: HSE oscillator used as the system clock
-			sysclk = 25000000;
-			break;
-		case 2: // 10: PLL used as the system clock
-			break;
-		case 3: // 11: PLL_R used as the system clock
-			break;
-		default:
-			break;
-	}
-	return sysclk;
-}
-
 // TEMPLATE
 void template(void)
 { // the best procedure ever does absolutely nothing
@@ -1610,13 +1654,13 @@ void template(void)
 // SYSTICK
 void SystickInic(void)
 {
-	ret.systick.reg->LOAD = (uint32_t)(SystemCoreClock - 1);
+	ret.systick.reg->LOAD = (uint32_t)(SystemClock() - 1);
 	ret.systick.reg->VAL = 0UL;
 	ret.systick.reg->CTRL |= ((1 << 1) | (1 << 2));
 }
 void STM32446delay_ms(uint32_t ms)
 {
-	ret.systick.reg->LOAD = (uint32_t)((SystemCoreClock / 1000) - 1);
+	ret.systick.reg->LOAD = (uint32_t)((SystemClock() / 1000) - 1);
 	// Enable the SysTick timer
 	ret.systick.reg->CTRL |= (1 << 0);
 	// Wait for a specified number of milliseconds
@@ -1627,7 +1671,7 @@ void STM32446delay_ms(uint32_t ms)
 }
 void STM32446delay_10us(uint32_t ten_us)
 {
-	ret.systick.reg->LOAD = (uint32_t)((SystemCoreClock / 100000) - 1);
+	ret.systick.reg->LOAD = (uint32_t)((SystemClock() / 100000) - 1);
 	// Enable the SysTick timer
 	ret.systick.reg->CTRL |= (1 << 0);
 	// Wait for a specified number of milliseconds
@@ -1639,7 +1683,7 @@ void STM32446delay_10us(uint32_t ten_us)
 
 void STM32446delay_us(uint32_t us)
 {
-	ret.systick.reg->LOAD = (uint32_t)((SystemCoreClock / 1000000) - 1);
+	ret.systick.reg->LOAD = (uint32_t)((SystemClock() / 1000000) - 1);
 	// Enable the SysTick timer
 	ret.systick.reg->CTRL |= (1 << 0);
 	// Wait for a specified number of milliseconds

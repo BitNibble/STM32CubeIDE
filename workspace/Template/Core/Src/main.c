@@ -17,7 +17,7 @@
   * PB 0...7 		---> LCD 4x20
   * PA 5     		---> Led indicator
   * PC 13    		---> user button
-  * PA9 and PA10 	--->	USART1
+  * PA9 and PA10 	---> USART1
 *******************************************************************************/
 /******************************************************************************/
 #include "main.h"
@@ -159,6 +159,7 @@ if(zone == 2)
 		temperature /= n_samples;
 		temperature = (temperature/3.1 - 943/3.1) + 25;
 		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
+		//lcd.string_size( func.print("%ld", stm.rcc.systemclock() ), 14);
 		samples=0;
 	}
 

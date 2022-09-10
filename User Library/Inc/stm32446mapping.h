@@ -88,6 +88,7 @@ typedef struct
 	void (*lenable)(unsigned int lclock);
 	void (*lselect)(uint8_t lclock);
 	void (*prescaler)(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
+	uint32_t (*systemclock)(void);
 	STM32446RCCPLL pll;
 	STM32446RCCPLLI2S plli2s;
 	STM32446RCCPLLSAI pllsai;

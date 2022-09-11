@@ -62,7 +62,7 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
 }
 void LCD0_inic(void)
 {
-	uint8_t repeat;
+	//uint8_t repeat;
 	//LCD INIC
 	ireg->MODER &= (uint32_t) ~((3 << (RS * 2)) | (3 << (RW * 2)) | (3 << (EN * 2))); // control pins as output
 	ireg->MODER |= ((1 << (RS * 2)) | (1 << (RW * 2)) | (1 << (EN * 2))); // control pins as output
@@ -93,7 +93,7 @@ void LCD0_inic(void)
 	LCD0_write(0x28, INST); //function set 2B
 	stm.systick.delay_10us(4);
 	/**************************************/
-	for(repeat = 2 ; repeat ; repeat--){
+	//for(repeat = 2 ; repeat ; repeat--){
 		// repeat twice in 4 bit length
 		LCD0_write(0x28, INST); //function set 2B
 		LCD0_BF();
@@ -114,12 +114,13 @@ void LCD0_inic(void)
 		LCD0_BF();
 		LCD0_write(0x06, INST);// entry mode set (crazy settings)
 		LCD0_BF();
-	}
+	//}
 	/**********INICIALIZATION END**********/
 	//LCD0_write(0x1F, INST);// cursor or display shift
 	//stm.systick.delay_10us(4);
 	//LCD0_write(0x03, INST);// return home
 	//stm.systick.delay_ms(2);
+	LCD0_gotoxy(0,0);
 }
 void LCD0_write(char c, unsigned short D_I)
 { // write to LCD

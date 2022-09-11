@@ -307,6 +307,8 @@ typedef struct
 	void (*reset)( GPIO_TypeDef* regs, int data); // BSRR
 	void (*setupreg)(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin); // GENERIC & |
 	void (*setup)( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n ); // GENERIN [] & |
+	char* (*ftoa)(double num, char* res, uint8_t afterpoint);
+	char* (*print)( char* str, uint8_t size_str, const char* format, ... );
 	void (*test)(void);
 }STM32446function;
 
@@ -359,8 +361,6 @@ typedef struct
 	STM32446TIM9obj tim9;
 	//STM32446 ADC1 OBJECT
 	STM32446ADC1obj adc1;
-	//STM32446 ADC COMMON OBJECT
-	STM32446ADCCOMMONobj adc123;
 	//STM32446 USART1 OBJECT
 	STM32446USART1obj usart1;
 	

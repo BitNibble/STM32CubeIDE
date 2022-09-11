@@ -12,6 +12,9 @@ Comment:
 	Stable.
 *******************************************************************************/
 #include "stm32446mapping.h"
+#include <stdio.h>
+//#include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
 #include <math.h>
 /*
@@ -165,13 +168,17 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data );
 /*** GENERIC ***/
 void STM32446Gpiosetupreg(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin);
 void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n );
-
+char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint);
+char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... );
 /***FILE FUNC***/
 void STM32446RtcSetTr(void);
 void STM32446RtcSetDr(void);
 uint8_t STM32446RtcAccess(uint8_t clock);
 void STM32446SramAccess(void);
 uint32_t SystemClock(void);
+void STM32446Reverse(char s[]);
+int STM32446StringLength (const char string[]);
+uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit);
 
 // Template
 void template(void);
@@ -363,6 +370,8 @@ STM32446 STM32446enable(void){
 	ret.func.reset = STM32446GpioReset;
 	ret.func.setupreg = STM32446Gpiosetupreg;
 	ret.func.setup = STM32446GpioSetup;
+	ret.func.ftoa = STM32446FUNCftoa;
+	ret.func.print = STM32446FUNCprint;
 	ret.func.test = template;
 	
 	/****************************************************************************/
@@ -615,7 +624,6 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
 		PLL_parameter.M = pllm;
 	}
 }
-
 
 void STM32446RccPLLCLKEnable(uint8_t onoff)
 {
@@ -1562,6 +1570,54 @@ uint16_t STM32SwapByte(uint16_t num)
 	tp = (uint16_t)(num << 8);
 	return (num >> 8) | tp;
 }
+
+/***ftoa***/
+char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint)
+{
+	uint32_t ipart;
+	double n, fpart;
+	uint8_t k = 0;
+	int8_t sign;
+	if (num < 0){
+		n = -num; sign = -1;
+	}else{
+		n = num; sign = 1;
+	}
+	ipart = (uint32_t) n; fpart = n - (double)ipart;
+	k = STM32446FUNCintinvstr((int)ipart, res, 1);
+	if (sign < 0) res[k++] = '-'; else res[k++] = ' ';
+	res[k] = '\0';
+	STM32446Reverse(res);
+	if (afterpoint > 0 && afterpoint < (8 + 1)){
+		res[k++] = '.';
+		STM32446FUNCintinvstr( (int32_t)(fpart * pow(10, afterpoint)), (res + k), afterpoint );
+		STM32446Reverse(res + k);
+	}else{
+		res[k++] = '.';
+		STM32446FUNCintinvstr( (int32_t)(fpart * pow(10, 2)), (res + k), 2 );
+		STM32446Reverse(res + k);
+	}
+	return res;
+}
+
+/***print***/
+char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... )
+{
+	va_list aptr;
+	int ret;
+
+	va_start(aptr, format);
+	ret = vsnprintf( str, size_str, (const char*) format, aptr );
+	//ret = vsnprintf( ptr, size_str, format, aptr );
+	va_end(aptr);
+
+	if(ret < 0){
+		return NULL;
+		//str[0]='/0';str[1]='/0';str[2]='/0';str[3]='/0';
+	}else
+		return str;
+}
+
 /********************************/
 /***********FILE FUNC************/
 /********************************/
@@ -1652,6 +1708,38 @@ void template(void)
 { // the best procedure ever does absolutely nothing
 
 }
+
+// Function to count the number of characters in a string
+int STM32446StringLength (const char string[])
+{
+	int count;
+	for (count = 0; string[count] != '\0'; count++ ) ;
+	return count;
+}
+
+// reverse: reverse string s in place
+void STM32446Reverse(char s[])
+{
+	char c;
+	int i, j;
+	for ( i = 0, j = STM32446StringLength(s) - 1; i < j ; i++, j-- ){
+		c = s[i];
+		s[i] = s[j];
+		s[j] = c;
+	}
+}
+
+/***intinvstr***/
+uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
+{
+	uint8_t k = 0;
+	for(res[k++] = (char)((num % 10) + '0'); (num /= 10) > 0 ; res[k++] = (char)((num % 10) + '0'));
+	for( ; k < n_digit ; res[k++] = '0');
+	res[k] = '\0';
+	return k;
+}
+/***/
+
 /*******************************************************************************/
 /*******************************************************************************/
 // SYSTICK

@@ -83,7 +83,7 @@ uint8_t buffer[32]; // for circular buffer
 uint8_t buffer2[32]; // for circular buffer
 uint8_t received[32]; // for circular buffer
 
-//char message[16];
+char message[21];
 
 stm = STM32446enable(); // stm object
 stm.inic.peripheral();
@@ -160,8 +160,8 @@ if(zone == 2)
 	}else{
 		temperature /= n_samples;
 		temperature = (temperature/3.1 - 943/3.1) + 25;
-		lcd.string_size( func.print("%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
-		//lcd.string_size( func.ftoa(temperature,message,4) , 14);
+		lcd.string_size( stm.func.print(message, 6, "%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
+		//lcd.string_size( stm.func.ftoa( temperature, message, 4) , 14);
 		samples=0;
 	}
 

@@ -17,7 +17,7 @@
   * PB 0...7 		---> LCD 4x20
   * PA 5     		---> Led indicator
   * PC 13    		---> user button
-  * PA9 and PA10 	--->	USART1
+  * PA9 and PA10 	---> USART1
   *
 *******************************************************************************/
 /******************************************************************************/
@@ -97,11 +97,13 @@ stm.adc1.single.inic();
 stm.adc1.single.temp();
 stm.adc1.single.start();
 
-stm.usart1.inic(8, 16, 1, 115200);
+stm.usart1.inic(8, 16, 1, 9600);
 stm.usart1.transmit();
 stm.usart1.receive();
 
 /***************************** TEST STUFF START *******************************/
+
+
 /*****************************  TEST STUFF END  *******************************/
 
 for ( zone = 0, workspace = 0 ; ass ; workspace++)
@@ -300,10 +302,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif
 *******************************************************************************/
 /******************************** COMMENT *************************************
-	The LCD is the most important part of a project, there is no better way to
-	troubleshoot and validate a project.
 
-
- ******************************************************************************/
+*******************************************************************************/
 /***EOF***/
 

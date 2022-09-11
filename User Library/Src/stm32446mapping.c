@@ -32,6 +32,12 @@ static uint32_t STM32446DateDr;
 static volatile uint32_t mem[4];
 static volatile uint32_t nen[4];
 static double STM32446temperature;
+static struct CLOCKprescaler
+{
+	uint16_t AHB;
+	uint8_t APB1;
+	uint8_t APB2;
+}CLOCK_prescaler;
 static struct PLLparameters
 {
 	uint32_t Source;
@@ -40,7 +46,7 @@ static struct PLLparameters
 	uint8_t P;
 	uint8_t Q;
 	uint8_t R;
-}PLL_parameter,PLLSAI_parameter,PLLI2S_parameter;
+}PLL_parameter;
 /*
 ***Procedure and Functions Prototypes
 */
@@ -202,16 +208,6 @@ STM32446 STM32446enable(void){
 	mem[0] = 0;
 	nen[0] = 0;
 	STM32446temperature = 0;
-	// PLL Default
-	PLL_parameter.Source = 16000000;
-	PLL_parameter.M = 8; // 2Mhz
-	PLL_parameter.N = 360; // 720Mhz PLL
-	PLL_parameter.P = 4; // 180Mhz
-	PLL_parameter.Q = 15; // 48Mhz
-	PLL_parameter.R = 6; // 120Mhz
-	PLLI2S_parameter = PLLSAI_parameter = PLL_parameter;
-	// PLL setup Default
-	STM32446PLLDivision(0, PLL_parameter.M, PLL_parameter.N, PLL_parameter.P, PLL_parameter.Q, PLL_parameter.R);
 	/*****STM32446 OBJECTS******/
 	//FLASH
 	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
@@ -394,7 +390,7 @@ uint8_t STM32446PeripheralInic(void)
 	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
 	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
 	**************************************************************************/
-	STM32446PLLDivision(0, 8, 360, 4, 15, 6); // 0,8,360,4,15,6.
+	STM32446PLLDivision(0, 8, 336, 2, 14, 7); // 0,8,360,4,15,6; 0,8,336,2,14,7;
 	// Enable PLL
 	STM32446RccPLLCLKEnable(0); // Only enable when Division is configured correctly.
 	/**************************************************************************
@@ -402,7 +398,8 @@ uint8_t STM32446PeripheralInic(void)
 	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
 	RTC 2 to 31
 	**************************************************************************/
-	//STM32446Prescaler(4, 2, 1, 0);
+	//STM32446Prescaler(8, 1, 1, 0);
+	//STM32446Prescaler(2, 1, 1, 0);
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -496,7 +493,7 @@ void STM32446RccLSelect(uint8_t lclock)
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre)
 {
 	const unsigned int mask = 0x001FFCF0;
-	ret.rcc.reg->CFGR &= ~mask; // clear args
+	ret.rcc.reg->CFGR &= (unsigned int) ~mask; // clear args
 
 	if(rtcpre > 1 && rtcpre < 32) // 16
 		ret.rcc.reg->CFGR |= (rtcpre << 16);
@@ -504,63 +501,82 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 	switch(ppre2){ // 13
 		case 2:
 			ret.rcc.reg->CFGR |= (4 << 13);
+			CLOCK_prescaler.APB2 = 2;
 			break;
 		case 4:
 			ret.rcc.reg->CFGR |= (5 << 13);
+			CLOCK_prescaler.APB2 = 4;
 			break;
 		case 8:
 			ret.rcc.reg->CFGR |= (6 << 13);
+			CLOCK_prescaler.APB2 = 8;
 			break;
 		case 16:
 			ret.rcc.reg->CFGR |= (7 << 13);
+			CLOCK_prescaler.APB2 = 16;
 			break;
 		default:
+			CLOCK_prescaler.APB2 = 1;
 			break;
 	}
 
 	switch(ppre1){ // 10
 	case 2:
 		ret.rcc.reg->CFGR |= (4 << 10);
+		CLOCK_prescaler.APB1 = 2;
 		break;
 	case 4:
 		ret.rcc.reg->CFGR |= (5 << 10);
+		CLOCK_prescaler.APB1 = 4;
 		break;
 	case 8:
 		ret.rcc.reg->CFGR |= (6 << 10);
+		CLOCK_prescaler.APB1 = 8;
 		break;
 	case 16:
 		ret.rcc.reg->CFGR |= (7 << 10);
+		CLOCK_prescaler.APB1 = 16;
 		break;
 	default:
+		CLOCK_prescaler.APB1 = 1;
 		break;
 	}
 
 	switch(ahbpre){ // 4
 	case 2:
 		ret.rcc.reg->CFGR |= (8 << 4);
+		CLOCK_prescaler.AHB = 2;
 		break;
 	case 4:
 		ret.rcc.reg->CFGR |= (9 << 4);
+		CLOCK_prescaler.AHB = 4;
 		break;
 	case 8:
 		ret.rcc.reg->CFGR |= (10 << 4);
+		CLOCK_prescaler.AHB = 8;
 		break;
 	case 16:
 		ret.rcc.reg->CFGR |= (11 << 4);
+		CLOCK_prescaler.AHB = 16;
 		break;
 	case 64:
 		ret.rcc.reg->CFGR |= (12 << 4);
+		CLOCK_prescaler.AHB = 64;
 		break;
 	case 128:
 		ret.rcc.reg->CFGR |= (13 << 4);
+		CLOCK_prescaler.AHB = 128;
 		break;
 	case 256:
 		ret.rcc.reg->CFGR |= (14 << 4);
+		CLOCK_prescaler.AHB = 256;
 		break;
 	case 512:
 		ret.rcc.reg->CFGR |= (15 << 4);
+		CLOCK_prescaler.AHB = 512;
 		break;
 	default:
+		CLOCK_prescaler.AHB = 1;
 		break;
 	}
 }
@@ -570,57 +586,55 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr)
 {
 	const unsigned int mask = 0x7F437FFF;
-	ret.rcc.reg->PLLCFGR |= mask; // set mask bits high
+	ret.rcc.reg->PLLCFGR &= (unsigned int) ~mask; // set mask bits LOW
 
 
 	if(pllr > 1 && pllr < 8){ // PLLR[28]: Main PLL division factor for I2Ss, SAIs, SYSTEM and SPDIF-Rx clocks
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(7 << 28)) | (pllr << 28);
+		ret.rcc.reg->PLLCFGR |= (pllr << 28);
 		PLL_parameter.R = pllr;
 	}
 
 	if(pllq > 1 && pllq < 16){ // PLLQ[24]: Main PLL (PLL) division factor for USB OTG FS, SDIOclocks
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(15 << 24)) | (pllq << 24);
+		ret.rcc.reg->PLLCFGR |= (pllq << 24);
 		PLL_parameter.Q = pllq;
 	}
 
 	if(pllsrc == 1){ // PLLSRC[22]: Main PLL(PLL) and audio PLL (PLLI2S) entry clock source
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(1 << 22)) | (pllsrc << 22);
 		PLL_parameter.Source = 25000000;
+		ret.rcc.reg->PLLCFGR |= (1 << 22);
 	}else{
-		ret.rcc.reg->PLLCFGR &= (unsigned int) ~(1 << 22);
 		PLL_parameter.Source = 16000000;
 	}
 
 	switch(pllp){ // PLLP[16]: Main PLL (PLL) division factor for main system clock
 		case 2:
-			ret.rcc.reg->PLLCFGR &= (unsigned int) ~(3 << 16);
 			PLL_parameter.P = pllp;
 			break;
 		case 4:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (1 << 16);
+			ret.rcc.reg->PLLCFGR |= (1 << 16);
 			PLL_parameter.P = pllp;
 			break;
 		case 6:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (2 << 16);
+			ret.rcc.reg->PLLCFGR |= (2 << 16);
 			PLL_parameter.P = pllp;
 			break;
 		case 8:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (3 << 16);
+			ret.rcc.reg->PLLCFGR |= (3 << 16);
 			PLL_parameter.P = pllp;
 			break;
 		default:
-			ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(3 << 16)) | (1 << 16);
+			ret.rcc.reg->PLLCFGR |= (1 << 16);
 			PLL_parameter.P = 4;
 			break;
 	}
 
 	if(plln > 49 && plln < 433){ // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(511 << 6)) | (plln << 6);
+		ret.rcc.reg->PLLCFGR |= (plln << 6);
 		PLL_parameter.N = plln;
 	}
 
 	if(pllm > 1 && pllm < 64){ // PLLM[0]: Division factor for the main PLL (PLL) input clock [2Mhz]
-		ret.rcc.reg->PLLCFGR &= ((unsigned int) ~(63)) | pllm;
+		ret.rcc.reg->PLLCFGR |= pllm;
 		PLL_parameter.M = pllm;
 	}
 }
@@ -1449,7 +1463,7 @@ Sets the usart parameters, using real values.
 	else if(fabs(stopbits - 2) < 0.00001) // STOP: STOP bits, 10: 2 Stop bits
 		ret.usart1.reg->CR2 |= (1 << 13);
 	
-	value = (double) SystemClock() / ( sampling * baudrate );
+	value = (double) SystemClock() / ( CLOCK_prescaler.AHB * sampling * baudrate );
 	fracpart = modf(value, &intpart);
 	
 	ret.usart1.reg->BRR = 0; // clean slate, reset.
@@ -1470,7 +1484,6 @@ void STM32446Usart1Stop(void){
 	ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
 }
 //MISCELLANEOUS
-
 
 // Convert Binary Coded Decimal (BCD) to Decimal
 char STM32446bcd2dec(char num)

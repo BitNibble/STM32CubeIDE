@@ -161,7 +161,7 @@ if(zone == 2)
 		temperature /= n_samples;
 		temperature = (temperature/3.1 - 943/3.1) + 25;
 		lcd.string_size( stm.func.print(message, 6, "%d %cC", (unsigned int)temperature, (char) 0xDF ), 6);
-		//lcd.string_size( stm.func.ftoa( temperature, message, 4) , 14);
+		//lcd.string_size( stm.func.ftoa( stm.rcc.systemclock(), message, 0) , 14);
 		samples=0;
 	}
 

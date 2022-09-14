@@ -67,17 +67,17 @@ typedef struct
 typedef struct
 {
 	void (*division)(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
-	void (*enable)(uint8_t onoff);
+	void (*enable)(void);
 }STM32446RCCPLL;
 
 typedef struct
 {
-	void (*enable)(uint8_t onoff);
+	void (*enable)(void);
 }STM32446RCCPLLI2S;
 
 typedef struct
 {
-	void (*enable)(uint8_t onoff);
+	void (*enable)(void);
 }STM32446RCCPLLSAI;
 
 typedef struct

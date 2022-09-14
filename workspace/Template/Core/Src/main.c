@@ -81,7 +81,7 @@ const int n_samples = 60;
 
 uint8_t buffer[32]; // for circular buffer
 uint8_t buffer2[32]; // for circular buffer
-uint8_t received[32]; // for circular buffer
+uint8_t received[32]; // from circular buffer
 
 char message[21];
 

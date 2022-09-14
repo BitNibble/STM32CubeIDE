@@ -64,6 +64,7 @@ unsigned int workspace;
 unsigned int zone;
 uint8_t transmit;
 uint8_t receive;
+uint32_t value;
 
 double temperature = 0;
 unsigned int samples = 0;
@@ -125,7 +126,16 @@ if(zone == 0)
 /******************************************************************************/
 if(zone == 1)
 {// workspace 1
-
+	value = stm.func.triggerB(PINC.HL,PINC.LH,13,count2);
+	if( value > 5 && value < 11 ){
+		circ.putstr(&circ, "5 to 10 pulse press\r\n" );
+	}
+	if( value > 10 && value < 30 ){
+		circ.putstr(&circ, "10 to 30 pulse press\r\n");
+	}
+	if( value > 40 ){
+		circ.putstr(&circ, "More than 40 pulse press\r\n");
+	}
 
 	continue;
 } // if

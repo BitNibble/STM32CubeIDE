@@ -412,6 +412,9 @@ uint8_t STM32446PeripheralInic(void)
 	// Low Speed Internal Clock turned on as default
 	// Internal low-speed oscillator enable and Internal low-speed oscillator ready
 	STM32446RccLEnable(2);
+	// Low speed oscillator select
+	STM32446RccLSelect(2);
+
 	return clkused;
 }
 /*******************************/
@@ -750,9 +753,10 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data )
 void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin )
 {
 	unsigned int mask = (unsigned int)(pow(2, size_block) - 1);
+	unsigned int location = pin * size_block;
 	data &= mask;
-	*reg &= ~(mask << (pin * size_block));
-	*reg |= (data << (pin * size_block));
+	*reg &= ~(mask << location);
+	*reg |= (data << location);
 }
 
 /*** Version 2

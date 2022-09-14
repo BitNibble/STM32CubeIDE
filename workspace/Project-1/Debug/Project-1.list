@@ -8468,7 +8468,7 @@ void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsi
  8003f8c:	00000000 	.word	0x00000000
 
 08003f90 <STM32446GpioSetup>:
-	*reg &= data << (pin * size_block);
+	*reg &= (data << location) | ~(mask << location);
 }
 ***/
 

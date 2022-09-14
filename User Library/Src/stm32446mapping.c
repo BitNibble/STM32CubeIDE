@@ -32,12 +32,14 @@ static uint32_t STM32446DateDr;
 static volatile uint32_t mem[4];
 static volatile uint32_t nen[4];
 static double STM32446temperature;
+
 static struct CLOCKprescaler
 {
 	uint16_t AHB;
 	uint8_t APB1;
 	uint8_t APB2;
 }CLOCK_prescaler;
+
 static struct PLLparameters
 {
 	uint32_t Source;
@@ -47,9 +49,11 @@ static struct PLLparameters
 	uint8_t Q;
 	uint8_t R;
 }PLL_parameter;
+
 /*
 ***Procedure and Functions Prototypes
 */
+
 // SysTick
 void SystickInic(void);
 
@@ -755,9 +759,10 @@ void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsi
 void STM32446Gpiosetupreg( volatile uint32_t* reg, uint32_t size_block, uint32_t data, uint32_t pin )
 {
 	uint32_t mask = (uint32_t)(pow(2, size_block) - 1);
+	uint32_t location = pin * size_block;
 	data &= mask;
-	*reg |= mask << (pin * size_block);
-	*reg &= data << (pin * size_block);
+	*reg |= (mask << location);
+	*reg &= (data << location) | ~(mask << location);
 }
 ***/
 

@@ -175,6 +175,7 @@ void STM32446GpioSet( GPIO_TypeDef* regs, int data );
 void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioReset( GPIO_TypeDef* regs, int data );
+void STM32446PinBlock( volatile uint32_t* dest, uint32_t size_block, uint32_t data, uint32_t pin );
 /*** GENERIC ***/
 void STM32446Gpiosetupreg(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin);
 void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n );
@@ -369,6 +370,7 @@ STM32446 STM32446enable(void){
 	ret.func.resetpin = STM32446GpioResetpin;
 	ret.func.reset = STM32446GpioReset;
 	ret.func.setupreg = STM32446Gpiosetupreg;
+	ret.func.pinblock = STM32446PinBlock;
 	ret.func.setup = STM32446GpioSetup;
 	ret.func.ftoa = STM32446FUNCftoa;
 	ret.func.print = STM32446FUNCprint;
@@ -778,6 +780,14 @@ void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, 
 	data &= mask;
 	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
 	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
+}
+
+void STM32446PinBlock( volatile uint32_t* dest, uint32_t size_block, uint32_t data, uint32_t pin )
+{
+	uint32_t mask = (uint32_t)(pow(2, size_block) - 1);
+	data &= mask;
+	*dest &= ~(mask << pin);
+	*dest |= (data << pin);
 }
 /***generic***/
 
@@ -1803,5 +1813,7 @@ Also be aware of the interrupt flags have to be cleared after being fired and th
 received.
 
 uvision trial limitation to 32Kb.
+
+Can do anything.
 *******************************************************************************/
 

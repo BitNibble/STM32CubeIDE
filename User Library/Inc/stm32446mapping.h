@@ -306,6 +306,7 @@ typedef struct
 	void (*resetpin)( GPIO_TypeDef* regs, int pin); // BSRR
 	void (*reset)( GPIO_TypeDef* regs, int data); // BSRR
 	void (*setupreg)(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin); // GENERIC & |
+	void (*pinblock)( volatile uint32_t* dest, uint32_t size_block, uint32_t data, uint32_t pin );
 	void (*setup)( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n ); // GENERIN [] & |
 	char* (*ftoa)(double num, char* res, uint8_t afterpoint);
 	char* (*print)( char* str, uint8_t size_str, const char* format, ... );

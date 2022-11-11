@@ -153,6 +153,7 @@ if(zone == 2)
 {// workspace 2 ADC1 TEMPERATURE
 
 	lcd.gotoxy(1,0);
+
 	if(samples < n_samples){
 		temperature += stm.adc1.single.read();
 		stm.adc1.single.restart();

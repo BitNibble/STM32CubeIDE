@@ -11,6 +11,8 @@ Comment:
 /***Library***/
 #include "lcd.h"
 /***Constant & Macro***/
+#define LCD_N_TICKS 0 // 512
+#define BIT_N_TICKS 0 // 32
 //CMD RS
 #define INST 0
 #define DATA 1
@@ -32,7 +34,9 @@ void LCD0_string_size(const char* s, uint32_t size); // RAW
 void LCD0_hspace(uint32_t n);
 void LCD0_clear(void);
 void LCD0_gotoxy(unsigned int y, unsigned int x);
+void LCD0_strobe(uint16_t num);
 void LCD0_reboot(void);
+void LCD_ticks(uint16_t num);
 /***Procedure & Function***/
 LCD0 LCD0enable(GPIO_TypeDef* reg)
 {
@@ -126,34 +130,26 @@ void LCD0_write(char c, unsigned short D_I)
 { // write to LCD
 	stm.func.resetpin(ireg,RW); // lcd as input
 	
-	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS); 
-	
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 *2)) | (3 << (DB5* 2)) | (3 << (DB6* 2)) | (3 << (DB7 * 2))); // mcu as output
 	ireg->MODER |= ((1 << (DB4 *2)) | (1 << (DB5* 2)) | (1 << (DB6* 2)) | (1 << (DB7 * 2))); // mcu as output
 	
-	stm.func.setpin(ireg, EN); // lcd enabled
+	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS);
+	LCD0_strobe(LCD_N_TICKS); LCD_ticks(BIT_N_TICKS);
 	
-	if(c & 0x80) stm.func.setpin(ireg,DB7); else stm.func.resetpin(ireg,DB7);
-	if(c & 0x40) stm.func.setpin(ireg,DB6); else stm.func.resetpin(ireg,DB6);
-	if(c & 0x20) stm.func.setpin(ireg,DB5); else stm.func.resetpin(ireg,DB5);
-	if(c & 0x10) stm.func.setpin(ireg,DB4); else stm.func.resetpin(ireg,DB4);
+	if(c & 0x80) stm.func.setpin(ireg,DB7); else stm.func.resetpin(ireg,DB7); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x40) stm.func.setpin(ireg,DB6); else stm.func.resetpin(ireg,DB6); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x20) stm.func.setpin(ireg,DB5); else stm.func.resetpin(ireg,DB5); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x10) stm.func.setpin(ireg,DB4); else stm.func.resetpin(ireg,DB4); LCD_ticks(BIT_N_TICKS);
 	
-	stm.func.resetpin(ireg, EN); // shift to lcd
+	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS);
+	LCD0_strobe(LCD_N_TICKS); LCD_ticks(BIT_N_TICKS);
 	
-	// Second nibble
-	 
-	stm.func.resetpin(ireg, RW); // lcd as input
+	if(c & 0x08) stm.func.setpin(ireg,DB7); else stm.func.resetpin(ireg,DB7); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x04) stm.func.setpin(ireg,DB6); else stm.func.resetpin(ireg,DB6); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x02) stm.func.setpin(ireg,DB5); else stm.func.resetpin(ireg,DB5); LCD_ticks(BIT_N_TICKS);
+	if(c & 0x01) stm.func.setpin(ireg,DB4); else stm.func.resetpin(ireg,DB4); LCD_ticks(BIT_N_TICKS);
 	
-	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS); 
-	
-	stm.func.setpin(ireg, EN); // lcd enabled
-	
-	if(c & 0x08) stm.func.setpin(ireg,DB7); else stm.func.resetpin(ireg,DB7);
-	if(c & 0x04) stm.func.setpin(ireg,DB6); else stm.func.resetpin(ireg,DB6);
-	if(c & 0x02) stm.func.setpin(ireg,DB5); else stm.func.resetpin(ireg,DB5);
-	if(c & 0x01) stm.func.setpin(ireg,DB4); else stm.func.resetpin(ireg,DB4); 
-	
-	stm.func.resetpin(ireg, EN); // shift to lcd
+	stm.func.resetpin(ireg, EN); LCD_ticks(BIT_N_TICKS);
 }
 char LCD0_read(unsigned short D_I)
 { // Read from LCD
@@ -161,34 +157,28 @@ char LCD0_read(unsigned short D_I)
 	uint8_t c = 0;
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2))); // mcu as input
 	
-	//First nibble
 	stm.func.setpin(ireg, RW); // lcd as output
 	
-	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS); 
-	
-	stm.func.setpin(ireg, EN); // lcd enable (shift out)
-	data = ireg->IDR; // read data 
-	stm.func.resetpin(ireg, EN); // lcd disable
-	
-	if(data & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
-	if(data & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
-	if(data & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
-	if(data & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
-	  
-	// Second nibble
-	stm.func.setpin(ireg, RW); // lcd as output
-	
-	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS); 
-	
-	stm.func.setpin(ireg, EN); // lcd enable (shift out)
+	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS);
+	LCD0_strobe(LCD_N_TICKS); LCD_ticks(BIT_N_TICKS);
 	data = ireg->IDR; // read data
-	stm.func.resetpin(ireg, EN); // lcd disable
 	
-	if(data & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
-	if(data & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
-	if(data & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
-	if(data & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);
+	if(data & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4); LCD_ticks(BIT_N_TICKS);
 	
+	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS);
+	LCD0_strobe(LCD_N_TICKS); LCD_ticks(BIT_N_TICKS);
+	data = ireg->IDR; // read data
+
+	if(data & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1); LCD_ticks(BIT_N_TICKS);
+	if(data & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0); LCD_ticks(BIT_N_TICKS);
+	
+	stm.func.resetpin(ireg, EN); LCD_ticks(BIT_N_TICKS);
+
 	return c;
 }
 void LCD0_BF(void)
@@ -273,6 +263,12 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
 			break;
 	}
 }
+void LCD0_strobe(uint16_t num)
+{
+	stm.func.resetpin(ireg, EN);
+	LCD_ticks(num);
+	stm.func.setpin(ireg, EN);
+}
 void LCD0_reboot(void)
 {
 	//low high detect pin NC
@@ -284,6 +280,11 @@ void LCD0_reboot(void)
 	if(i)
 		LCD0_inic();
 	lcd0_detect = tmp;
+}
+void LCD_ticks(uint16_t num)
+{
+	uint16_t count;
+	for(count = 0; count < num; count++) ;
 }
 /***Interrupt***/
 /******************************************************************************

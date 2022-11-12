@@ -4,7 +4,7 @@ Author: Sergio Santos
    <sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 25102020
+Date: 12112022
 Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ************************************************************************/

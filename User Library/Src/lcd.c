@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 25102020
+Date: 12112022
 Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ************************************************************************/
@@ -129,7 +129,6 @@ void LCD0_inic(void)
 void LCD0_write(char c, unsigned short D_I)
 { // write to LCD
 	stm.func.resetpin(ireg,RW); // lcd as input
-	
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 *2)) | (3 << (DB5* 2)) | (3 << (DB6* 2)) | (3 << (DB7 * 2))); // mcu as output
 	ireg->MODER |= ((1 << (DB4 *2)) | (1 << (DB5* 2)) | (1 << (DB6* 2)) | (1 << (DB7 * 2))); // mcu as output
 	
@@ -156,7 +155,6 @@ char LCD0_read(unsigned short D_I)
 	uint32_t data = 0;
 	uint8_t c = 0;
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 * 2)) | (3 << (DB5 * 2)) | (3 << (DB6 * 2)) | (3 << (DB7 * 2))); // mcu as input
-	
 	stm.func.setpin(ireg, RW); // lcd as output
 	
 	if(D_I) stm.func.setpin(ireg, RS); else stm.func.resetpin(ireg, RS);

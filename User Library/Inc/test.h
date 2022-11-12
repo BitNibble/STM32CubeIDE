@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _TEST_H_
 	#define _TEST_H_
+
 /***Library***/
 #include <inttypes.h>
 /***Constant & Macro***/
@@ -20,6 +21,7 @@ typedef struct
 }TEST;
 /***Header***/
 TEST TESTenable(void);
+
 #endif
 /***comment***
 **************/

@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _CIRCBUFFER_H_
 	#define _CIRCBUFFER_H_
+
 /***Library***/
 #include <inttypes.h>
 /***Constant & Macro***/
@@ -29,6 +30,7 @@ struct circ_buf_template
 typedef struct circ_buf_template circbuff;
 /***Header***/
 circbuff CIRCBUFFenable(uint8_t size_buff, uint8_t* buff);
+
 #endif
 /********************************Comment***************************************
 *******************************************************************************/

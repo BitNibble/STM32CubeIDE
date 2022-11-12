@@ -11,6 +11,7 @@ Comment:
 ************************************************************************/
 #ifndef _FUNCTION_H_
 	#define _FUNCTION_H_
+
 /***Library***/
 /***pc use***
 #include <stdio.h>
@@ -79,6 +80,7 @@ typedef struct
 }FUNC;
 /***Header***/
 FUNC FUNCenable(void);
+
 #endif
 /***Comment***
 *************/

@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _LCD_H_
 	#define _LCD_H_
+
 /***Library***/
 //#include <util/delay.h> // if use AVR ATMEL
 #include <inttypes.h>
@@ -42,6 +43,7 @@ typedef struct
 }LCD0;
 /***Header***/
 LCD0 LCD0enable(GPIO_TypeDef* reg);
+
 #endif
 /***EOF***/
 

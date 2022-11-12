@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _EXPLODE_H_
 	#define _EXPLODE_H_
+
 /***Library***/
 #include <inttypes.h>
 /***Constant & Macro***/
@@ -27,6 +28,7 @@ typedef struct expld{
 }EXPLODE;
 /***Header***/
 EXPLODE EXPLODEenable(void);
+
 #endif
 /***comment***
 **************/

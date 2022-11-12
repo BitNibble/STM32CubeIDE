@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _74HC595_H_
 	#define _74HC595_H_
+
 /***Library***/
 #include <inttypes.h>
 /***Constant & Macro***/
@@ -23,6 +24,7 @@ typedef struct
 }HC595;
 /***Header***/
 HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin);
+
 #endif
 /***EOF***/
 

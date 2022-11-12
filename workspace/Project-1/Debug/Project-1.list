@@ -2467,7 +2467,7 @@ uint8_t CIRC_get( struct circ_buf_template* circ ){
  800166a:	68fa      	ldr	r2, [r7, #12]
  800166c:	429a      	cmp	r2, r3
  800166e:	d103      	bne.n	8001678 <CIRC_get+0x38>
-		*tail = '\0'; // flag null
+		*tail = 0; // flag null
  8001670:	68fb      	ldr	r3, [r7, #12]
  8001672:	2200      	movs	r2, #0
  8001674:	701a      	strb	r2, [r3, #0]
@@ -5353,7 +5353,6 @@ void LCD0_write(char c, unsigned short D_I)
  8002956:	2101      	movs	r1, #1
  8002958:	4610      	mov	r0, r2
  800295a:	4798      	blx	r3
-	
 	ireg->MODER &= (uint32_t) ~((3 << (DB4 *2)) | (3 << (DB5* 2)) | (3 << (DB6* 2)) | (3 << (DB7 * 2))); // mcu as output
  800295c:	4b8d      	ldr	r3, [pc, #564]	; (8002b94 <LCD0_write+0x258>)
  800295e:	681b      	ldr	r3, [r3, #0]
@@ -5638,7 +5637,6 @@ char LCD0_read(unsigned short D_I)
  8002bb2:	681b      	ldr	r3, [r3, #0]
  8002bb4:	f422 427f 	bic.w	r2, r2, #65280	; 0xff00
  8002bb8:	601a      	str	r2, [r3, #0]
-	
 	stm.func.setpin(ireg, RW); // lcd as output
  8002bba:	4b6f      	ldr	r3, [pc, #444]	; (8002d78 <LCD0_read+0x1e0>)
  8002bbc:	f8d3 31dc 	ldr.w	r3, [r3, #476]	; 0x1dc

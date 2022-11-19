@@ -35,15 +35,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00000628  00000000  00000000  0002afe0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000219d6  00000000  00000000  0002b608  2**0
+ 16 .debug_macro  000219be  00000000  00000000  0002b608  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000078ec  00000000  00000000  0004cfde  2**0
+ 17 .debug_line   000078ec  00000000  00000000  0004cfc6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c74e3  00000000  00000000  000548ca  2**0
+ 18 .debug_str    000c74d2  00000000  00000000  000548b2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0011bdad  2**0
+ 19 .comment      00000050  00000000  00000000  0011bd84  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000267c  00000000  00000000  0011be00  2**2
+ 20 .debug_frame  0000267c  00000000  00000000  0011bdd4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1173,7 +1173,7 @@ stm.usart1.receive();
 
 /*****************************  TEST STUFF END  *******************************/
 
-for ( zone = 0, workspace = 0 ; ass ; workspace++)
+for ( zone = 0, workspace = 0 ; (1) ; workspace++)
  8000dea:	2300      	movs	r3, #0
  8000dec:	f8c7 3274 	str.w	r3, [r7, #628]	; 0x274
  8000df0:	2300      	movs	r3, #0
@@ -1560,7 +1560,7 @@ if(zone == 7)
  80010be:	e000      	b.n	80010c2 <main+0x49a>
 	continue;
  80010c0:	bf00      	nop
-for ( zone = 0, workspace = 0 ; ass ; workspace++)
+for ( zone = 0, workspace = 0 ; (1) ; workspace++)
  80010c2:	f8d7 328c 	ldr.w	r3, [r7, #652]	; 0x28c
  80010c6:	3301      	adds	r3, #1
  80010c8:	f8c7 328c 	str.w	r3, [r7, #652]	; 0x28c
@@ -12919,7 +12919,7 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
  80062d6:	4a0d      	ldr	r2, [pc, #52]	; (800630c <STM32446triggerA+0xa8>)
  80062d8:	60d3      	str	r3, [r2, #12]
  80062da:	e007      	b.n	80062ec <STM32446triggerA+0x88>
-					mem[3] = ((uint32_t) sperm - mem[1]) + mem[2];
+					mem[3] = ((uint32_t) ~0 - mem[1]) + mem[2];
  80062dc:	4b0b      	ldr	r3, [pc, #44]	; (800630c <STM32446triggerA+0xa8>)
  80062de:	689a      	ldr	r2, [r3, #8]
  80062e0:	4b0a      	ldr	r3, [pc, #40]	; (800630c <STM32446triggerA+0xa8>)
@@ -13033,7 +13033,7 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
  8006384:	4a0c      	ldr	r2, [pc, #48]	; (80063b8 <STM32446triggerB+0xa8>)
  8006386:	60d3      	str	r3, [r2, #12]
  8006388:	e007      	b.n	800639a <STM32446triggerB+0x8a>
-					nen[3] = ((uint32_t) sperm - nen[1]) + nen[2];
+					nen[3] = ((uint32_t) ~0 - nen[1]) + nen[2];
  800638a:	4b0b      	ldr	r3, [pc, #44]	; (80063b8 <STM32446triggerB+0xa8>)
  800638c:	689a      	ldr	r2, [r3, #8]
  800638e:	4b0a      	ldr	r3, [pc, #40]	; (80063b8 <STM32446triggerB+0xa8>)

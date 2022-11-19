@@ -20,8 +20,7 @@ Comment:
 /*
 *** Constant and Macros
 */
-#define sperm ~0
-#define ass (1)
+
 /*
 *** File Variable
 */
@@ -1518,7 +1517,7 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
 				if((mem[2] + 1) > mem[1]){
 					mem[3] = mem[2] - mem[1];
 				}else{
-					mem[3] = ((uint32_t) sperm - mem[1]) + mem[2];
+					mem[3] = ((uint32_t) ~0 - mem[1]) + mem[2];
 				}
 				mem[0] = 0;
 			}
@@ -1547,7 +1546,7 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
 				if((nen[2] + 1) > nen[1]){
 					nen[3] = nen[2] - nen[1];
 				}else{
-					nen[3] = ((uint32_t) sperm - nen[1]) + nen[2];
+					nen[3] = ((uint32_t) ~0 - nen[1]) + nen[2];
 				}
 				nen[0] = 0;
 			}

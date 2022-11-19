@@ -35,9 +35,6 @@
 #include "lcd.h"
 #include "circbuffer.h"
 
-#define sperm ~0
-#define ass (1)
-
 static STM32446 stm;
 static FUNC func;
 static EXPLODE PINA;
@@ -107,7 +104,7 @@ stm.usart1.receive();
 
 /*****************************  TEST STUFF END  *******************************/
 
-for ( zone = 0, workspace = 0 ; ass ; workspace++)
+for ( zone = 0, workspace = 0 ; (1) ; workspace++)
 {// COMMON
 zone = workspace & 7;
 

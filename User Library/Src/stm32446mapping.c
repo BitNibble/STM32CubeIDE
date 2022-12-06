@@ -1332,7 +1332,7 @@ void STM32446Adc1VBAT(void) // vbat overrides temperature
 
 void STM32446Adc1TEMP(void)
 {
-	//Temperature (in ÂºC) = {(VSENSE V25) / Avg_Slope} + 25
+	//Temperature (in ºC) = {(VSENSE V25) / Avg_Slope} + 25
 	ret.adc1.common.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
 }
 

@@ -11,20 +11,21 @@ Comment:
 #ifndef _TEST_H_
 	#define _TEST_H_
 
-/***Library***/
+/*** Global Library ***/
 #include <inttypes.h>
-/***Constant & Macro***/
-/***Global Variable***/
+
+/*** Gloabl Constant & Macro ***/
+
+/*** Global Variable ***/
 typedef struct
 {
 	uint32_t testa;
 }TEST;
-/***Header***/
+
+/*** Global Header ***/
 TEST TESTenable(void);
 
 #endif
-/***comment***
-**************/
 /***EOF***/
 
 

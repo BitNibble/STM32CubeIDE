@@ -11,10 +11,12 @@ Comment:
 #ifndef _EXPLODE_H_
 	#define _EXPLODE_H_
 
-/***Library***/
+/*** Global Library ***/
 #include <inttypes.h>
-/***Constant & Macro***/
-/***Global Variable***/
+
+/*** GloablConstant & Macro ***/
+
+/*** Global Variable ***/
 typedef struct expld{
 	/***Variable***/
 	uint32_t XI;
@@ -23,14 +25,13 @@ typedef struct expld{
 	uint32_t LL;
 	uint32_t LH;
 	uint32_t HL;
-	/***PROTOTYPES VTABLE***/
+	// PROTOTYPES VTABLE
 	void (*update)(struct expld* self, uint32_t x);
 }EXPLODE;
-/***Header***/
+
+/*** Global Header ***/
 EXPLODE EXPLODEenable(void);
 
 #endif
-/***comment***
-**************/
 /***EOF***/
 

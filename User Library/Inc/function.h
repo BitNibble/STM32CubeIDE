@@ -12,7 +12,7 @@ Comment:
 #ifndef _FUNCTION_H_
 	#define _FUNCTION_H_
 
-/***Library***/
+/*** Global Library ***/
 /***pc use***
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,8 +20,9 @@ Comment:
 #include <errno.h>
 ***/
 #include <inttypes.h>
-/***Constant & Macro***/
-/***Global Variable***/
+
+/*** Gloabl Constant & Macro ***/
+/*** Global Variable ***/
 // Low Byte High Byte
 typedef struct
 {
@@ -31,7 +32,7 @@ typedef struct
 
 typedef struct
 {
-	/***PROTOTYPES VTABLE***/
+	// PROTOTYPES VTABLE
 	int (*stringlength)(const char string[]);
 	void (*reverse)(char s[]);
 	unsigned int (*mayia)(unsigned int xi, unsigned int xf, uint8_t nbits);
@@ -76,13 +77,12 @@ typedef struct
 	int (*getnum)(char* x);
 	unsigned int (*getnumv2)(char* x);
 	int (*readint)(int nmin, int nmax);
-	*/
+	***/
 }FUNC;
-/***Header***/
+
+/*** Global Header ***/
 FUNC FUNCenable(void);
 
 #endif
-/***Comment***
-*************/
 /***EOF***/
 

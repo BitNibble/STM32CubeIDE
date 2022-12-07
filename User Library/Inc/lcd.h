@@ -11,12 +11,13 @@ Comment:
 #ifndef _LCD_H_
 	#define _LCD_H_
 
-/***Library***/
+/*** Global Library ***/
 //#include <util/delay.h> // if use AVR ATMEL
 #include <inttypes.h>
 #include "stm32446mapping.h"
-/***Constant & Macro***/
-//ASIGN PORT PINS TO LCD (can be setup in any way)
+
+/*** Global Constant & Macro ***/
+// ASIGN PORT PINS TO LCD (can be setup in any way)
 #define RS 0
 #define RW 1
 #define EN 2
@@ -25,10 +26,10 @@ Comment:
 #define DB5 5
 #define DB6 6
 #define DB7 7
-/***Global Variable***/
+
+/*** Global Variable ***/
 typedef struct
 {
-	/******/
 	void (*write)(char c, unsigned short D_I);
 	char (*read)(unsigned short D_I);
 	void (*BF)(void);
@@ -41,7 +42,7 @@ typedef struct
 	void (*gotoxy)(unsigned int y, unsigned int x);
 	void (*reboot)(void);
 }LCD0;
-/***Header***/
+/*** Global Header ***/
 LCD0 LCD0enable(GPIO_TypeDef* reg);
 
 #endif

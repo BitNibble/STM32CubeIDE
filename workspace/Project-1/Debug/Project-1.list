@@ -27,21 +27,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00020064  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00009870  00000000  00000000  00020094  2**0
+ 12 .debug_info   00009865  00000000  00000000  00020094  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001016  00000000  00000000  00029904  2**0
+ 13 .debug_abbrev 00001016  00000000  00000000  000298f9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000006c0  00000000  00000000  0002a920  2**3
+ 14 .debug_aranges 000006c0  00000000  00000000  0002a910  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000628  00000000  00000000  0002afe0  2**3
+ 15 .debug_ranges 00000628  00000000  00000000  0002afd0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000219be  00000000  00000000  0002b608  2**0
+ 16 .debug_macro  000219be  00000000  00000000  0002b5f8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000078ec  00000000  00000000  0004cfc6  2**0
+ 17 .debug_line   000078f9  00000000  00000000  0004cfb6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c74d2  00000000  00000000  000548b2  2**0
+ 18 .debug_str    000c74d2  00000000  00000000  000548af  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0011bd84  2**0
+ 19 .comment      00000050  00000000  00000000  0011bd81  2**0
                   CONTENTS, READONLY
  20 .debug_frame  0000267c  00000000  00000000  0011bdd4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -2050,10 +2050,10 @@ Infinite_Loop:
 	...
 
 08001398 <HC595enable>:
-void HC595_shift_bit(uint8_t bool);
 void HC595_shift_byte(uint8_t byte);
 void HC595_shift_out(void);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin)
 {
  8001398:	b490      	push	{r4, r7}
@@ -2063,10 +2063,10 @@ HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datap
  80013a0:	60b9      	str	r1, [r7, #8]
  80013a2:	607a      	str	r2, [r7, #4]
  80013a4:	70fb      	strb	r3, [r7, #3]
-	//LOCAL VARIABLES
-	//ALLOCAÇÂO MEMORIA PARA Estrutura
+	// LOCAL VARIABLES
+	// ALLOCAÇÂO MEMORIA PARA Estrutura
 	HC595 hc595;
-	//import parametros
+	// import parametros
 	hc595_DDR = ddr;
  80013a6:	4a38      	ldr	r2, [pc, #224]	; (8001488 <HC595enable+0xf0>)
  80013a8:	68bb      	ldr	r3, [r7, #8]
@@ -2087,7 +2087,7 @@ HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datap
  80013c0:	4a35      	ldr	r2, [pc, #212]	; (8001498 <HC595enable+0x100>)
  80013c2:	f897 302c 	ldrb.w	r3, [r7, #44]	; 0x2c
  80013c6:	7013      	strb	r3, [r2, #0]
-	//inic variables
+	// inic variables
 #if defined (STM32F446xx)
 	*hc595_DDR &= (uint32_t) ~((3 << (datapin * 2)) | (3 << (clkpin * 2)) | (3 << (outpin * 2)));
  80013c8:	4b2f      	ldr	r3, [pc, #188]	; (8001488 <HC595enable+0xf0>)
@@ -2160,7 +2160,7 @@ HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datap
  800145c:	681b      	ldr	r3, [r3, #0]
  800145e:	400a      	ands	r2, r1
  8001460:	601a      	str	r2, [r3, #0]
-	//Direccionar apontadores para PROTOTIPOS
+	// Direccionar apontadores para PROTOTIPOS
 	hc595.bit = HC595_shift_bit;
  8001462:	4b0e      	ldr	r3, [pc, #56]	; (800149c <HC595enable+0x104>)
  8001464:	617b      	str	r3, [r7, #20]
@@ -2170,7 +2170,7 @@ HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datap
 	hc595.out = HC595_shift_out;
  800146a:	4b0e      	ldr	r3, [pc, #56]	; (80014a4 <HC595enable+0x10c>)
  800146c:	61fb      	str	r3, [r7, #28]
-	//
+	
 	return hc595;
  800146e:	68fb      	ldr	r3, [r7, #12]
  8001470:	461c      	mov	r4, r3
@@ -2193,6 +2193,7 @@ HC595 HC595enable(volatile uint32_t *ddr, volatile uint32_t *port, uint8_t datap
  80014a4:	08001585 	.word	0x08001585
 
 080014a8 <HC595_shift_bit>:
+
 void HC595_shift_bit(uint8_t bool)
 {
  80014a8:	b480      	push	{r7}
@@ -2276,6 +2277,7 @@ void HC595_shift_bit(uint8_t bool)
  800153c:	20000405 	.word	0x20000405
 
 08001540 <HC595_shift_byte>:
+
 void HC595_shift_byte(uint8_t byte)
 {
  8001540:	b580      	push	{r7, lr}
@@ -2316,6 +2318,7 @@ void HC595_shift_byte(uint8_t byte)
 	...
 
 08001584 <HC595_shift_out>:
+
 void HC595_shift_out(void)
 {
  8001584:	b480      	push	{r7}
@@ -2360,8 +2363,8 @@ void HC595_shift_out(void)
 080015d0 <CIRCBUFFenable>:
 void CIRC_freset(void);
 void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str);
-/***Procedure & Function***/
-/******************************************************************************/
+
+/*** Procedure & Function ***/
 circbuff CIRCBUFFenable( uint8_t size_buff, uint8_t* buff )
 {
  80015d0:	b4b0      	push	{r4, r5, r7}
@@ -2407,7 +2410,7 @@ circbuff CIRCBUFFenable( uint8_t size_buff, uint8_t* buff )
 	circ.getstr = CIRC_getstr;
  800160a:	4b0c      	ldr	r3, [pc, #48]	; (800163c <CIRCBUFFenable+0x6c>)
  800160c:	637b      	str	r3, [r7, #52]	; 0x34
-	/******/
+	
 	return circ; // return copy
  800160e:	68fb      	ldr	r3, [r7, #12]
  8001610:	461d      	mov	r5, r3
@@ -2431,7 +2434,7 @@ circbuff CIRCBUFFenable( uint8_t size_buff, uint8_t* buff )
  800163c:	0800171f 	.word	0x0800171f
 
 08001640 <CIRC_get>:
-/******************************************************************************/
+
 uint8_t CIRC_get( struct circ_buf_template* circ ){
  8001640:	b480      	push	{r7}
  8001642:	b085      	sub	sp, #20
@@ -2623,10 +2626,10 @@ void CIRC_getstr(struct circ_buf_template* circ, uint8_t* str){
  8001752:	bd90      	pop	{r4, r7, pc}
 
 08001754 <EXPLODEenable>:
-uint32_t EXPLODEll(EXPLODE* self);
 uint32_t EXPLODElh(EXPLODE* self);
 uint32_t EXPLODEhl(EXPLODE* self);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 EXPLODE EXPLODEenable( void )
 {
  8001754:	b4b0      	push	{r4, r5, r7}
@@ -2648,7 +2651,7 @@ EXPLODE EXPLODEenable( void )
 	explode.update = EXPLODEupdate;
  8001764:	4b08      	ldr	r3, [pc, #32]	; (8001788 <EXPLODEenable+0x34>)
  8001766:	627b      	str	r3, [r7, #36]	; 0x24
-	/******/
+	
 	return explode;
  8001768:	687b      	ldr	r3, [r7, #4]
  800176a:	461d      	mov	r5, r3
@@ -2667,6 +2670,7 @@ EXPLODE EXPLODEenable( void )
  8001788:	0800178d 	.word	0x0800178d
 
 0800178c <EXPLODEupdate>:
+
 // boot
 void EXPLODEupdate(EXPLODE* self, uint32_t x)
 {
@@ -2715,6 +2719,7 @@ void EXPLODEupdate(EXPLODE* self, uint32_t x)
  80017da:	bd80      	pop	{r7, pc}
 
 080017dc <EXPLODEhh>:
+
 // hh
 uint32_t EXPLODEhh(EXPLODE* self)
 {
@@ -2740,6 +2745,7 @@ uint32_t EXPLODEhh(EXPLODE* self)
  80017fc:	4770      	bx	lr
 
 080017fe <EXPLODEll>:
+
 // ll
 uint32_t EXPLODEll(EXPLODE* self)
 {
@@ -2766,6 +2772,7 @@ uint32_t EXPLODEll(EXPLODE* self)
  8001820:	4770      	bx	lr
 
 08001822 <EXPLODElh>:
+
 // lh
 uint32_t EXPLODElh(EXPLODE* self)
 {
@@ -2797,6 +2804,7 @@ uint32_t EXPLODElh(EXPLODE* self)
  800184c:	4770      	bx	lr
 
 0800184e <EXPLODEhl>:
+
 // hl
 uint32_t EXPLODEhl(EXPLODE* self)
 {
@@ -2829,18 +2837,17 @@ uint32_t EXPLODEhl(EXPLODE* self)
 	...
 
 0800187c <FUNCenable>:
-int FUNCreadint(int nmin, int nmax);
 ***/
 // uint8_t TRANupdate(struct TRAN *tr, uint8_t idata);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 FUNC FUNCenable( void )
 {
  800187c:	b580      	push	{r7, lr}
  800187e:	b0a6      	sub	sp, #152	; 0x98
  8001880:	af00      	add	r7, sp, #0
  8001882:	6078      	str	r0, [r7, #4]
-	
-*******************************************************************************/
+	// Comment out links not being used, in order to release memmory.
 	// struct object
 	FUNC func;
 	// Inic FUNCstr
@@ -2958,11 +2965,11 @@ FUNC FUNCenable( void )
 	func.print = FUNCprint;
  8001922:	4b2b      	ldr	r3, [pc, #172]	; (80019d0 <FUNCenable+0x154>)
  8001924:	f8c7 3094 	str.w	r3, [r7, #148]	; 0x94
+	func.putstr = FUNCputstr;
 	func.getnum = FUNCgetnum;
 	func.getnumv2 = FUNCgetnumv2;
 	func.readint = FUNCreadint;
-	*/
-	/******/
+	***/
 	return func;
  8001928:	687b      	ldr	r3, [r7, #4]
  800192a:	4618      	mov	r0, r3
@@ -3015,9 +3022,10 @@ FUNC FUNCenable( void )
  80019d4:	00000000 	.word	0x00000000
 
 080019d8 <FUNCmayia>:
+
 // mayia
 unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
-{//magic formula
+{// magic formula
  80019d8:	b580      	push	{r7, lr}
  80019da:	b088      	sub	sp, #32
  80019dc:	af00      	add	r7, sp, #0
@@ -3085,6 +3093,7 @@ unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
  8001a58:	3ff00000 	.word	0x3ff00000
 
 08001a5c <FUNCswap>:
+
 // interchange *px and *py
 void FUNCswap(long *px, long *py)
 {
@@ -3115,6 +3124,7 @@ void FUNCswap(long *px, long *py)
  8001a84:	4770      	bx	lr
 
 08001a86 <FUNCcopy>:
+
 // copy: copy 'from' into 'to'; assume to is big enough
 void FUNCcopy(char to[], char from[])
 {
@@ -3154,6 +3164,7 @@ void FUNCcopy(char to[], char from[])
  8001abe:	4770      	bx	lr
 
 08001ac0 <FUNCsqueeze>:
+
 // squeeze: delete all c from s
 void FUNCsqueeze(char s[], int c)
 {
@@ -3215,6 +3226,7 @@ void FUNCsqueeze(char s[], int c)
  8001b20:	4770      	bx	lr
 
 08001b22 <FUNCshellsort>:
+
 // shellsort: sort v[0]...v[n-1] into increasing order
 void FUNCshellsort(int v[], int n)
 {
@@ -3320,6 +3332,7 @@ void FUNCshellsort(int v[], int n)
 	...
 
 08001bd4 <FUNCi32toa>:
+
 // i32toa: convert n to characters in s
 char* FUNCi32toa(int32_t n)
 {
@@ -3407,6 +3420,7 @@ char* FUNCi32toa(int32_t n)
  8001c64:	20000408 	.word	0x20000408
 
 08001c68 <FUNCi16toa>:
+
 // i16toa: convert n to characters in s
 char* FUNCi16toa(int16_t n)
 {
@@ -3497,6 +3511,7 @@ char* FUNCi16toa(int16_t n)
  8001d08:	20000408 	.word	0x20000408
 
 08001d0c <FUNCui16toa>:
+
 // ui16toa: convert n to characters in s
 char* FUNCui16toa(uint16_t n)
 {
@@ -3576,6 +3591,7 @@ char* FUNCui16toa(uint16_t n)
  8001da0:	20000408 	.word	0x20000408
 
 08001da4 <FUNCtrim>:
+
 // trim: remove trailing blanks, tabs, newlines
 int FUNCtrim(char s[])
 {
@@ -3636,6 +3652,7 @@ int FUNCtrim(char s[])
  8001e02:	bd80      	pop	{r7, pc}
 
 08001e04 <FUNCpmax>:
+
 // larger number of two
 int FUNCpmax(int a1, int a2)
 {
@@ -3669,6 +3686,7 @@ int FUNCpmax(int a1, int a2)
  8001e2c:	4770      	bx	lr
 
 08001e2e <FUNCgcd>:
+
 // common divisor
 int FUNCgcd (int u, int v)
 {
@@ -3709,6 +3727,7 @@ int FUNCgcd (int u, int v)
  8001e66:	4770      	bx	lr
 
 08001e68 <FUNCstrToInt>:
+
 // Function to convert a string to an integer
 int FUNCstrToInt (const char string[])
 {
@@ -3767,6 +3786,7 @@ int FUNCstrToInt (const char string[])
  8001ec2:	4770      	bx	lr
 
 08001ec4 <FUNCfilter>:
+
 // filter
 uint8_t FUNCfilter(uint8_t mask, uint8_t data)
 {
@@ -3791,6 +3811,7 @@ uint8_t FUNCfilter(uint8_t mask, uint8_t data)
  8001ee6:	4770      	bx	lr
 
 08001ee8 <FUNCticks>:
+
 // ticks
 unsigned int FUNCticks(unsigned int num)
 {
@@ -3820,6 +3841,7 @@ unsigned int FUNCticks(unsigned int num)
  8001f10:	4770      	bx	lr
 
 08001f12 <FUNCtwocomptoint8bit>:
+
 // Two's Complement function
 int FUNCtwocomptoint8bit(int twoscomp){
  8001f12:	b480      	push	{r7}
@@ -3828,13 +3850,13 @@ int FUNCtwocomptoint8bit(int twoscomp){
  8001f18:	6078      	str	r0, [r7, #4]
   
   int value;
-	//Let's see if the byte is negative
+	// Let's see if the byte is negative
   if (twoscomp & 0x80){
  8001f1a:	687b      	ldr	r3, [r7, #4]
  8001f1c:	f003 0380 	and.w	r3, r3, #128	; 0x80
  8001f20:	2b00      	cmp	r3, #0
  8001f22:	d00a      	beq.n	8001f3a <FUNCtwocomptoint8bit+0x28>
-    //Invert
+    // Invert
     twoscomp = ~twoscomp + 1;
  8001f24:	687b      	ldr	r3, [r7, #4]
  8001f26:	425b      	negs	r3, r3
@@ -3843,7 +3865,7 @@ int FUNCtwocomptoint8bit(int twoscomp){
  8001f2a:	687b      	ldr	r3, [r7, #4]
  8001f2c:	b2db      	uxtb	r3, r3
  8001f2e:	607b      	str	r3, [r7, #4]
-    //Cast as int and multiply by negative one
+    // Cast as int and multiply by negative one
     value = (int)(twoscomp) * (-1);
  8001f30:	687b      	ldr	r3, [r7, #4]
  8001f32:	425b      	negs	r3, r3
@@ -3852,13 +3874,13 @@ int FUNCtwocomptoint8bit(int twoscomp){
  8001f36:	68fb      	ldr	r3, [r7, #12]
  8001f38:	e006      	b.n	8001f48 <FUNCtwocomptoint8bit+0x36>
   }else{
-    //Byte is non-negative, therefore convert to decimal and display
-    //Make sure we are never over 1279
+    // Byte is non-negative, therefore convert to decimal and display
+    // Make sure we are never over 1279
     twoscomp = (twoscomp & 0x7F);
  8001f3a:	687b      	ldr	r3, [r7, #4]
  8001f3c:	f003 037f 	and.w	r3, r3, #127	; 0x7f
  8001f40:	607b      	str	r3, [r7, #4]
-    //Cast as int and return
+    // Cast as int and return
     value = (int)(twoscomp);
  8001f42:	687b      	ldr	r3, [r7, #4]
  8001f44:	60fb      	str	r3, [r7, #12]
@@ -3873,6 +3895,7 @@ int FUNCtwocomptoint8bit(int twoscomp){
  8001f52:	4770      	bx	lr
 
 08001f54 <FUNCtwocomptoint10bit>:
+
 // Two's Complement function, shifts 10 bit binary to signed integers (-512 to 512)
 int FUNCtwocomptoint10bit(int twoscomp){
  8001f54:	b480      	push	{r7}
@@ -3880,13 +3903,13 @@ int FUNCtwocomptoint10bit(int twoscomp){
  8001f58:	af00      	add	r7, sp, #0
  8001f5a:	6078      	str	r0, [r7, #4]
 	int value;
-  //Let's see if the byte is negative
+  // Let's see if the byte is negative
   if (twoscomp & 0x200){
  8001f5c:	687b      	ldr	r3, [r7, #4]
  8001f5e:	f403 7300 	and.w	r3, r3, #512	; 0x200
  8001f62:	2b00      	cmp	r3, #0
  8001f64:	d00b      	beq.n	8001f7e <FUNCtwocomptoint10bit+0x2a>
-    //Invert
+    // Invert
     twoscomp = ~twoscomp + 1;
  8001f66:	687b      	ldr	r3, [r7, #4]
  8001f68:	425b      	negs	r3, r3
@@ -3895,7 +3918,7 @@ int FUNCtwocomptoint10bit(int twoscomp){
  8001f6c:	687b      	ldr	r3, [r7, #4]
  8001f6e:	f3c3 0309 	ubfx	r3, r3, #0, #10
  8001f72:	607b      	str	r3, [r7, #4]
-    //Cast as int and multiply by negative one
+    // Cast as int and multiply by negative one
     value = (int)(twoscomp) * (-1);
  8001f74:	687b      	ldr	r3, [r7, #4]
  8001f76:	425b      	negs	r3, r3
@@ -3904,14 +3927,14 @@ int FUNCtwocomptoint10bit(int twoscomp){
  8001f7a:	68fb      	ldr	r3, [r7, #12]
  8001f7c:	e006      	b.n	8001f8c <FUNCtwocomptoint10bit+0x38>
   }else{
-    //Serial.println("We entered the positive loop");
-    //Byte is non-negative, therefore convert to decimal and display
+    // Serial.println("We entered the positive loop");
+    // Byte is non-negative, therefore convert to decimal and display
     twoscomp = (twoscomp & 0x1FF);
  8001f7e:	687b      	ldr	r3, [r7, #4]
  8001f80:	f3c3 0308 	ubfx	r3, r3, #0, #9
  8001f84:	607b      	str	r3, [r7, #4]
-    //Cast as int and return
-    //Serial.println(twoscomp);
+    // Cast as int and return
+    // Serial.println(twoscomp);
     value = (int)(twoscomp);
  8001f86:	687b      	ldr	r3, [r7, #4]
  8001f88:	60fb      	str	r3, [r7, #12]
@@ -3926,6 +3949,7 @@ int FUNCtwocomptoint10bit(int twoscomp){
  8001f96:	4770      	bx	lr
 
 08001f98 <FUNCtwocomptointnbit>:
+
 // Two's Complement function, nbits
 int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
  8001f98:	b480      	push	{r7}
@@ -3946,7 +3970,7 @@ int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
  8001fb0:	68fb      	ldr	r3, [r7, #12]
  8001fb2:	3b01      	subs	r3, #1
  8001fb4:	60bb      	str	r3, [r7, #8]
-  //Let's see if the number is negative
+  // Let's see if the number is negative
   if ((unsigned int) twoscomp & signmask){
  8001fb6:	687a      	ldr	r2, [r7, #4]
  8001fb8:	68fb      	ldr	r3, [r7, #12]
@@ -3981,6 +4005,7 @@ int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
  8001fe6:	4770      	bx	lr
 
 08001fe8 <FUNCdec2bcd>:
+
 // Convert Decimal to Binary Coded Decimal (BCD)
 char FUNCdec2bcd(char num)
 {
@@ -4018,6 +4043,7 @@ char FUNCdec2bcd(char num)
  8002028:	cccccccd 	.word	0xcccccccd
 
 0800202c <FUNCbcd2dec>:
+
 // Convert Binary Coded Decimal (BCD) to Decimal
 char FUNCbcd2dec(char num)
 {
@@ -4049,6 +4075,7 @@ char FUNCbcd2dec(char num)
 	...
 
 08002060 <FUNCresizestr>:
+
 char* FUNCresizestr(char *string, int size)
 {
  8002060:	b480      	push	{r7}
@@ -4125,9 +4152,7 @@ char* FUNCresizestr(char *string, int size)
 
 080020d4 <FUNCtrimmer>:
 long FUNCtrimmer(long x, long in_min, long in_max, long out_min, long out_max)
-/***
-same as arduino map function.
-***/
+// same as arduino map function
 {
  80020d4:	b480      	push	{r7}
  80020d6:	b085      	sub	sp, #20
@@ -4158,6 +4183,7 @@ same as arduino map function.
  800210a:	4770      	bx	lr
 
 0800210c <StringLength>:
+
 // Function to count the number of characters in a string
 int StringLength (const char string[])
 {
@@ -4189,6 +4215,7 @@ int StringLength (const char string[])
  8002138:	4770      	bx	lr
 
 0800213a <Reverse>:
+
 // reverse: reverse string s in place
 void Reverse(char s[])
 {
@@ -4248,6 +4275,7 @@ void Reverse(char s[])
  8002194:	bd80      	pop	{r7, pc}
 
 08002196 <FUNCbcd2bin>:
+
 unsigned char FUNCbcd2bin(unsigned char val)
 {
  8002196:	b480      	push	{r7}
@@ -4277,6 +4305,7 @@ unsigned char FUNCbcd2bin(unsigned char val)
  80021c6:	4770      	bx	lr
 
 080021c8 <FUNCbin2bcd>:
+
 unsigned char FUNCbin2bcd(unsigned int val)
 {
  80021c8:	b480      	push	{r7}
@@ -4313,6 +4342,7 @@ unsigned char FUNCbin2bcd(unsigned int val)
  8002208:	cccccccd 	.word	0xcccccccd
 
 0800220c <FUNCgcd1>:
+
 long FUNCgcd1(long a, long b)
 {
  800220c:	b580      	push	{r7, lr}
@@ -4365,6 +4395,7 @@ long FUNCgcd1(long a, long b)
  8002258:	bd80      	pop	{r7, pc}
 
 0800225a <FUNCpincheck>:
+
 uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 {
  800225a:	b480      	push	{r7}
@@ -4402,6 +4433,7 @@ uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 	...
 
 08002294 <FUNCprint_binary>:
+
 char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
 {
  8002294:	b480      	push	{r7}
@@ -4464,10 +4496,10 @@ char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
  80022fc:	20000408 	.word	0x20000408
 
 08002300 <FUNCintinvstr>:
-{
 	return (uint8_t)((((bin) / 10) << 4) + ((bin) % 10));
 }
-/***intinvstr***/
+
+// intinvstr
 uint8_t FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 {
  8002300:	b480      	push	{r7}
@@ -4565,8 +4597,8 @@ uint8_t FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
  80023b4:	66666667 	.word	0x66666667
 
 080023b8 <FUNCftoa>:
-/***/
-/***ftoa***/
+
+// ftoa
 char* FUNCftoa(double num, char* res, uint8_t afterpoint)
 {
  80023b8:	b5b0      	push	{r4, r5, r7, lr}
@@ -4749,7 +4781,8 @@ char* FUNCftoa(double num, char* res, uint8_t afterpoint)
  8002530:	40590000 	.word	0x40590000
 
 08002534 <FUNCdectohex>:
-/***dectohex***/
+
+// dectohex
 char* FUNCdectohex(int32_t num)
 {
  8002534:	b580      	push	{r7, lr}
@@ -4974,7 +5007,7 @@ uint16_t FUNCSwapByte(uint16_t num)
 
 080026a0 <FUNCprint>:
 
-/***print***/
+// print
 char* FUNCprint( const char* format, ... )
 {
  80026a0:	b40f      	push	{r0, r1, r2, r3}
@@ -4994,7 +5027,7 @@ char* FUNCprint( const char* format, ... )
  80026b4:	4808      	ldr	r0, [pc, #32]	; (80026d8 <FUNCprint+0x38>)
  80026b6:	f004 facd 	bl	8006c54 <vsniprintf>
  80026ba:	6078      	str	r0, [r7, #4]
-	//ret = vsnprintf( ptr, FUNCSTRSIZE, format, aptr );
+	// ret = vsnprintf( ptr, FUNCSTRSIZE, format, aptr );
 	va_end(aptr);
 	
 	if(ret < 0){
@@ -5004,7 +5037,7 @@ char* FUNCprint( const char* format, ... )
 		return NULL;
  80026c2:	2300      	movs	r3, #0
  80026c4:	e000      	b.n	80026c8 <FUNCprint+0x28>
-		//FUNCstr[0]='/0';FUNCstr[1]='/0';FUNCstr[2]='/0';FUNCstr[3]='/0';
+		// FUNCstr[0]='/0';FUNCstr[1]='/0';FUNCstr[2]='/0';FUNCstr[3]='/0';
 	}else
 		return FUNCstr;
  80026c6:	4b04      	ldr	r3, [pc, #16]	; (80026d8 <FUNCprint+0x38>)
@@ -5019,10 +5052,10 @@ char* FUNCprint( const char* format, ... )
  80026d8:	20000408 	.word	0x20000408
 
 080026dc <LCD0enable>:
-void LCD0_strobe(uint16_t num);
 void LCD0_reboot(void);
 void LCD_ticks(uint16_t num);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 LCD0 LCD0enable(GPIO_TypeDef* reg)
 {
  80026dc:	b5b0      	push	{r4, r5, r7, lr}
@@ -5030,7 +5063,7 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
  80026e2:	af00      	add	r7, sp, #0
  80026e4:	f8c7 020c 	str.w	r0, [r7, #524]	; 0x20c
  80026e8:	f8c7 1208 	str.w	r1, [r7, #520]	; 0x208
-	//ALLOCAï¿½ï¿½O MEMORIA PARA Estrutura
+	// ALLOCA??O MEMORIA PARA Estrutura
 	LCD0 lcd0;
 	stm = STM32446enable(); // The entire stm32446
  80026ec:	4c24      	ldr	r4, [pc, #144]	; (8002780 <LCD0enable+0xa4>)
@@ -5044,14 +5077,14 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
  8002702:	f44f 7302 	mov.w	r3, #520	; 0x208
  8002706:	461a      	mov	r2, r3
  8002708:	f004 fa18 	bl	8006b3c <memcpy>
-	//LOCAL VARIABLES
-	//import parameters
+	// LOCAL VARIABLES
+	// import parameters
 	ireg = reg;
  800270c:	4a1d      	ldr	r2, [pc, #116]	; (8002784 <LCD0enable+0xa8>)
  800270e:	f8d7 3208 	ldr.w	r3, [r7, #520]	; 0x208
  8002712:	6013      	str	r3, [r2, #0]
-	//initialize variables
-	//Direccionar apontadores para PROTOTIPOS
+	// initialize variables
+	// Direccionar apontadores para PROTOTIPOS
 	lcd0.write = LCD0_write;
  8002714:	4b1c      	ldr	r3, [pc, #112]	; (8002788 <LCD0enable+0xac>)
  8002716:	f8c7 3214 	str.w	r3, [r7, #532]	; 0x214
@@ -5085,10 +5118,10 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
 	lcd0.reboot = LCD0_reboot;
  8002750:	4b17      	ldr	r3, [pc, #92]	; (80027b0 <LCD0enable+0xd4>)
  8002752:	f8c7 323c 	str.w	r3, [r7, #572]	; 0x23c
-	//LCD INIC
+	// LCD INIC
 	LCD0_inic();
  8002756:	f000 f82d 	bl	80027b4 <LCD0_inic>
-	//
+	
 	return lcd0;
  800275a:	f8d7 320c 	ldr.w	r3, [r7, #524]	; 0x20c
  800275e:	461d      	mov	r5, r3
@@ -5119,12 +5152,13 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
  80027b0:	08002f95 	.word	0x08002f95
 
 080027b4 <LCD0_inic>:
+
 void LCD0_inic(void)
 {
  80027b4:	b580      	push	{r7, lr}
  80027b6:	af00      	add	r7, sp, #0
-	//uint8_t repeat;
-	//LCD INIC
+	// uint8_t repeat;
+	// LCD INIC
 	ireg->MODER &= (uint32_t) ~((3 << (RS * 2)) | (3 << (RW * 2)) | (3 << (EN * 2))); // control pins as output
  80027b8:	4b5d      	ldr	r3, [pc, #372]	; (8002930 <LCD0_inic+0x17c>)
  80027ba:	681b      	ldr	r3, [r3, #0]
@@ -5212,13 +5246,13 @@ void LCD0_inic(void)
  800285a:	4a36      	ldr	r2, [pc, #216]	; (8002934 <LCD0_inic+0x180>)
  800285c:	6013      	str	r3, [r2, #0]
 	
-	/***INICIALIZACAO LCD**datasheet******/
+	// INICIALIZACAO LCD datasheet
 	stm.systick.delay_ms(20); // using clock at 16Mhz
  800285e:	4b36      	ldr	r3, [pc, #216]	; (8002938 <LCD0_inic+0x184>)
  8002860:	f8d3 3164 	ldr.w	r3, [r3, #356]	; 0x164
  8002864:	2014      	movs	r0, #20
  8002866:	4798      	blx	r3
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
  8002868:	2100      	movs	r1, #0
  800286a:	2038      	movs	r0, #56	; 0x38
  800286c:	f000 f866 	bl	800293c <LCD0_write>
@@ -5227,7 +5261,7 @@ void LCD0_inic(void)
  8002872:	f8d3 3168 	ldr.w	r3, [r3, #360]	; 0x168
  8002876:	2004      	movs	r0, #4
  8002878:	4798      	blx	r3
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
  800287a:	2100      	movs	r1, #0
  800287c:	2038      	movs	r0, #56	; 0x38
  800287e:	f000 f85d 	bl	800293c <LCD0_write>
@@ -5236,7 +5270,7 @@ void LCD0_inic(void)
  8002884:	f8d3 3168 	ldr.w	r3, [r3, #360]	; 0x168
  8002888:	200a      	movs	r0, #10
  800288a:	4798      	blx	r3
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
  800288c:	2100      	movs	r1, #0
  800288e:	2038      	movs	r0, #56	; 0x38
  8002890:	f000 f854 	bl	800293c <LCD0_write>
@@ -5245,7 +5279,7 @@ void LCD0_inic(void)
  8002896:	f8d3 3168 	ldr.w	r3, [r3, #360]	; 0x168
  800289a:	2004      	movs	r0, #4
  800289c:	4798      	blx	r3
-	LCD0_write(0x28, INST); //function set 2B
+	LCD0_write(0x28, INST); // function set 2B
  800289e:	2100      	movs	r1, #0
  80028a0:	2028      	movs	r0, #40	; 0x28
  80028a2:	f000 f84b 	bl	800293c <LCD0_write>
@@ -5254,7 +5288,7 @@ void LCD0_inic(void)
  80028a8:	f8d3 3168 	ldr.w	r3, [r3, #360]	; 0x168
  80028ac:	2004      	movs	r0, #4
  80028ae:	4798      	blx	r3
-	LCD0_write(0x28, INST); //function set 2B
+	LCD0_write(0x28, INST); // function set 2B
  80028b0:	2100      	movs	r1, #0
  80028b2:	2028      	movs	r0, #40	; 0x28
  80028b4:	f000 f842 	bl	800293c <LCD0_write>
@@ -5263,65 +5297,65 @@ void LCD0_inic(void)
  80028ba:	f8d3 3168 	ldr.w	r3, [r3, #360]	; 0x168
  80028be:	2004      	movs	r0, #4
  80028c0:	4798      	blx	r3
-	/**************************************/
-	//for(repeat = 2 ; repeat ; repeat--){
+	
+	// for(repeat = 2 ; repeat ; repeat--){
 		// repeat twice in 4 bit length
-		LCD0_write(0x28, INST); //function set 2B
+		LCD0_write(0x28, INST); // function set 2B
  80028c2:	2100      	movs	r1, #0
  80028c4:	2028      	movs	r0, #40	; 0x28
  80028c6:	f000 f839 	bl	800293c <LCD0_write>
 		LCD0_BF();
  80028ca:	f000 fa57 	bl	8002d7c <LCD0_BF>
-		LCD0_write(0x28, INST); //function set 2B
+		LCD0_write(0x28, INST); // function set 2B
  80028ce:	2100      	movs	r1, #0
  80028d0:	2028      	movs	r0, #40	; 0x28
  80028d2:	f000 f833 	bl	800293c <LCD0_write>
 		LCD0_BF();
  80028d6:	f000 fa51 	bl	8002d7c <LCD0_BF>
 
-		LCD0_write(0x0C, INST);// display on/off control
+		LCD0_write(0x0C, INST); // display on/off control
  80028da:	2100      	movs	r1, #0
  80028dc:	200c      	movs	r0, #12
  80028de:	f000 f82d 	bl	800293c <LCD0_write>
 		LCD0_BF();
  80028e2:	f000 fa4b 	bl	8002d7c <LCD0_BF>
-		LCD0_write(0x0C, INST);// display on/off control
+		LCD0_write(0x0C, INST); // display on/off control
  80028e6:	2100      	movs	r1, #0
  80028e8:	200c      	movs	r0, #12
  80028ea:	f000 f827 	bl	800293c <LCD0_write>
 		LCD0_BF();
  80028ee:	f000 fa45 	bl	8002d7c <LCD0_BF>
 
-		LCD0_write(0x01, INST);// clear display
+		LCD0_write(0x01, INST); // clear display
  80028f2:	2100      	movs	r1, #0
  80028f4:	2001      	movs	r0, #1
  80028f6:	f000 f821 	bl	800293c <LCD0_write>
 		LCD0_BF();
  80028fa:	f000 fa3f 	bl	8002d7c <LCD0_BF>
-		LCD0_write(0x01, INST);// clear display
+		LCD0_write(0x01, INST); // clear display
  80028fe:	2100      	movs	r1, #0
  8002900:	2001      	movs	r0, #1
  8002902:	f000 f81b 	bl	800293c <LCD0_write>
 		LCD0_BF();
  8002906:	f000 fa39 	bl	8002d7c <LCD0_BF>
 
-		LCD0_write(0x06, INST);// entry mode set (crazy settings)
+		LCD0_write(0x06, INST); // entry mode set (crazy settings)
  800290a:	2100      	movs	r1, #0
  800290c:	2006      	movs	r0, #6
  800290e:	f000 f815 	bl	800293c <LCD0_write>
 		LCD0_BF();
  8002912:	f000 fa33 	bl	8002d7c <LCD0_BF>
-		LCD0_write(0x06, INST);// entry mode set (crazy settings)
+		LCD0_write(0x06, INST); // entry mode set (crazy settings)
  8002916:	2100      	movs	r1, #0
  8002918:	2006      	movs	r0, #6
  800291a:	f000 f80f 	bl	800293c <LCD0_write>
 		LCD0_BF();
  800291e:	f000 fa2d 	bl	8002d7c <LCD0_BF>
-	/**********INICIALIZATION END**********/
-	//LCD0_write(0x1F, INST);// cursor or display shift
-	//stm.systick.delay_10us(4);
-	//LCD0_write(0x03, INST);// return home
-	//stm.systick.delay_ms(2);
+	// INICIALIZATION END
+	// LCD0_write(0x1F, INST); // cursor or display shift
+	// stm.systick.delay_10us(4);
+	// LCD0_write(0x03, INST); // return home
+	// stm.systick.delay_ms(2);
 	LCD0_gotoxy(0,0);
  8002922:	2100      	movs	r1, #0
  8002924:	2000      	movs	r0, #0
@@ -5616,6 +5650,7 @@ void LCD0_write(char c, unsigned short D_I)
  8002b94:	20000670 	.word	0x20000670
 
 08002b98 <LCD0_read>:
+
 char LCD0_read(unsigned short D_I)
 { // Read from LCD
  8002b98:	b580      	push	{r7, lr}
@@ -5843,6 +5878,7 @@ char LCD0_read(unsigned short D_I)
  8002d78:	20000468 	.word	0x20000468
 
 08002d7c <LCD0_BF>:
+
 void LCD0_BF(void)
 //	It has to read at minimum one equal and exit
 //	immediately if not equal, weird property.
@@ -5887,6 +5923,7 @@ void LCD0_BF(void)
  8002db4:	bd80      	pop	{r7, pc}
 
 08002db6 <LCD0_getch>:
+
 char LCD0_getch(void)
 {
  8002db6:	b580      	push	{r7, lr}
@@ -5909,6 +5946,7 @@ char LCD0_getch(void)
  8002dd2:	bd80      	pop	{r7, pc}
 
 08002dd4 <LCD0_putch>:
+
 void LCD0_putch(char c)
 {
  8002dd4:	b580      	push	{r7, lr}
@@ -5930,6 +5968,7 @@ void LCD0_putch(char c)
  8002df2:	bd80      	pop	{r7, pc}
 
 08002df4 <LCD0_string>:
+
 void LCD0_string(const char* s)
 {
  8002df4:	b580      	push	{r7, lr}
@@ -5963,6 +6002,7 @@ void LCD0_string(const char* s)
  8002e20:	bd80      	pop	{r7, pc}
 
 08002e22 <LCD0_string_size>:
+
 void LCD0_string_size(const char* s, uint32_t size)
 {
  8002e22:	b580      	push	{r7, lr}
@@ -6028,6 +6068,7 @@ void LCD0_string_size(const char* s, uint32_t size)
  8002e7c:	bd80      	pop	{r7, pc}
 
 08002e7e <LCD0_hspace>:
+
 void LCD0_hspace(uint32_t n)
 {
  8002e7e:	b580      	push	{r7, lr}
@@ -6055,6 +6096,7 @@ void LCD0_hspace(uint32_t n)
  8002ea2:	bd80      	pop	{r7, pc}
 
 08002ea4 <LCD0_clear>:
+
 void LCD0_clear(void)
 {
  8002ea4:	b580      	push	{r7, lr}
@@ -6075,6 +6117,7 @@ void LCD0_clear(void)
  8002ec0:	20000468 	.word	0x20000468
 
 08002ec4 <LCD0_gotoxy>:
+
 void LCD0_gotoxy(unsigned int y, unsigned int x)
 {
  8002ec4:	b580      	push	{r7, lr}
@@ -6104,7 +6147,7 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
  8002ef8:	f7ff fd20 	bl	800293c <LCD0_write>
 			LCD0_BF();
  8002efc:	f7ff ff3e 	bl	8002d7c <LCD0_BF>
-			break;
+		break;
  8002f00:	e021      	b.n	8002f46 <LCD0_gotoxy+0x82>
 		case 1:
 			LCD0_write((char)(0xC0 + x), INST);
@@ -6117,7 +6160,7 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
  8002f0e:	f7ff fd15 	bl	800293c <LCD0_write>
 			LCD0_BF();
  8002f12:	f7ff ff33 	bl	8002d7c <LCD0_BF>
-			break;
+		break;
  8002f16:	e016      	b.n	8002f46 <LCD0_gotoxy+0x82>
 		case 2:
 			LCD0_write((char)(0x94 + x), INST); // 0x94
@@ -6130,7 +6173,7 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
  8002f24:	f7ff fd0a 	bl	800293c <LCD0_write>
 			LCD0_BF();
  8002f28:	f7ff ff28 	bl	8002d7c <LCD0_BF>
-			break;
+		break;
  8002f2c:	e00b      	b.n	8002f46 <LCD0_gotoxy+0x82>
 		case 3:
 			LCD0_write((char)(0xD4 + x), INST); // 0xD4
@@ -6143,10 +6186,10 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
  8002f3a:	f7ff fcff 	bl	800293c <LCD0_write>
 			LCD0_BF();
  8002f3e:	f7ff ff1d 	bl	8002d7c <LCD0_BF>
-			break;
+		break;
  8002f42:	e000      	b.n	8002f46 <LCD0_gotoxy+0x82>
 		default:
-			break;
+		break;
  8002f44:	bf00      	nop
 	}
 }
@@ -6157,6 +6200,7 @@ void LCD0_gotoxy(unsigned int y, unsigned int x)
  8002f4e:	bf00      	nop
 
 08002f50 <LCD0_strobe>:
+
 void LCD0_strobe(uint16_t num)
 {
  8002f50:	b580      	push	{r7, lr}
@@ -6194,12 +6238,13 @@ void LCD0_strobe(uint16_t num)
  8002f90:	20000670 	.word	0x20000670
 
 08002f94 <LCD0_reboot>:
+
 void LCD0_reboot(void)
 {
  8002f94:	b580      	push	{r7, lr}
  8002f96:	b082      	sub	sp, #8
  8002f98:	af00      	add	r7, sp, #0
-	//low high detect pin NC
+	// low high detect pin NC
 	uint32_t i;
 	uint32_t tmp;
 	tmp = ireg->IDR & (1 << NC);
@@ -6238,6 +6283,7 @@ void LCD0_reboot(void)
  8002fd4:	20000674 	.word	0x20000674
 
 08002fd8 <LCD_ticks>:
+
 void LCD_ticks(uint16_t num)
 {
  8002fd8:	b480      	push	{r7}
@@ -6266,20 +6312,17 @@ void LCD_ticks(uint16_t num)
  8003002:	4770      	bx	lr
 
 08003004 <STM32446enable>:
-/*
-*** File Procedure and Functions
-*/
 
+void SysTick_Handler(void);
+
+/**** Procedure & Functions ***/
 // STM32446 Image Linker
 STM32446 STM32446enable(void){
  8003004:	b580      	push	{r7, lr}
  8003006:	b082      	sub	sp, #8
  8003008:	af00      	add	r7, sp, #0
  800300a:	6078      	str	r0, [r7, #4]
-/******************************************************************************
-	Comment out the linked modules to reduce memmory usage.
-	
-*******************************************************************************/
+// Comment out the linked modules to reduce memmory usage.
 	mem[0] = 0;
  800300c:	4b98      	ldr	r3, [pc, #608]	; (8003270 <STM32446enable+0x26c>)
  800300e:	2200      	movs	r2, #0
@@ -6293,26 +6336,26 @@ STM32446 STM32446enable(void){
  800301a:	f04f 0200 	mov.w	r2, #0
  800301e:	f04f 0300 	mov.w	r3, #0
  8003022:	e9c1 2300 	strd	r2, r3, [r1]
-	/*****STM32446 OBJECTS******/
-	//FLASH
+	// STM32446 OBJECTS
+	// FLASH
 	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
  8003026:	4b95      	ldr	r3, [pc, #596]	; (800327c <STM32446enable+0x278>)
  8003028:	4a95      	ldr	r2, [pc, #596]	; (8003280 <STM32446enable+0x27c>)
  800302a:	601a      	str	r2, [r3, #0]
 	
-	//CRC
+	// CRC
 	ret.crc.reg = (CRC_TypeDef*) CRC_BASE;
  800302c:	4b93      	ldr	r3, [pc, #588]	; (800327c <STM32446enable+0x278>)
  800302e:	4a95      	ldr	r2, [pc, #596]	; (8003284 <STM32446enable+0x280>)
  8003030:	605a      	str	r2, [r3, #4]
 	
-	//PWR
+	// PWR
 	ret.pwr.reg = (PWR_TypeDef*) PWR_BASE;
  8003032:	4b92      	ldr	r3, [pc, #584]	; (800327c <STM32446enable+0x278>)
  8003034:	4a94      	ldr	r2, [pc, #592]	; (8003288 <STM32446enable+0x284>)
  8003036:	609a      	str	r2, [r3, #8]
 	
-	//RCC
+	// RCC
 	ret.rcc.reg = (RCC_TypeDef*) RCC_BASE;
  8003038:	4b90      	ldr	r3, [pc, #576]	; (800327c <STM32446enable+0x278>)
  800303a:	4a94      	ldr	r2, [pc, #592]	; (800328c <STM32446enable+0x288>)
@@ -6341,7 +6384,7 @@ STM32446 STM32446enable(void){
  800305c:	4b87      	ldr	r3, [pc, #540]	; (800327c <STM32446enable+0x278>)
  800305e:	4a91      	ldr	r2, [pc, #580]	; (80032a4 <STM32446enable+0x2a0>)
  8003060:	625a      	str	r2, [r3, #36]	; 0x24
-	/****PLL****/
+	// PLL
 	ret.rcc.pll.division = STM32446PLLDivision;
  8003062:	4b86      	ldr	r3, [pc, #536]	; (800327c <STM32446enable+0x278>)
  8003064:	4a90      	ldr	r2, [pc, #576]	; (80032a8 <STM32446enable+0x2a4>)
@@ -6359,7 +6402,7 @@ STM32446 STM32446enable(void){
  8003076:	4a8f      	ldr	r2, [pc, #572]	; (80032b4 <STM32446enable+0x2b0>)
  8003078:	635a      	str	r2, [r3, #52]	; 0x34
 	
-	//GPIOA
+	// GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
  800307a:	4b80      	ldr	r3, [pc, #512]	; (800327c <STM32446enable+0x278>)
  800307c:	4a8e      	ldr	r2, [pc, #568]	; (80032b8 <STM32446enable+0x2b4>)
@@ -6389,7 +6432,7 @@ STM32446 STM32446enable(void){
  80030a0:	4a8b      	ldr	r2, [pc, #556]	; (80032d0 <STM32446enable+0x2cc>)
  80030a2:	649a      	str	r2, [r3, #72]	; 0x48
 	
-	//GPIOB
+	// GPIOB
 	ret.gpiob.reg = (GPIO_TypeDef*) GPIOB_BASE;
  80030a4:	4b75      	ldr	r3, [pc, #468]	; (800327c <STM32446enable+0x278>)
  80030a6:	4a8b      	ldr	r2, [pc, #556]	; (80032d4 <STM32446enable+0x2d0>)
@@ -6419,7 +6462,7 @@ STM32446 STM32446enable(void){
  80030ca:	4a88      	ldr	r2, [pc, #544]	; (80032ec <STM32446enable+0x2e8>)
  80030cc:	665a      	str	r2, [r3, #100]	; 0x64
 	
-	//GPIOC
+	// GPIOC
 	ret.gpioc.reg = (GPIO_TypeDef*) GPIOC_BASE;
  80030ce:	4b6b      	ldr	r3, [pc, #428]	; (800327c <STM32446enable+0x278>)
  80030d0:	4a87      	ldr	r2, [pc, #540]	; (80032f0 <STM32446enable+0x2ec>)
@@ -6449,7 +6492,7 @@ STM32446 STM32446enable(void){
  80030f8:	4a83      	ldr	r2, [pc, #524]	; (8003308 <STM32446enable+0x304>)
  80030fa:	f8c3 2080 	str.w	r2, [r3, #128]	; 0x80
 	
-	//GPIOD
+	// GPIOD
 	ret.gpiod.reg = (GPIO_TypeDef*) GPIOD_BASE;
  80030fe:	4b5f      	ldr	r3, [pc, #380]	; (800327c <STM32446enable+0x278>)
  8003100:	4a82      	ldr	r2, [pc, #520]	; (800330c <STM32446enable+0x308>)
@@ -6479,7 +6522,7 @@ STM32446 STM32446enable(void){
  8003130:	4a7c      	ldr	r2, [pc, #496]	; (8003324 <STM32446enable+0x320>)
  8003132:	f8c3 209c 	str.w	r2, [r3, #156]	; 0x9c
 
-	//GPIOE
+	// GPIOE
 	ret.gpioe.reg = (GPIO_TypeDef*) GPIOE_BASE;
  8003136:	4b51      	ldr	r3, [pc, #324]	; (800327c <STM32446enable+0x278>)
  8003138:	4a7b      	ldr	r2, [pc, #492]	; (8003328 <STM32446enable+0x324>)
@@ -6509,7 +6552,7 @@ STM32446 STM32446enable(void){
  8003168:	4a75      	ldr	r2, [pc, #468]	; (8003340 <STM32446enable+0x33c>)
  800316a:	f8c3 20b8 	str.w	r2, [r3, #184]	; 0xb8
 
-	//GPIOH
+	// GPIOH
 	ret.gpioh.reg = (GPIO_TypeDef*) GPIOH_BASE;
  800316e:	4b43      	ldr	r3, [pc, #268]	; (800327c <STM32446enable+0x278>)
  8003170:	4a74      	ldr	r2, [pc, #464]	; (8003344 <STM32446enable+0x340>)
@@ -6539,7 +6582,7 @@ STM32446 STM32446enable(void){
  80031a0:	4a6e      	ldr	r2, [pc, #440]	; (800335c <STM32446enable+0x358>)
  80031a2:	f8c3 20d4 	str.w	r2, [r3, #212]	; 0xd4
 	
-	//RTC
+	// RTC
 	ret.rtc.reg = (RTC_TypeDef*) RTC_BASE;
  80031a6:	4b35      	ldr	r3, [pc, #212]	; (800327c <STM32446enable+0x278>)
  80031a8:	4a6d      	ldr	r2, [pc, #436]	; (8003360 <STM32446enable+0x35c>)
@@ -6589,13 +6632,13 @@ STM32446 STM32446enable(void){
  8003200:	4a62      	ldr	r2, [pc, #392]	; (800338c <STM32446enable+0x388>)
  8003202:	f8c3 210c 	str.w	r2, [r3, #268]	; 0x10c
 	
-	//SYSCFG
+	// SYSCFG
 	ret.syscfg.reg = (SYSCFG_TypeDef*) SYSCFG_BASE;
  8003206:	4b1d      	ldr	r3, [pc, #116]	; (800327c <STM32446enable+0x278>)
  8003208:	4a61      	ldr	r2, [pc, #388]	; (8003390 <STM32446enable+0x38c>)
  800320a:	f8c3 2110 	str.w	r2, [r3, #272]	; 0x110
 	
-	//DMA1
+	// DMA1
 	ret.dma1.reg = (DMA_TypeDef*) DMA1_BASE;
  800320e:	4b1b      	ldr	r3, [pc, #108]	; (800327c <STM32446enable+0x278>)
  8003210:	4a60      	ldr	r2, [pc, #384]	; (8003394 <STM32446enable+0x390>)
@@ -6605,7 +6648,7 @@ STM32446 STM32446enable(void){
  8003218:	4a5f      	ldr	r2, [pc, #380]	; (8003398 <STM32446enable+0x394>)
  800321a:	f8c3 2118 	str.w	r2, [r3, #280]	; 0x118
 
-	//DMA2
+	// DMA2
 	ret.dma2.reg = (DMA_TypeDef*) DMA2_BASE;
  800321e:	4b17      	ldr	r3, [pc, #92]	; (800327c <STM32446enable+0x278>)
  8003220:	4a5e      	ldr	r2, [pc, #376]	; (800339c <STM32446enable+0x398>)
@@ -6615,13 +6658,13 @@ STM32446 STM32446enable(void){
  8003228:	4a5d      	ldr	r2, [pc, #372]	; (80033a0 <STM32446enable+0x39c>)
  800322a:	f8c3 213c 	str.w	r2, [r3, #316]	; 0x13c
 	
-	//NVIC
+	// NVIC
 	ret.nvic.reg = (NVIC_Type*) NVIC_BASE;
  800322e:	4b13      	ldr	r3, [pc, #76]	; (800327c <STM32446enable+0x278>)
  8003230:	4a5c      	ldr	r2, [pc, #368]	; (80033a4 <STM32446enable+0x3a0>)
  8003232:	f8c3 215c 	str.w	r2, [r3, #348]	; 0x15c
 	
-	//SysTick (Used as Delay Source)
+	// SysTick (Used as Delay Source)
 	ret.systick.reg = (SysTick_Type*) SysTick_BASE;
  8003236:	4b11      	ldr	r3, [pc, #68]	; (800327c <STM32446enable+0x278>)
  8003238:	4a5b      	ldr	r2, [pc, #364]	; (80033a8 <STM32446enable+0x3a4>)
@@ -6639,15 +6682,15 @@ STM32446 STM32446enable(void){
  8003250:	4a58      	ldr	r2, [pc, #352]	; (80033b4 <STM32446enable+0x3b0>)
  8003252:	f8c3 216c 	str.w	r2, [r3, #364]	; 0x16c
 	
-	/**random order**/
+	// random order
 	
-	//TIM9
+	// TIM9
 	ret.tim9.reg = (TIM_TypeDef*) TIM9_BASE;
  8003256:	4b09      	ldr	r3, [pc, #36]	; (800327c <STM32446enable+0x278>)
  8003258:	4a57      	ldr	r2, [pc, #348]	; (80033b8 <STM32446enable+0x3b4>)
  800325a:	f8c3 2170 	str.w	r2, [r3, #368]	; 0x170
 	
-	//ADC1
+	// ADC1
 	ret.adc1.reg = (ADC_TypeDef*) ADC1_BASE;
  800325e:	4b07      	ldr	r3, [pc, #28]	; (800327c <STM32446enable+0x278>)
  8003260:	4a56      	ldr	r2, [pc, #344]	; (80033bc <STM32446enable+0x3b8>)
@@ -6742,7 +6785,7 @@ STM32446 STM32446enable(void){
  80033b8:	40014000 	.word	0x40014000
  80033bc:	40012000 	.word	0x40012000
  80033c0:	40012300 	.word	0x40012300
-	/****single****/
+	// single
 	ret.adc1.single.inic = STM32446Adc1Inic;
  80033c4:	4b4d      	ldr	r3, [pc, #308]	; (80034fc <STM32446enable+0x4f8>)
  80033c6:	4a4e      	ldr	r2, [pc, #312]	; (8003500 <STM32446enable+0x4fc>)
@@ -6772,7 +6815,7 @@ STM32446 STM32446enable(void){
  80033f6:	4a48      	ldr	r2, [pc, #288]	; (8003518 <STM32446enable+0x514>)
  80033f8:	f8c3 2194 	str.w	r2, [r3, #404]	; 0x194
 	
-	//USART1
+	// USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
  80033fc:	4b3f      	ldr	r3, [pc, #252]	; (80034fc <STM32446enable+0x4f8>)
  80033fe:	4a47      	ldr	r2, [pc, #284]	; (800351c <STM32446enable+0x518>)
@@ -6798,13 +6841,13 @@ STM32446 STM32446enable(void){
  8003426:	4a42      	ldr	r2, [pc, #264]	; (8003530 <STM32446enable+0x52c>)
  8003428:	f8c3 21ac 	str.w	r2, [r3, #428]	; 0x1ac
 	
-	/*** INICS ***/
+	// INICS
 	ret.inic.peripheral = STM32446PeripheralInic;
  800342c:	4b33      	ldr	r3, [pc, #204]	; (80034fc <STM32446enable+0x4f8>)
  800342e:	4a41      	ldr	r2, [pc, #260]	; (8003534 <STM32446enable+0x530>)
  8003430:	f8c3 21b0 	str.w	r2, [r3, #432]	; 0x1b0
 	
-	/*** FUNCS ***/
+	// FUNCS
 	ret.func.bcd2dec = STM32446bcd2dec;
  8003434:	4b31      	ldr	r3, [pc, #196]	; (80034fc <STM32446enable+0x4f8>)
  8003436:	4a40      	ldr	r2, [pc, #256]	; (8003538 <STM32446enable+0x534>)
@@ -6890,10 +6933,10 @@ STM32446 STM32446enable(void){
  80034d6:	4a2c      	ldr	r2, [pc, #176]	; (8003588 <STM32446enable+0x584>)
  80034d8:	f8c3 2204 	str.w	r2, [r3, #516]	; 0x204
 	
-	/****************************************************************************/
+	
 	SystickInic(); // Polling delay source.
  80034dc:	f003 fa30 	bl	8006940 <SystickInic>
-	/****************************************************************************/
+	
 	return ret;
  80034e0:	687b      	ldr	r3, [r7, #4]
  80034e2:	4a06      	ldr	r2, [pc, #24]	; (80034fc <STM32446enable+0x4f8>)
@@ -6946,20 +6989,19 @@ STM32446 STM32446enable(void){
  8003588:	080067f1 	.word	0x080067f1
 
 0800358c <STM32446PeripheralInic>:
-/*******************************/
-/*************INICS*************/
-/*******************************/
+
+// INICS
 // peripheral
 uint8_t STM32446PeripheralInic(void)
 {
  800358c:	b580      	push	{r7, lr}
  800358e:	b084      	sub	sp, #16
  8003590:	af02      	add	r7, sp, #8
-	/**************************************************************************
-	PLLDIVISION parameters
-	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
-	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
-	**************************************************************************/
+	// Setup PLL
+	// PLLDIVISION parameters
+	// source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
+	// Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
+	
 	STM32446PLLDivision(0, 8, 336, 2, 14, 7); // 0,8,360,4,15,6; 0,8,336,2,14,7;
  8003592:	2307      	movs	r3, #7
  8003594:	9301      	str	r3, [sp, #4]
@@ -6970,11 +7012,11 @@ uint8_t STM32446PeripheralInic(void)
  80035a0:	2108      	movs	r1, #8
  80035a2:	2000      	movs	r0, #0
  80035a4:	f000 faf2 	bl	8003b8c <STM32446PLLDivision>
-	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
-	RTC 2 to 31
-	**************************************************************************/
-	//STM32446Prescaler(8, 1, 1, 0);
-	//STM32446Prescaler(2, 1, 1, 0);
+	// AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
+	// RTC 2 to 31
+	
+	// STM32446Prescaler(8, 1, 1, 0);
+	// STM32446Prescaler(2, 1, 1, 0);
 	STM32446Prescaler(1, 1, 1, 0);
  80035a8:	2300      	movs	r3, #0
  80035aa:	2201      	movs	r2, #1
@@ -7011,9 +7053,8 @@ uint8_t STM32446PeripheralInic(void)
 	...
 
 080035dc <STM32446RccHEnable>:
-/*******************************/
-/*************FUNCS*************/
-/*******************************/
+
+// FUNCS
 // RCC
 void STM32446RccHEnable(unsigned int hclock)
 {
@@ -7149,12 +7190,12 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
  80036be:	d002      	beq.n	80036c6 <STM32446RccHSelect+0x2e>
  80036c0:	2b02      	cmp	r3, #2
  80036c2:	d009      	beq.n	80036d8 <STM32446RccHSelect+0x40>
-			break;
+		break;
 		case 3:
 			ret.rcc.reg->CFGR |= 3; // PLL_R selected as system clock
-			break;
+		break;
 		default:
-			break;
+		break;
  80036c4:	e01a      	b.n	80036fc <STM32446RccHSelect+0x64>
 			ret.rcc.reg->CFGR |= 1; // HSE oscillator selected as system clock
  80036c6:	4b15      	ldr	r3, [pc, #84]	; (800371c <STM32446RccHSelect+0x84>)
@@ -7164,7 +7205,7 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
  80036ce:	68db      	ldr	r3, [r3, #12]
  80036d0:	f042 0201 	orr.w	r2, r2, #1
  80036d4:	609a      	str	r2, [r3, #8]
-			break;
+		break;
  80036d6:	e012      	b.n	80036fe <STM32446RccHSelect+0x66>
 			ret.rcc.reg->CFGR |= 2; // PLL_P selected as system clock
  80036d8:	4b10      	ldr	r3, [pc, #64]	; (800371c <STM32446RccHSelect+0x84>)
@@ -7174,7 +7215,7 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
  80036e0:	68db      	ldr	r3, [r3, #12]
  80036e2:	f042 0202 	orr.w	r2, r2, #2
  80036e6:	609a      	str	r2, [r3, #8]
-			break;
+		break;
  80036e8:	e009      	b.n	80036fe <STM32446RccHSelect+0x66>
 			ret.rcc.reg->CFGR |= 3; // PLL_R selected as system clock
  80036ea:	4b0c      	ldr	r3, [pc, #48]	; (800371c <STM32446RccHSelect+0x84>)
@@ -7184,9 +7225,9 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
  80036f2:	68db      	ldr	r3, [r3, #12]
  80036f4:	f042 0203 	orr.w	r2, r2, #3
  80036f8:	609a      	str	r2, [r3, #8]
-			break;
+		break;
  80036fa:	e000      	b.n	80036fe <STM32446RccHSelect+0x66>
-			break;
+		break;
  80036fc:	bf00      	nop
 	}
 	return (ret.rcc.reg->CFGR >> 2) & 3;
@@ -7351,7 +7392,7 @@ void STM32446RccLSelect(uint8_t lclock)
  8003810:	68db      	ldr	r3, [r3, #12]
  8003812:	f442 7200 	orr.w	r2, r2, #512	; 0x200
  8003816:	671a      	str	r2, [r3, #112]	; 0x70
-			break;
+		break;
  8003818:	e01a      	b.n	8003850 <STM32446RccLSelect+0x74>
 		case 1:
 			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
@@ -7362,7 +7403,7 @@ void STM32446RccLSelect(uint8_t lclock)
  8003822:	68db      	ldr	r3, [r3, #12]
  8003824:	f442 7280 	orr.w	r2, r2, #256	; 0x100
  8003828:	671a      	str	r2, [r3, #112]	; 0x70
-			break;
+		break;
  800382a:	e011      	b.n	8003850 <STM32446RccLSelect+0x74>
 		case 3:
 			ret.rcc.reg->BDCR |= ((1 << 8) | (1 << 9)); // HSE oscillator clock divided by a programmable prescaler
@@ -7373,7 +7414,7 @@ void STM32446RccLSelect(uint8_t lclock)
  8003834:	68db      	ldr	r3, [r3, #12]
  8003836:	f442 7240 	orr.w	r2, r2, #768	; 0x300
  800383a:	671a      	str	r2, [r3, #112]	; 0x70
-			break;
+		break;
  800383c:	e008      	b.n	8003850 <STM32446RccLSelect+0x74>
 		default:
 			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
@@ -7384,7 +7425,7 @@ void STM32446RccLSelect(uint8_t lclock)
  8003846:	68db      	ldr	r3, [r3, #12]
  8003848:	f442 7280 	orr.w	r2, r2, #256	; 0x100
  800384c:	671a      	str	r2, [r3, #112]	; 0x70
-			break;
+		break;
  800384e:	bf00      	nop
 	}
 }
@@ -7473,7 +7514,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  80038fc:	4b82      	ldr	r3, [pc, #520]	; (8003b08 <STM32446Prescaler+0x2a8>)
  80038fe:	2202      	movs	r2, #2
  8003900:	70da      	strb	r2, [r3, #3]
-			break;
+		break;
  8003902:	e027      	b.n	8003954 <STM32446Prescaler+0xf4>
 		case 4:
 			ret.rcc.reg->CFGR |= (5 << 13);
@@ -7488,7 +7529,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003914:	4b7c      	ldr	r3, [pc, #496]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003916:	2204      	movs	r2, #4
  8003918:	70da      	strb	r2, [r3, #3]
-			break;
+		break;
  800391a:	e01b      	b.n	8003954 <STM32446Prescaler+0xf4>
 		case 8:
 			ret.rcc.reg->CFGR |= (6 << 13);
@@ -7503,7 +7544,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  800392c:	4b76      	ldr	r3, [pc, #472]	; (8003b08 <STM32446Prescaler+0x2a8>)
  800392e:	2208      	movs	r2, #8
  8003930:	70da      	strb	r2, [r3, #3]
-			break;
+		break;
  8003932:	e00f      	b.n	8003954 <STM32446Prescaler+0xf4>
 		case 16:
 			ret.rcc.reg->CFGR |= (7 << 13);
@@ -7518,14 +7559,14 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003944:	4b70      	ldr	r3, [pc, #448]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003946:	2210      	movs	r2, #16
  8003948:	70da      	strb	r2, [r3, #3]
-			break;
+		break;
  800394a:	e003      	b.n	8003954 <STM32446Prescaler+0xf4>
 		default:
 			CLOCK_prescaler.APB2 = 1;
  800394c:	4b6e      	ldr	r3, [pc, #440]	; (8003b08 <STM32446Prescaler+0x2a8>)
  800394e:	2201      	movs	r2, #1
  8003950:	70da      	strb	r2, [r3, #3]
-			break;
+		break;
  8003952:	bf00      	nop
 	}
 
@@ -7565,7 +7606,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  80039b0:	4b55      	ldr	r3, [pc, #340]	; (8003b08 <STM32446Prescaler+0x2a8>)
  80039b2:	2202      	movs	r2, #2
  80039b4:	709a      	strb	r2, [r3, #2]
-		break;
+	break;
  80039b6:	e027      	b.n	8003a08 <STM32446Prescaler+0x1a8>
 	case 4:
 		ret.rcc.reg->CFGR |= (5 << 10);
@@ -7580,7 +7621,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  80039c8:	4b4f      	ldr	r3, [pc, #316]	; (8003b08 <STM32446Prescaler+0x2a8>)
  80039ca:	2204      	movs	r2, #4
  80039cc:	709a      	strb	r2, [r3, #2]
-		break;
+	break;
  80039ce:	e01b      	b.n	8003a08 <STM32446Prescaler+0x1a8>
 	case 8:
 		ret.rcc.reg->CFGR |= (6 << 10);
@@ -7595,7 +7636,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  80039e0:	4b49      	ldr	r3, [pc, #292]	; (8003b08 <STM32446Prescaler+0x2a8>)
  80039e2:	2208      	movs	r2, #8
  80039e4:	709a      	strb	r2, [r3, #2]
-		break;
+	break;
  80039e6:	e00f      	b.n	8003a08 <STM32446Prescaler+0x1a8>
 	case 16:
 		ret.rcc.reg->CFGR |= (7 << 10);
@@ -7610,14 +7651,14 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  80039f8:	4b43      	ldr	r3, [pc, #268]	; (8003b08 <STM32446Prescaler+0x2a8>)
  80039fa:	2210      	movs	r2, #16
  80039fc:	709a      	strb	r2, [r3, #2]
-		break;
+	break;
  80039fe:	e003      	b.n	8003a08 <STM32446Prescaler+0x1a8>
 	default:
 		CLOCK_prescaler.APB1 = 1;
  8003a00:	4b41      	ldr	r3, [pc, #260]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003a02:	2201      	movs	r2, #1
  8003a04:	709a      	strb	r2, [r3, #2]
-		break;
+	break;
  8003a06:	bf00      	nop
 	}
 
@@ -7684,7 +7725,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003ab0:	4b15      	ldr	r3, [pc, #84]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003ab2:	2202      	movs	r2, #2
  8003ab4:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003ab6:	e05f      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 4:
 		ret.rcc.reg->CFGR |= (9 << 4);
@@ -7699,7 +7740,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003ac8:	4b0f      	ldr	r3, [pc, #60]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003aca:	2204      	movs	r2, #4
  8003acc:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003ace:	e053      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 8:
 		ret.rcc.reg->CFGR |= (10 << 4);
@@ -7714,7 +7755,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003ae0:	4b09      	ldr	r3, [pc, #36]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003ae2:	2208      	movs	r2, #8
  8003ae4:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003ae6:	e047      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 16:
 		ret.rcc.reg->CFGR |= (11 << 4);
@@ -7729,7 +7770,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003af8:	4b03      	ldr	r3, [pc, #12]	; (8003b08 <STM32446Prescaler+0x2a8>)
  8003afa:	2210      	movs	r2, #16
  8003afc:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003afe:	e03b      	b.n	8003b78 <STM32446Prescaler+0x318>
  8003b00:	001ffcf0 	.word	0x001ffcf0
  8003b04:	20000678 	.word	0x20000678
@@ -7747,7 +7788,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003b1c:	4b1a      	ldr	r3, [pc, #104]	; (8003b88 <STM32446Prescaler+0x328>)
  8003b1e:	2240      	movs	r2, #64	; 0x40
  8003b20:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003b22:	e029      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 128:
 		ret.rcc.reg->CFGR |= (13 << 4);
@@ -7762,7 +7803,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003b34:	4b14      	ldr	r3, [pc, #80]	; (8003b88 <STM32446Prescaler+0x328>)
  8003b36:	2280      	movs	r2, #128	; 0x80
  8003b38:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003b3a:	e01d      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 256:
 		ret.rcc.reg->CFGR |= (14 << 4);
@@ -7777,7 +7818,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003b4c:	4b0e      	ldr	r3, [pc, #56]	; (8003b88 <STM32446Prescaler+0x328>)
  8003b4e:	f44f 7280 	mov.w	r2, #256	; 0x100
  8003b52:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003b54:	e010      	b.n	8003b78 <STM32446Prescaler+0x318>
 	case 512:
 		ret.rcc.reg->CFGR |= (15 << 4);
@@ -7792,14 +7833,14 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
  8003b66:	4b08      	ldr	r3, [pc, #32]	; (8003b88 <STM32446Prescaler+0x328>)
  8003b68:	f44f 7200 	mov.w	r2, #512	; 0x200
  8003b6c:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003b6e:	e003      	b.n	8003b78 <STM32446Prescaler+0x318>
 	default:
 		CLOCK_prescaler.AHB = 1;
  8003b70:	4b05      	ldr	r3, [pc, #20]	; (8003b88 <STM32446Prescaler+0x328>)
  8003b72:	2201      	movs	r2, #1
  8003b74:	801a      	strh	r2, [r3, #0]
-		break;
+	break;
  8003b76:	bf00      	nop
 	}
 }
@@ -7813,7 +7854,7 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 
 08003b8c <STM32446PLLDivision>:
 
-/****PLL****/
+// PLL
 
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr)
 {
@@ -7932,7 +7973,7 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
  8003c4e:	b2da      	uxtb	r2, r3
  8003c50:	4b32      	ldr	r3, [pc, #200]	; (8003d1c <STM32446PLLDivision+0x190>)
  8003c52:	721a      	strb	r2, [r3, #8]
-			break;
+		break;
  8003c54:	e032      	b.n	8003cbc <STM32446PLLDivision+0x130>
 		case 4:
 			ret.rcc.reg->PLLCFGR |= (1 << 16);
@@ -7948,7 +7989,7 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
  8003c68:	b2da      	uxtb	r2, r3
  8003c6a:	4b2c      	ldr	r3, [pc, #176]	; (8003d1c <STM32446PLLDivision+0x190>)
  8003c6c:	721a      	strb	r2, [r3, #8]
-			break;
+		break;
  8003c6e:	e025      	b.n	8003cbc <STM32446PLLDivision+0x130>
 		case 6:
 			ret.rcc.reg->PLLCFGR |= (2 << 16);
@@ -7964,7 +8005,7 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
  8003c82:	b2da      	uxtb	r2, r3
  8003c84:	4b25      	ldr	r3, [pc, #148]	; (8003d1c <STM32446PLLDivision+0x190>)
  8003c86:	721a      	strb	r2, [r3, #8]
-			break;
+		break;
  8003c88:	e018      	b.n	8003cbc <STM32446PLLDivision+0x130>
 		case 8:
 			ret.rcc.reg->PLLCFGR |= (3 << 16);
@@ -7980,7 +8021,7 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
  8003c9c:	b2da      	uxtb	r2, r3
  8003c9e:	4b1f      	ldr	r3, [pc, #124]	; (8003d1c <STM32446PLLDivision+0x190>)
  8003ca0:	721a      	strb	r2, [r3, #8]
-			break;
+		break;
  8003ca2:	e00b      	b.n	8003cbc <STM32446PLLDivision+0x130>
 		default:
 			ret.rcc.reg->PLLCFGR |= (1 << 16);
@@ -7995,7 +8036,7 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
  8003cb4:	4b19      	ldr	r3, [pc, #100]	; (8003d1c <STM32446PLLDivision+0x190>)
  8003cb6:	2204      	movs	r2, #4
  8003cb8:	721a      	strb	r2, [r3, #8]
-			break;
+		break;
  8003cba:	bf00      	nop
 	}
 
@@ -8185,7 +8226,7 @@ uint32_t SystemClock(void)
 			sysclk= 16000000;
  8003df6:	4b1b      	ldr	r3, [pc, #108]	; (8003e64 <SystemClock+0xa0>)
  8003df8:	607b      	str	r3, [r7, #4]
-			break;
+		break;
  8003dfa:	e028      	b.n	8003e4e <SystemClock+0x8a>
 		case 1: // 01: HSE oscillator used as the system clock
 			PLL_parameter.Source = 25000000;
@@ -8195,7 +8236,7 @@ uint32_t SystemClock(void)
 			sysclk = 25000000;
  8003e02:	4b19      	ldr	r3, [pc, #100]	; (8003e68 <SystemClock+0xa4>)
  8003e04:	607b      	str	r3, [r7, #4]
-			break;
+		break;
  8003e06:	e022      	b.n	8003e4e <SystemClock+0x8a>
 		case 2: // 10: PLL used as the system clock
 			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.P );
@@ -8212,7 +8253,7 @@ uint32_t SystemClock(void)
  8003e1e:	fb91 f2f2 	sdiv	r2, r1, r2
  8003e22:	fb02 f303 	mul.w	r3, r2, r3
  8003e26:	607b      	str	r3, [r7, #4]
-			break;
+		break;
  8003e28:	e011      	b.n	8003e4e <SystemClock+0x8a>
 		case 3: // 11: PLL_R used as the system clock
 			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.R );
@@ -8229,10 +8270,10 @@ uint32_t SystemClock(void)
  8003e40:	fb91 f2f2 	sdiv	r2, r1, r2
  8003e44:	fb02 f303 	mul.w	r3, r2, r3
  8003e48:	607b      	str	r3, [r7, #4]
-			break;
+		break;
  8003e4a:	e000      	b.n	8003e4e <SystemClock+0x8a>
 		default:
-			break;
+		break;
  8003e4c:	bf00      	nop
 	}
 	return sysclk;
@@ -8251,7 +8292,7 @@ uint32_t SystemClock(void)
 08003e6c <STM32446GpioSetpins>:
 
 // GPIO
-/** To much resources **/
+// To much resources
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
 {
  8003e6c:	b40e      	push	{r1, r2, r3}
@@ -8306,7 +8347,7 @@ void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
  8003ebc:	4770      	bx	lr
 
 08003ebe <STM32446GpioSetpin>:
-/** disabled **/
+// disabled
 
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin )
 {
@@ -8315,7 +8356,7 @@ void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin )
  8003ec2:	af00      	add	r7, sp, #0
  8003ec4:	6078      	str	r0, [r7, #4]
  8003ec6:	6039      	str	r1, [r7, #0]
-			regs->BSRR = (1 << pin);
+	regs->BSRR = (1 << pin);
  8003ec8:	2201      	movs	r2, #1
  8003eca:	683b      	ldr	r3, [r7, #0]
  8003ecc:	fa02 f303 	lsl.w	r3, r2, r3
@@ -8338,7 +8379,7 @@ void STM32446GpioSet( GPIO_TypeDef* regs, int data )
  8003ee6:	af00      	add	r7, sp, #0
  8003ee8:	6078      	str	r0, [r7, #4]
  8003eea:	6039      	str	r1, [r7, #0]
-			regs->BSRR = (unsigned int) data;
+	regs->BSRR = (unsigned int) data;
  8003eec:	683a      	ldr	r2, [r7, #0]
  8003eee:	687b      	ldr	r3, [r7, #4]
  8003ef0:	619a      	str	r2, [r3, #24]
@@ -8351,7 +8392,7 @@ void STM32446GpioSet( GPIO_TypeDef* regs, int data )
 
 08003efe <STM32446GpioResetpins>:
 
-/** To much resources **/
+// To much resources
 void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
 { // slow
  8003efe:	b40e      	push	{r1, r2, r3}
@@ -8407,7 +8448,7 @@ void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
  8003f50:	4770      	bx	lr
 
 08003f52 <STM32446GpioResetpin>:
-/** disabled **/
+// disabled
 
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin )
 {
@@ -8416,7 +8457,7 @@ void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin )
  8003f56:	af00      	add	r7, sp, #0
  8003f58:	6078      	str	r0, [r7, #4]
  8003f5a:	6039      	str	r1, [r7, #0]
-			regs->BSRR = (unsigned int)((1 << pin) << 16);
+	regs->BSRR = (unsigned int)((1 << pin) << 16);
  8003f5c:	2201      	movs	r2, #1
  8003f5e:	683b      	ldr	r3, [r7, #0]
  8003f60:	fa02 f303 	lsl.w	r3, r2, r3
@@ -8440,7 +8481,7 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data )
  8003f7c:	af00      	add	r7, sp, #0
  8003f7e:	6078      	str	r0, [r7, #4]
  8003f80:	6039      	str	r1, [r7, #0]
-			regs->BSRR = (unsigned int)(data << 16);
+	regs->BSRR = (unsigned int)(data << 16);
  8003f82:	683b      	ldr	r3, [r7, #0]
  8003f84:	041b      	lsls	r3, r3, #16
  8003f86:	461a      	mov	r2, r3
@@ -8455,7 +8496,7 @@ void STM32446GpioReset( GPIO_TypeDef* regs, int data )
 
 08003f98 <STM32446Gpiosetupreg>:
 
-/***generic***/
+// generic
 void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin )
 {
  8003f98:	b580      	push	{r7, lr}
@@ -8693,8 +8734,8 @@ void STM32446PinBlock( volatile uint32_t* dest, uint32_t size_block, uint32_t da
  800418c:	00000000 	.word	0x00000000
 
 08004190 <STM32446GpioAmoder>:
-/***generic***/
 
+//generic
 // GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin )
 {
@@ -10972,7 +11013,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  800544a:	f001 f9a9 	bl	80067a0 <STM32446RtcAccess>
  800544e:	4603      	mov	r3, r0
  8005450:	73fb      	strb	r3, [r7, #15]
-	//Some help from youtube vids
+	// Some help from youtube vids
 	//ret.rcc.reg->CFGR &= (uint32_t) ~((1 << 0) | (1 << 1)); // RCC_CFGR sw[2:0] 00 Bits 1:0
 	//ret.rcc.reg->CFGR &= (uint32_t) ~((1 << 20) | (1 << 19) | (1 << 18) | (1 << 17) | (1 << 16)); // RCC_CFGR RTCPRE[4:0] 00010: HSE/2 Bits 20:16
 	//ret.rcc.reg->CFGR |= (uint32_t) (1 << 17); // RCC_CFGR RTCPRE[4:0] 00010: HSE/2 Bits
@@ -10986,7 +11027,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  800545c:	f442 4200 	orr.w	r2, r2, #32768	; 0x8000
  8005460:	671a      	str	r2, [r3, #112]	; 0x70
 	
-	//5 - Enter the "key" to unlock write protection
+	// 5 - Enter the "key" to unlock write protection
 	ret.rtc.reg->WPR |= 0xCA;
  8005462:	4b25      	ldr	r3, [pc, #148]	; (80054f8 <STM32446RtcInic+0xd8>)
  8005464:	f8d3 30e0 	ldr.w	r3, [r3, #224]	; 0xe0
@@ -11005,7 +11046,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  8005488:	625a      	str	r2, [r3, #36]	; 0x24
 	//ret.rtc.reg->ISR &= (uint32_t) ~((1 << 3) | (1 << 5) | (1 << 7));
 
-	//6 - Set INIT bit and wait for ready flag
+	// 6 - Set INIT bit and wait for ready flag
 	ret.rtc.reg->ISR |= (1 << 7); // INIT: Initialization mode
  800548a:	4b1b      	ldr	r3, [pc, #108]	; (80054f8 <STM32446RtcInic+0xd8>)
  800548c:	f8d3 30e0 	ldr.w	r3, [r3, #224]	; 0xe0
@@ -11026,7 +11067,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  80054b0:	2306      	movs	r3, #6
  80054b2:	73fb      	strb	r3, [r7, #15]
 	
-	//9 - Set BYPSHAD bit
+	// 9 - Set BYPSHAD bit
 	// must read twice
 	//ret.rtc.reg->CR |= (1 << 5); // BYPSHAD: Bypass the shadow registers
 	// read only once
@@ -11039,7 +11080,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  80054c2:	f022 0220 	bic.w	r2, r2, #32
  80054c6:	609a      	str	r2, [r3, #8]
 	
-	//10 - Clear INIT bit
+	// 10 - Clear INIT bit
 	ret.rtc.reg->ISR &= (uint32_t) ~(1 << 7);
  80054c8:	4b0b      	ldr	r3, [pc, #44]	; (80054f8 <STM32446RtcInic+0xd8>)
  80054ca:	f8d3 30e0 	ldr.w	r3, [r3, #224]	; 0xe0
@@ -11049,7 +11090,7 @@ uint8_t STM32446RtcInic(uint8_t clock)
  80054d6:	f022 0280 	bic.w	r2, r2, #128	; 0x80
  80054da:	60da      	str	r2, [r3, #12]
 	
-	//11 - Disable access to RTC registers
+	// 11 - Disable access to RTC registers
 	ret.pwr.reg->CR &= (uint32_t) ~(1 << 8);
  80054dc:	4b06      	ldr	r3, [pc, #24]	; (80054f8 <STM32446RtcInic+0xd8>)
  80054de:	689b      	ldr	r3, [r3, #8]
@@ -11959,13 +12000,13 @@ void STM32446Rtctr2vec(char* vect)
 
 08005b50 <STM32446Adc1Inic>:
 
-//ADC1
+// ADC1
 void STM32446Adc1Inic(void)
 {
  8005b50:	b480      	push	{r7}
  8005b52:	af00      	add	r7, sp, #0
-	/***ADC Clock***/
-	//ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
+	// ADC Clock
+	// ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
 	ret.rcc.reg->APB2ENR |= (1 << 8); // ADC1EN: ADC1 clock enable
  8005b54:	4b1f      	ldr	r3, [pc, #124]	; (8005bd4 <STM32446Adc1Inic+0x84>)
  8005b56:	68db      	ldr	r3, [r3, #12]
@@ -11974,7 +12015,7 @@ void STM32446Adc1Inic(void)
  8005b5c:	68db      	ldr	r3, [r3, #12]
  8005b5e:	f442 7280 	orr.w	r2, r2, #256	; 0x100
  8005b62:	645a      	str	r2, [r3, #68]	; 0x44
-	/***ADC CONFIG***/
+	// ADC CONFIG
 	ret.adc1.reg->CR2 |= (1 << 10); // EOCS: End of conversion selection
  8005b64:	4b1b      	ldr	r3, [pc, #108]	; (8005bd4 <STM32446Adc1Inic+0x84>)
  8005b66:	f8d3 3174 	ldr.w	r3, [r3, #372]	; 0x174
@@ -12051,7 +12092,7 @@ void STM32446Adc1TEMP(void)
 {
  8005c00:	b480      	push	{r7}
  8005c02:	af00      	add	r7, sp, #0
-	//Temperature (in ÂºC) = {(VSENSE V25) / Avg_Slope} + 25
+	// Temperature (in ºC) = {(VSENSE V25) / Avg_Slope} + 25
 	ret.adc1.common.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
  8005c04:	4b07      	ldr	r3, [pc, #28]	; (8005c24 <STM32446Adc1TEMP+0x24>)
  8005c06:	f8d3 3178 	ldr.w	r3, [r3, #376]	; 0x178
@@ -12199,7 +12240,7 @@ void STM32446Adc1Stop(void)
 
 08005d20 <STM32446Usart1Inic>:
 
-//USART1
+// USART1
 void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 {
  8005d20:	b580      	push	{r7, lr}
@@ -12220,11 +12261,10 @@ void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbi
  8005d3c:	68db      	ldr	r3, [r3, #12]
  8005d3e:	f042 0210 	orr.w	r2, r2, #16
  8005d42:	645a      	str	r2, [r3, #68]	; 0x44
-		PA9 - TX		PA10 - RX
-		PA11 - CTS		PA12 - RTS
-
-		AF7 and AF8, activation. therefore
-	 *****************************************************************/
+	// Choose GPIO
+	// PA9 - TX		PA10 - RX
+	// PA11 - CTS		PA12 - RTS
+	// AF7 and AF8, activation. therefore
 	ret.gpioa.moder(2,9);
  8005d44:	4b14      	ldr	r3, [pc, #80]	; (8005d98 <STM32446Usart1Inic+0x78>)
  8005d46:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
@@ -12249,11 +12289,11 @@ void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbi
  8005d66:	210a      	movs	r1, #10
  8005d68:	2007      	movs	r0, #7
  8005d6a:	4798      	blx	r3
-	3. Program the number of stop bits in USART_CR2.
-	4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
-	   place. Configure the DMA register as explained in multibuffer communication.
-	5. Select the desired baud rate using the USART_BRR register.
-	*******************************************************************************/
+	// 3. Program the number of stop bits in USART_CR2.
+	// 4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
+	//   place. Configure the DMA register as explained in multibuffer communication.
+	// 5. Select the desired baud rate using the USART_BRR register.
+
 	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
  8005d6c:	4b0a      	ldr	r3, [pc, #40]	; (8005d98 <STM32446Usart1Inic+0x78>)
  8005d6e:	f8d3 3198 	ldr.w	r3, [r3, #408]	; 0x198
@@ -12278,15 +12318,15 @@ void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbi
  8005d98:	20000678 	.word	0x20000678
 
 08005d9c <STM32446Usart1Transmit>:
-void STM32446Usart1Transmit(void) //RM0390 pg801
+void STM32446Usart1Transmit(void) // RM0390 pg801
 {
  8005d9c:	b480      	push	{r7}
  8005d9e:	af00      	add	r7, sp, #0
-		for each data to be transmitted in case of single buffer.
-	8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
-		that the transmission of the last frame is complete. This is required for instance when
-		the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
-	*******************************************************************************/
+	// 7. Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
+	//	for each data to be transmitted in case of single buffer.
+	// 8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
+	//	that the transmission of the last frame is complete. This is required for instance when
+	//	the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
  8005da0:	4b11      	ldr	r3, [pc, #68]	; (8005de8 <STM32446Usart1Transmit+0x4c>)
  8005da2:	f8d3 3198 	ldr.w	r3, [r3, #408]	; 0x198
@@ -12303,11 +12343,11 @@ void STM32446Usart1Transmit(void) //RM0390 pg801
  8005dbe:	f8d3 3198 	ldr.w	r3, [r3, #408]	; 0x198
  8005dc2:	f042 0208 	orr.w	r2, r2, #8
  8005dc6:	60da      	str	r2, [r3, #12]
-	//ret.usart1.reg->DR = 'A';
-	//on real application, use fall threw method in main
-	//for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
+	// ret.usart1.reg->DR = 'A';
+	// on real application, use fall threw method in main
+	// for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 	// added this as disable after confirmed end of transmission [9]
-	//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+	// ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
 	ret.usart1.reg->SR &= ~(1 << 6); // TC: Transmission complete
  8005dc8:	4b07      	ldr	r3, [pc, #28]	; (8005de8 <STM32446Usart1Transmit+0x4c>)
  8005dca:	f8d3 3198 	ldr.w	r3, [r3, #408]	; 0x198
@@ -12326,15 +12366,13 @@ void STM32446Usart1Transmit(void) //RM0390 pg801
 
 08005dec <STM32446Usart1Receive>:
 
-void STM32446Usart1Receive(void) //RM0390 pg804
+void STM32446Usart1Receive(void) // RM0390 pg804
 {
  8005dec:	b480      	push	{r7}
  8005dee:	af00      	add	r7, sp, #0
-	/******************************************************************************
-		Procedure: baud rate register USART_BRR
-	6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
-		bit.
-	 *******************************************************************************/
+	//	Procedure: baud rate register USART_BRR
+	// 6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
+	//	bit.
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 6); // DMAR: DMA enable receiver - disabled
  8005df0:	4b11      	ldr	r3, [pc, #68]	; (8005e38 <STM32446Usart1Receive+0x4c>)
  8005df2:	f8d3 3198 	ldr.w	r3, [r3, #408]	; 0x198
@@ -12371,9 +12409,7 @@ void STM32446Usart1Receive(void) //RM0390 pg804
 08005e40 <STM32446Usart1Parameters>:
 
 void STM32446Usart1Parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
-/******************************************************************************
-Sets the usart parameters, using real values.
-*******************************************************************************/
+// Sets the usart parameters, using real values.
 {
  8005e40:	e92d 4fb0 	stmdb	sp!, {r4, r5, r7, r8, r9, sl, fp, lr}
  8005e44:	b08e      	sub	sp, #56	; 0x38
@@ -12769,8 +12805,8 @@ void STM32446Usart1Stop(void){
  80061e8:	20000678 	.word	0x20000678
 
 080061ec <STM32446bcd2dec>:
-//MISCELLANEOUS
 
+//MISCELLANEOUS
 // Convert Binary Coded Decimal (BCD) to Decimal
 char STM32446bcd2dec(char num)
 {
@@ -12866,9 +12902,9 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
 				}
 				mem[0] = 0;
 			}
-			break;
+		break;
 		default:
-			break;
+		break;
  8006284:	e039      	b.n	80062fa <STM32446triggerA+0x96>
 			if(hllh_io & (1 << pin)){
  8006286:	7afb      	ldrb	r3, [r7, #11]
@@ -12887,7 +12923,7 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
  800629e:	4b1b      	ldr	r3, [pc, #108]	; (800630c <STM32446triggerA+0xa8>)
  80062a0:	2201      	movs	r2, #1
  80062a2:	601a      	str	r2, [r3, #0]
-			break;
+		break;
  80062a4:	e026      	b.n	80062f4 <STM32446triggerA+0x90>
 			if(hllh_io & (1 << pin)){
  80062a6:	7afb      	ldrb	r3, [r7, #11]
@@ -12932,12 +12968,12 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
  80062ec:	4b07      	ldr	r3, [pc, #28]	; (800630c <STM32446triggerA+0xa8>)
  80062ee:	2200      	movs	r2, #0
  80062f0:	601a      	str	r2, [r3, #0]
-			break;
+		break;
  80062f2:	e001      	b.n	80062f8 <STM32446triggerA+0x94>
-			break;
+		break;
  80062f4:	bf00      	nop
  80062f6:	e000      	b.n	80062fa <STM32446triggerA+0x96>
-			break;
+		break;
  80062f8:	bf00      	nop
 	}
 	return mem[3];
@@ -12980,9 +13016,9 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
 				}
 				nen[0] = 0;
 			}
-			break;
+		break;
 		default:
-			break;
+		break;
  8006332:	e039      	b.n	80063a8 <STM32446triggerB+0x98>
 			if(hl_io & (1 << pin)){
  8006334:	79fb      	ldrb	r3, [r7, #7]
@@ -13001,7 +13037,7 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
  800634c:	4b1a      	ldr	r3, [pc, #104]	; (80063b8 <STM32446triggerB+0xa8>)
  800634e:	2201      	movs	r2, #1
  8006350:	601a      	str	r2, [r3, #0]
-			break;
+		break;
  8006352:	e026      	b.n	80063a2 <STM32446triggerB+0x92>
 			if(lh_io & (1 << pin)){
  8006354:	79fb      	ldrb	r3, [r7, #7]
@@ -13046,12 +13082,12 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
  800639a:	4b07      	ldr	r3, [pc, #28]	; (80063b8 <STM32446triggerB+0xa8>)
  800639c:	2200      	movs	r2, #0
  800639e:	601a      	str	r2, [r3, #0]
-			break;
+		break;
  80063a0:	e001      	b.n	80063a6 <STM32446triggerB+0x96>
-			break;
+		break;
  80063a2:	bf00      	nop
  80063a4:	e000      	b.n	80063a8 <STM32446triggerB+0x98>
-			break;
+		break;
  80063a6:	bf00      	nop
 	}
 	return nen[3];
@@ -13074,11 +13110,11 @@ uint16_t STM32ReadHLByte(STM32HighLowByte reg)
  80063c0:	af00      	add	r7, sp, #0
  80063c2:	80b8      	strh	r0, [r7, #4]
 	return (uint16_t)(reg.H << 8) | reg.L;
- 80063c4:	793b      	ldrb	r3, [r7, #4]
+ 80063c4:	797b      	ldrb	r3, [r7, #5]
  80063c6:	b29b      	uxth	r3, r3
  80063c8:	021b      	lsls	r3, r3, #8
  80063ca:	b29a      	uxth	r2, r3
- 80063cc:	797b      	ldrb	r3, [r7, #5]
+ 80063cc:	793b      	ldrb	r3, [r7, #4]
  80063ce:	b29b      	uxth	r3, r3
  80063d0:	4313      	orrs	r3, r2
  80063d2:	b29b      	uxth	r3, r3
@@ -13098,11 +13134,11 @@ uint16_t STM32ReadLHByte(STM32HighLowByte reg)
  80063e4:	af00      	add	r7, sp, #0
  80063e6:	80b8      	strh	r0, [r7, #4]
 	return (uint16_t)(reg.L << 8) | reg.H;
- 80063e8:	797b      	ldrb	r3, [r7, #5]
+ 80063e8:	793b      	ldrb	r3, [r7, #4]
  80063ea:	b29b      	uxth	r3, r3
  80063ec:	021b      	lsls	r3, r3, #8
  80063ee:	b29a      	uxth	r2, r3
- 80063f0:	793b      	ldrb	r3, [r7, #4]
+ 80063f0:	797b      	ldrb	r3, [r7, #5]
  80063f2:	b29b      	uxth	r3, r3
  80063f4:	4313      	orrs	r3, r2
  80063f6:	b29b      	uxth	r3, r3
@@ -13127,10 +13163,10 @@ STM32HighLowByte STM32WriteHLByte(uint16_t val)
  8006410:	0a1b      	lsrs	r3, r3, #8
  8006412:	b29b      	uxth	r3, r3
  8006414:	b2db      	uxtb	r3, r3
- 8006416:	723b      	strb	r3, [r7, #8]
+ 8006416:	727b      	strb	r3, [r7, #9]
  8006418:	88fb      	ldrh	r3, [r7, #6]
  800641a:	b2db      	uxtb	r3, r3
- 800641c:	727b      	strb	r3, [r7, #9]
+ 800641c:	723b      	strb	r3, [r7, #8]
 	return reg;
  800641e:	893b      	ldrh	r3, [r7, #8]
  8006420:	81bb      	strh	r3, [r7, #12]
@@ -13160,10 +13196,10 @@ STM32HighLowByte STM32WriteLHByte(uint16_t val)
  8006448:	0a1b      	lsrs	r3, r3, #8
  800644a:	b29b      	uxth	r3, r3
  800644c:	b2db      	uxtb	r3, r3
- 800644e:	727b      	strb	r3, [r7, #9]
+ 800644e:	723b      	strb	r3, [r7, #8]
  8006450:	88fb      	ldrh	r3, [r7, #6]
  8006452:	b2db      	uxtb	r3, r3
- 8006454:	723b      	strb	r3, [r7, #8]
+ 8006454:	727b      	strb	r3, [r7, #9]
 	return reg;
  8006456:	893b      	ldrh	r3, [r7, #8]
  8006458:	81bb      	strh	r3, [r7, #12]
@@ -13211,7 +13247,7 @@ uint16_t STM32SwapByte(uint16_t num)
 
 080064a0 <STM32446FUNCftoa>:
 
-/***ftoa***/
+// ftoa
 char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint)
 {
  80064a0:	b5b0      	push	{r4, r5, r7, lr}
@@ -13395,7 +13431,7 @@ char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint)
 
 0800661c <STM32446FUNCprint>:
 
-/***print***/
+// print
 char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... )
 {
  800661c:	b40c      	push	{r2, r3}
@@ -13441,9 +13477,8 @@ char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... )
  8006656:	4770      	bx	lr
 
 08006658 <STM32446RtcSetTr>:
-/********************************/
-/***********FILE FUNC************/
-/********************************/
+
+// FILE FUNC
 //RTC
 void STM32446RtcSetTr(void)
 {
@@ -13621,8 +13656,8 @@ uint8_t STM32446RtcAccess(uint8_t clock)
  80067a6:	4603      	mov	r3, r0
  80067a8:	71fb      	strb	r3, [r7, #7]
 	uint8_t status;
-	//RM0390 pg 94
-	//RTC access
+	// RM0390 pg 94
+	// RTC access
 	//1 - Enable the power interface clock by setting the PWREN bits in the RCC_APB1ENR
 	ret.rcc.reg->APB1ENR |= (1 << 28); // Power interface clock enable
  80067aa:	4b10      	ldr	r3, [pc, #64]	; (80067ec <STM32446RtcAccess+0x4c>)
@@ -13777,7 +13812,7 @@ void STM32446Reverse(char s[])
 
 08006888 <STM32446FUNCintinvstr>:
 
-/***intinvstr***/
+// intinvstr
 uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 {
  8006888:	b480      	push	{r7}
@@ -13876,8 +13911,6 @@ uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 
 08006940 <SystickInic>:
 
-/*******************************************************************************/
-/*******************************************************************************/
 // SYSTICK
 void SystickInic(void)
 {
@@ -13910,6 +13943,7 @@ void SystickInic(void)
  8006978:	20000678 	.word	0x20000678
 
 0800697c <STM32446delay_ms>:
+
 void STM32446delay_ms(uint32_t ms)
 {
  800697c:	b580      	push	{r7, lr}
@@ -13967,6 +14001,7 @@ void STM32446delay_ms(uint32_t ms)
  80069e8:	20000880 	.word	0x20000880
 
 080069ec <STM32446delay_10us>:
+
 void STM32446delay_10us(uint32_t ten_us)
 {
  80069ec:	b580      	push	{r7, lr}
@@ -14083,7 +14118,7 @@ void STM32446delay_us(uint32_t us)
 
 08006acc <SysTick_Handler>:
 
-/***Interrupt Procedure***/
+/*** File Interrupt ***/
 void SysTick_Handler(void)
 { // count down to zero systick interrupt and reload.
  8006acc:	b480      	push	{r7}

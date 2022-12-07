@@ -8,25 +8,28 @@ Date: 06082022
 Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 *************************************************************************/
-/***Library***/
+/*** File Library ***/
 #include "function.h"
 #include <stdio.h>
 //#include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
-/***Constant & Macro***/
+
+/*** File Constant & Macro ***/
 #define FUNCSTRSIZE 95
 #define MAXafterpoint 6
 #define DEFAULTafterpoint 2
-/***Global File Variable***/
+
+/*** File Variable ***/
 static char FUNCstr[FUNCSTRSIZE + 1];
-/***Header***/
+
+/*** File Header ***/
 int StringLength (const char string[]);
 void Reverse(char s[]);
 uint8_t  bintobcd(uint8_t bin);
 uint8_t leap_year_check(uint16_t year);
-/******/
+
 unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits);
 void FUNCswap(long *px, long *py);
 void FUNCcopy(char to[], char from[]);
@@ -73,13 +76,11 @@ unsigned int FUNCgetnumv2(char* x);
 int FUNCreadint(int nmin, int nmax);
 ***/
 // uint8_t TRANupdate(struct TRAN *tr, uint8_t idata);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 FUNC FUNCenable( void )
 {
-/******************************************************************************
-	Comment out links not being used, in order to release memmory.
-	
-*******************************************************************************/
+	// Comment out links not being used, in order to release memmory.
 	// struct object
 	FUNC func;
 	// Inic FUNCstr
@@ -130,13 +131,13 @@ FUNC FUNCenable( void )
 	func.getnum = FUNCgetnum;
 	func.getnumv2 = FUNCgetnumv2;
 	func.readint = FUNCreadint;
-	*/
-	/******/
+	***/
 	return func;
 }
+
 // mayia
 unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
-{//magic formula
+{// magic formula
 	unsigned int mask;
 	unsigned int diff;
 	unsigned int trans;
@@ -147,6 +148,7 @@ unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 	trans = diff & xf;
 	return (trans << nbits) | diff;
 }
+
 // interchange *px and *py
 void FUNCswap(long *px, long *py)
 {
@@ -155,6 +157,7 @@ void FUNCswap(long *px, long *py)
 	*px = *py;
 	*py = temp;
 }
+
 // copy: copy 'from' into 'to'; assume to is big enough
 void FUNCcopy(char to[], char from[])
 {
@@ -163,6 +166,7 @@ void FUNCcopy(char to[], char from[])
 	while ((to[i] = from[i]) != '\0')
 		++i;
 }
+
 // squeeze: delete all c from s
 void FUNCsqueeze(char s[], int c)
 {
@@ -173,6 +177,7 @@ void FUNCsqueeze(char s[], int c)
 	}
 	s[j] = '\0';
 }
+
 // shellsort: sort v[0]...v[n-1] into increasing order
 void FUNCshellsort(int v[], int n)
 {
@@ -185,6 +190,7 @@ void FUNCshellsort(int v[], int n)
 				v[j + gap] = temp;
 			}
 }
+
 // i32toa: convert n to characters in s
 char* FUNCi32toa(int32_t n)
 {
@@ -202,6 +208,7 @@ char* FUNCi32toa(int32_t n)
 	Reverse(FUNCstr);
 	return FUNCstr;
 }
+
 // i16toa: convert n to characters in s
 char* FUNCi16toa(int16_t n)
 {
@@ -219,6 +226,7 @@ char* FUNCi16toa(int16_t n)
 	Reverse(FUNCstr);
 	return FUNCstr;
 }
+
 // ui16toa: convert n to characters in s
 char* FUNCui16toa(uint16_t n)
 {
@@ -228,6 +236,7 @@ char* FUNCui16toa(uint16_t n)
 	Reverse(FUNCstr);
 	return FUNCstr;
 }
+
 // trim: remove trailing blanks, tabs, newlines
 int FUNCtrim(char s[])
 {
@@ -238,6 +247,7 @@ int FUNCtrim(char s[])
 	s[n + 1] = '\0';
 	return n;
 }
+
 // larger number of two
 int FUNCpmax(int a1, int a2)
 {
@@ -249,6 +259,7 @@ int FUNCpmax(int a1, int a2)
 	}
 	return biggest;
 }
+
 // common divisor
 int FUNCgcd (int u, int v)
 {
@@ -260,6 +271,7 @@ int FUNCgcd (int u, int v)
 	}
 	return u;
 }
+
 // Function to convert a string to an integer
 int FUNCstrToInt (const char string[])
 {
@@ -270,11 +282,13 @@ int FUNCstrToInt (const char string[])
 	}
 	return result;
 }
+
 // filter
 uint8_t FUNCfilter(uint8_t mask, uint8_t data)
 {
 	return mask & data;
 }
+
 // ticks
 unsigned int FUNCticks(unsigned int num)
 {
@@ -282,55 +296,58 @@ unsigned int FUNCticks(unsigned int num)
 	for(count = 0; count < num; count++) ;
 	return count;
 }
+
 // Two's Complement function
 int FUNCtwocomptoint8bit(int twoscomp){
   
   int value;
-	//Let's see if the byte is negative
+	// Let's see if the byte is negative
   if (twoscomp & 0x80){
-    //Invert
+    // Invert
     twoscomp = ~twoscomp + 1;
 		twoscomp = (twoscomp & 0xFF);
-    //Cast as int and multiply by negative one
+    // Cast as int and multiply by negative one
     value = (int)(twoscomp) * (-1);
     return value;
   }else{
-    //Byte is non-negative, therefore convert to decimal and display
-    //Make sure we are never over 1279
+    // Byte is non-negative, therefore convert to decimal and display
+    // Make sure we are never over 1279
     twoscomp = (twoscomp & 0x7F);
-    //Cast as int and return
+    // Cast as int and return
     value = (int)(twoscomp);
     return value;
   }
 }
+
 // Two's Complement function, shifts 10 bit binary to signed integers (-512 to 512)
 int FUNCtwocomptoint10bit(int twoscomp){
 	int value;
-  //Let's see if the byte is negative
+  // Let's see if the byte is negative
   if (twoscomp & 0x200){
-    //Invert
+    // Invert
     twoscomp = ~twoscomp + 1;
     twoscomp = (twoscomp & 0x3FF);
-    //Cast as int and multiply by negative one
+    // Cast as int and multiply by negative one
     value = (int)(twoscomp) * (-1);
     return value;
   }else{
-    //Serial.println("We entered the positive loop");
-    //Byte is non-negative, therefore convert to decimal and display
+    // Serial.println("We entered the positive loop");
+    // Byte is non-negative, therefore convert to decimal and display
     twoscomp = (twoscomp & 0x1FF);
-    //Cast as int and return
-    //Serial.println(twoscomp);
+    // Cast as int and return
+    // Serial.println(twoscomp);
     value = (int)(twoscomp);
     return value;
   }
 }
+
 // Two's Complement function, nbits
 int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
   unsigned int signmask;
   unsigned int mask;
   signmask = (1 << (nbits - 1));
   mask = signmask - 1;
-  //Let's see if the number is negative
+  // Let's see if the number is negative
   if ((unsigned int) twoscomp & signmask){
 	twoscomp &= mask;
     twoscomp -= signmask;
@@ -339,16 +356,19 @@ int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
   }
   return twoscomp;
 }
+
 // Convert Decimal to Binary Coded Decimal (BCD)
 char FUNCdec2bcd(char num)
 {
 	return ((num / 10 * 16) + (num % 10));
 }
+
 // Convert Binary Coded Decimal (BCD) to Decimal
 char FUNCbcd2dec(char num)
 {
 	return ((num / 16 * 10) + (num % 16));
 }
+
 char* FUNCresizestr(char *string, int size)
 {
 	int i;
@@ -365,12 +385,11 @@ char* FUNCresizestr(char *string, int size)
 	return FUNCstr;
 }
 long FUNCtrimmer(long x, long in_min, long in_max, long out_min, long out_max)
-/***
-same as arduino map function.
-***/
+// same as arduino map function
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
 // Function to count the number of characters in a string
 int StringLength (const char string[])
 {
@@ -378,6 +397,7 @@ int StringLength (const char string[])
 	for (count = 0; string[count] != '\0'; count++ ) ;
 	return count;
 }
+
 // reverse: reverse string s in place
 void Reverse(char s[])
 {
@@ -389,14 +409,17 @@ void Reverse(char s[])
 		s[j] = c;
 	}
 }
+
 unsigned char FUNCbcd2bin(unsigned char val)
 {
 	return (val & 0x0f) + (val >> 4) * 10;
 }
+
 unsigned char FUNCbin2bcd(unsigned int val)
 {
 	return (unsigned char)(((val / 10) << 4) + val % 10);
 }
+
 long FUNCgcd1(long a, long b)
 {
 	long r;
@@ -410,6 +433,7 @@ long FUNCgcd1(long a, long b)
 	}	
 	return b;
 }
+
 uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 {
 	uint8_t lh;
@@ -419,6 +443,7 @@ uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 		lh = 0;
 	return lh;
 }
+
 char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
 {
 	unsigned int i, c;
@@ -427,6 +452,7 @@ char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
+
 uint8_t leap_year_check(uint16_t year){
 	uint8_t i;
 	if (!(year % 400))
@@ -439,11 +465,13 @@ uint8_t leap_year_check(uint16_t year){
     	i = 0;
 	return i;
 }
+
 uint8_t bintobcd(uint8_t bin)
 {
 	return (uint8_t)((((bin) / 10) << 4) + ((bin) % 10));
 }
-/***intinvstr***/
+
+// intinvstr
 uint8_t FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 {
 	uint8_t k = 0;
@@ -452,8 +480,8 @@ uint8_t FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 	res[k] = '\0';
 	return k;
 }
-/***/
-/***ftoa***/
+
+// ftoa
 char* FUNCftoa(double num, char* res, uint8_t afterpoint)
 {
 	uint32_t ipart;
@@ -481,7 +509,8 @@ char* FUNCftoa(double num, char* res, uint8_t afterpoint)
 	}
 	return res;
 }
-/***dectohex***/
+
+// dectohex
 char* FUNCdectohex(int32_t num)
 {
 	int32_t remainder;
@@ -526,7 +555,7 @@ uint16_t FUNCSwapByte(uint16_t num)
 	return (num >> 8) | tp;
 }
 
-/***print***/
+// print
 char* FUNCprint( const char* format, ... )
 {
 	va_list aptr;
@@ -534,17 +563,16 @@ char* FUNCprint( const char* format, ... )
 	
 	va_start(aptr, format);
 	ret = vsnprintf( FUNCstr, FUNCSTRSIZE, (const char*) format, aptr );
-	//ret = vsnprintf( ptr, FUNCSTRSIZE, format, aptr );
+	// ret = vsnprintf( ptr, FUNCSTRSIZE, format, aptr );
 	va_end(aptr);
 	
 	if(ret < 0){
 		return NULL;
-		//FUNCstr[0]='/0';FUNCstr[1]='/0';FUNCstr[2]='/0';FUNCstr[3]='/0';
+		// FUNCstr[0]='/0';FUNCstr[1]='/0';FUNCstr[2]='/0';FUNCstr[3]='/0';
 	}else
 		return FUNCstr;
 }
 
-/***/
 /******
 int gcd( int a, int b ) {
     int result ;
@@ -713,8 +741,8 @@ int FUNCreadint(int nmin, int nmax)
 		return num;
 }
 ***/
-/***Interrupt***/
-/***Comment***
-*************/
+
+/*** File Interrupt ***/
+
 /***EOF***/
 

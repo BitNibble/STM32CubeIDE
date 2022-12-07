@@ -11,19 +11,17 @@ Comment:
 	Still in progress 03082022, increment has go along.
 	Stable.
 *******************************************************************************/
+/*** File Library ***/
 #include "stm32446mapping.h"
 #include <stdio.h>
 //#include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
-/*
-*** Constant and Macros
-*/
 
-/*
-*** File Variable
-*/
+/*** File Constant & Macros ***/
+
+/*** File Variable ***/
 static STM32446 ret;
 static volatile uint32_t DelayCounter;
 static uint32_t STM32446TimeTr;
@@ -49,18 +47,15 @@ static struct PLLparameters
 	uint8_t R;
 }PLL_parameter;
 
-/*
-***Procedure and Functions Prototypes
-*/
-
+/*** File Header ***/
 // SysTick
 void SystickInic(void);
 
-/***INIC***/
+// INIC
 uint8_t STM32446PeripheralInic(void);
 
-/***FUNC***/
-//RCC
+// FUNC
+// RCC
 void STM32446RccHEnable(unsigned int hclock);
 uint8_t STM32446RccHSelect(uint8_t sysclk);
 void STM32446RccLEnable(unsigned int lclock);
@@ -68,13 +63,13 @@ void STM32446RccLSelect(uint8_t lclock);
 void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppre2, unsigned int rtcpre);
 uint32_t SystemClock(void);
 
-/***PLL***/
+// PLL
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr);
 void STM32446RccPLLCLKEnable(void);
 void STM32446RccPLLI2SEnable(void);
 void STM32446RccPLLSAIEnable(void);
 
-//GPIOA
+// GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin );
 void STM32446GpioAospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioApupdr( unsigned int data, unsigned int pin );
@@ -82,7 +77,7 @@ void STM32446GpioAreset( unsigned int data );
 void STM32446GpioAset( unsigned int data );
 void STM32446GpioAafr( unsigned int data, unsigned int pin );
 
-//GPIOB
+// GPIOB
 void STM32446GpioBmoder( unsigned int data, unsigned int pin );
 void STM32446GpioBospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioBpupdr( unsigned int data, unsigned int pin );
@@ -90,7 +85,7 @@ void STM32446GpioBreset( unsigned int data );
 void STM32446GpioBset( unsigned int data );
 void STM32446GpioBafr( unsigned int data, unsigned int pin );
 
-//GPIOC
+// GPIOC
 void STM32446GpioCmoder( unsigned int data, unsigned int pin );
 void STM32446GpioCospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioCpupdr( unsigned int data, unsigned int pin );
@@ -98,7 +93,7 @@ void STM32446GpioCreset( unsigned int data );
 void STM32446GpioCset( unsigned int data );
 void STM32446GpioCafr( unsigned int data, unsigned int pin );
 
-//GPIOD
+// GPIOD
 void STM32446GpioDmoder( unsigned int data, unsigned int pin );
 void STM32446GpioDospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioDpupdr( unsigned int data, unsigned int pin );
@@ -106,7 +101,7 @@ void STM32446GpioDreset( unsigned int data );
 void STM32446GpioDset( unsigned int data );
 void STM32446GpioDafr( unsigned int data, unsigned int pin );
 
-//GPIOE
+// GPIOE
 void STM32446GpioEmoder( unsigned int data, unsigned int pin );
 void STM32446GpioEospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioEpupdr( unsigned int data, unsigned int pin );
@@ -114,7 +109,7 @@ void STM32446GpioEreset( unsigned int data );
 void STM32446GpioEset( unsigned int data );
 void STM32446GpioEafr( unsigned int data, unsigned int pin );
 
-//GPIOH
+// GPIOH
 void STM32446GpioHmoder( unsigned int data, unsigned int pin );
 void STM32446GpioHospeedr( unsigned int data, unsigned int pin );
 void STM32446GpioHpupdr( unsigned int data, unsigned int pin );
@@ -135,7 +130,7 @@ void STM32446Rtcdr2vec(char* vect);
 void STM32446Rtctr2vec(char* vect);
 void STM32446RtcRegWrite(volatile uint32_t* reg, uint32_t data);
 
-//ADC1
+// ADC1
 void STM32446Adc1Inic(void);
 void STM32446Adc1VBAT(void);
 void STM32446Adc1TEMP(void);
@@ -144,7 +139,7 @@ double STM32446Adc1Read(void);
 void STM32446Adc1Restart(void);
 void STM32446Adc1Stop(void);
 
-//USART1
+// USART1
 void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 void STM32446Usart1Transmit(void);
 void STM32446Usart1Receive(void);
@@ -154,20 +149,20 @@ void STM32446Usart1Stop(void);
 // MISCELLANEOUS
 char STM32446bcd2dec(char num);
 char STM32446dec2bcd(char num);
-/*** SYSTICK ***/
+// SYSTICK
 void STM32446delay_ms(uint32_t ms);
 void STM32446delay_10us(uint32_t ten_us);
 void STM32446delay_us(uint32_t us);
-/*** BUTTON ***/
+// BUTTON
 uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
-/*** BYTE ***/
+// BYTE
 uint16_t STM32ReadHLByte(STM32HighLowByte reg);
 uint16_t STM32ReadLHByte(STM32HighLowByte reg);
 STM32HighLowByte STM32WriteHLByte(uint16_t val);
 STM32HighLowByte STM32WriteLHByte(uint16_t val);
 uint16_t STM32SwapByte(uint16_t num);
-/*** GPIO ***/
+// GPIO
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioSet( GPIO_TypeDef* regs, int data );
@@ -175,12 +170,12 @@ void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... );
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin );
 void STM32446GpioReset( GPIO_TypeDef* regs, int data );
 void STM32446PinBlock( volatile uint32_t* dest, uint32_t size_block, uint32_t data, uint32_t pin );
-/*** GENERIC ***/
+// GENERIC
 void STM32446Gpiosetupreg(volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin);
 void STM32446GpioSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n );
 char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint);
 char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... );
-/***FILE FUNC***/
+// FILE FUNC
 void STM32446RtcSetTr(void);
 void STM32446RtcSetDr(void);
 uint8_t STM32446RtcAccess(uint8_t clock);
@@ -193,36 +188,28 @@ uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit);
 // Template
 void template(void);
 
-/*
-***Interrupt Prototype
-*/
+// Interrupt Prototype
 
 void SysTick_Handler(void);
 
-/*
-*** File Procedure and Functions
-*/
-
+/**** Procedure & Functions ***/
 // STM32446 Image Linker
 STM32446 STM32446enable(void){
-/******************************************************************************
-	Comment out the linked modules to reduce memmory usage.
-	
-*******************************************************************************/
+// Comment out the linked modules to reduce memmory usage.
 	mem[0] = 0;
 	nen[0] = 0;
 	STM32446temperature = 0;
-	/*****STM32446 OBJECTS******/
-	//FLASH
+	// STM32446 OBJECTS
+	// FLASH
 	ret.flash.reg = (FLASH_TypeDef*) FLASH_R_BASE;
 	
-	//CRC
+	// CRC
 	ret.crc.reg = (CRC_TypeDef*) CRC_BASE;
 	
-	//PWR
+	// PWR
 	ret.pwr.reg = (PWR_TypeDef*) PWR_BASE;
 	
-	//RCC
+	// RCC
 	ret.rcc.reg = (RCC_TypeDef*) RCC_BASE;
 	ret.rcc.henable = STM32446RccHEnable;
 	ret.rcc.hselect = STM32446RccHSelect;
@@ -230,13 +217,13 @@ STM32446 STM32446enable(void){
 	ret.rcc.lselect = STM32446RccLSelect;
 	ret.rcc.prescaler = STM32446Prescaler;
 	ret.rcc.systemclock = SystemClock;
-	/****PLL****/
+	// PLL
 	ret.rcc.pll.division = STM32446PLLDivision;
 	ret.rcc.pll.enable = STM32446RccPLLCLKEnable;
 	ret.rcc.plli2s.enable = STM32446RccPLLI2SEnable;
 	ret.rcc.pllsai.enable = STM32446RccPLLSAIEnable;
 	
-	//GPIOA
+	// GPIOA
 	ret.gpioa.reg = (GPIO_TypeDef*) GPIOA_BASE;
 	ret.gpioa.moder = STM32446GpioAmoder;
 	ret.gpioa.ospeedr = STM32446GpioAospeedr;
@@ -245,7 +232,7 @@ STM32446 STM32446enable(void){
 	ret.gpioa.set = STM32446GpioAset;
 	ret.gpioa.afr = STM32446GpioAafr;
 	
-	//GPIOB
+	// GPIOB
 	ret.gpiob.reg = (GPIO_TypeDef*) GPIOB_BASE;
 	ret.gpiob.moder = STM32446GpioBmoder;
 	ret.gpiob.ospeedr = STM32446GpioBospeedr;
@@ -254,7 +241,7 @@ STM32446 STM32446enable(void){
 	ret.gpiob.set = STM32446GpioBset;
 	ret.gpiob.afr = STM32446GpioBafr;
 	
-	//GPIOC
+	// GPIOC
 	ret.gpioc.reg = (GPIO_TypeDef*) GPIOC_BASE;
 	ret.gpioc.moder = STM32446GpioCmoder;
 	ret.gpioc.ospeedr = STM32446GpioCospeedr;
@@ -263,7 +250,7 @@ STM32446 STM32446enable(void){
 	ret.gpioc.set = STM32446GpioCset;
 	ret.gpioc.afr = STM32446GpioCafr;
 	
-	//GPIOD
+	// GPIOD
 	ret.gpiod.reg = (GPIO_TypeDef*) GPIOD_BASE;
 	ret.gpiod.moder = STM32446GpioDmoder;
 	ret.gpiod.ospeedr = STM32446GpioDospeedr;
@@ -272,7 +259,7 @@ STM32446 STM32446enable(void){
 	ret.gpiod.set = STM32446GpioDset;
 	ret.gpiod.afr = STM32446GpioDafr;
 
-	//GPIOE
+	// GPIOE
 	ret.gpioe.reg = (GPIO_TypeDef*) GPIOE_BASE;
 	ret.gpioe.moder = STM32446GpioEmoder;
 	ret.gpioe.ospeedr = STM32446GpioEospeedr;
@@ -281,7 +268,7 @@ STM32446 STM32446enable(void){
 	ret.gpioe.set = STM32446GpioEset;
 	ret.gpioe.afr = STM32446GpioEafr;
 
-	//GPIOH
+	// GPIOH
 	ret.gpioh.reg = (GPIO_TypeDef*) GPIOH_BASE;
 	ret.gpioh.moder = STM32446GpioHmoder;
 	ret.gpioh.ospeedr = STM32446GpioHospeedr;
@@ -290,7 +277,7 @@ STM32446 STM32446enable(void){
 	ret.gpioh.set = STM32446GpioHset;
 	ret.gpioh.afr = STM32446GpioHafr;
 	
-	//RTC
+	// RTC
 	ret.rtc.reg = (RTC_TypeDef*) RTC_BASE;
 	ret.rtc.inic = STM32446RtcInic;
 	ret.rtc.Day = STM32446RtcDay;
@@ -304,35 +291,35 @@ STM32446 STM32446enable(void){
 	ret.rtc.tr2vec = STM32446Rtctr2vec;
 	ret.rtc.RegWrite = STM32446RtcRegWrite;
 	
-	//SYSCFG
+	// SYSCFG
 	ret.syscfg.reg = (SYSCFG_TypeDef*) SYSCFG_BASE;
 	
-	//DMA1
+	// DMA1
 	ret.dma1.reg = (DMA_TypeDef*) DMA1_BASE;
 	ret.dma1.stream[0].reg = (DMA_Stream_TypeDef*) DMA1_Stream0_BASE;
 
-	//DMA2
+	// DMA2
 	ret.dma2.reg = (DMA_TypeDef*) DMA2_BASE;
 	ret.dma2.stream[0].reg = (DMA_Stream_TypeDef*) DMA2_Stream0_BASE;
 	
-	//NVIC
+	// NVIC
 	ret.nvic.reg = (NVIC_Type*) NVIC_BASE;
 	
-	//SysTick (Used as Delay Source)
+	// SysTick (Used as Delay Source)
 	ret.systick.reg = (SysTick_Type*) SysTick_BASE;
 	ret.systick.delay_ms = STM32446delay_ms;
 	ret.systick.delay_10us = STM32446delay_10us;
 	ret.systick.delay_us = STM32446delay_us;
 	
-	/**random order**/
+	// random order
 	
-	//TIM9
+	// TIM9
 	ret.tim9.reg = (TIM_TypeDef*) TIM9_BASE;
 	
-	//ADC1
+	// ADC1
 	ret.adc1.reg = (ADC_TypeDef*) ADC1_BASE;
 	ret.adc1.common.reg = (ADC_Common_TypeDef*) ADC123_COMMON_BASE;
-	/****single****/
+	// single
 	ret.adc1.single.inic = STM32446Adc1Inic;
 	ret.adc1.single.vbat = STM32446Adc1VBAT;
 	ret.adc1.single.temp = STM32446Adc1TEMP;
@@ -341,7 +328,7 @@ STM32446 STM32446enable(void){
 	ret.adc1.single.restart = STM32446Adc1Restart;
 	ret.adc1.single.stop = STM32446Adc1Stop;
 	
-	//USART1
+	// USART1
 	ret.usart1.reg = (USART_TypeDef*) USART1_BASE;
 	ret.usart1.inic = STM32446Usart1Inic;
 	ret.usart1.transmit = STM32446Usart1Transmit;
@@ -349,10 +336,10 @@ STM32446 STM32446enable(void){
 	ret.usart1.parameters = STM32446Usart1Parameters;
 	ret.usart1.stop = STM32446Usart1Stop;
 	
-	/*** INICS ***/
+	// INICS
 	ret.inic.peripheral = STM32446PeripheralInic;
 	
-	/*** FUNCS ***/
+	// FUNCS
 	ret.func.bcd2dec = STM32446bcd2dec;
 	ret.func.dec2bcd = STM32446dec2bcd;
 	ret.func.triggerA = STM32446triggerA;
@@ -375,36 +362,32 @@ STM32446 STM32446enable(void){
 	ret.func.print = STM32446FUNCprint;
 	ret.func.test = template;
 	
-	/****************************************************************************/
+	
 	SystickInic(); // Polling delay source.
-	/****************************************************************************/
+	
 	return ret;
 }
 
-/******************************************************************************/
-/*******************************/
-/*************INICS*************/
-/*******************************/
+// INICS
 // peripheral
 uint8_t STM32446PeripheralInic(void)
 {
 	uint8_t clkused; // First turn it on then select it or enable it.
 	// Setup PLL
-	/**************************************************************************
-	PLLDIVISION parameters
-	source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
-	Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
-	**************************************************************************/
+	// PLLDIVISION parameters
+	// source 0 or 1		M 2 to 63		N 50 to 432		P 2,4,6,8
+	// Q 2 to 15			R 2 to 7        (2Mhz ideal, N/m  *  clkx)
+	
 	STM32446PLLDivision(0, 8, 336, 2, 14, 7); // 0,8,360,4,15,6; 0,8,336,2,14,7;
 	// Enable PLL
-	//STM32446RccPLLCLKEnable(); // Only enable when Division is configured correctly.
-	/**************************************************************************
-	SysClock prescaler parameters
-	AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
-	RTC 2 to 31
-	**************************************************************************/
-	//STM32446Prescaler(8, 1, 1, 0);
-	//STM32446Prescaler(2, 1, 1, 0);
+	// STM32446RccPLLCLKEnable(); // Only enable when Division is configured correctly.
+	
+	// SysClock prescaler parameters
+	// AHB 1,2,4,8,16,64,128,256,512 		APB1 1,2,4,8,16		APB2 1,2,4,8,16
+	// RTC 2 to 31
+	
+	// STM32446Prescaler(8, 1, 1, 0);
+	// STM32446Prescaler(2, 1, 1, 0);
 	STM32446Prescaler(1, 1, 1, 0);
 	// System Clock Source
 	STM32446RccHEnable(0);
@@ -418,9 +401,8 @@ uint8_t STM32446PeripheralInic(void)
 
 	return clkused;
 }
-/*******************************/
-/*************FUNCS*************/
-/*******************************/
+
+// FUNCS
 // RCC
 void STM32446RccHEnable(unsigned int hclock)
 {
@@ -447,15 +429,15 @@ uint8_t STM32446RccHSelect(uint8_t sysclk)
 	switch(sysclk){
 		case 1:
 			ret.rcc.reg->CFGR |= 1; // HSE oscillator selected as system clock
-			break;
+		break;
 		case 2:
 			ret.rcc.reg->CFGR |= 2; // PLL_P selected as system clock
-			break;
+		break;
 		case 3:
 			ret.rcc.reg->CFGR |= 3; // PLL_R selected as system clock
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 	return (ret.rcc.reg->CFGR >> 2) & 3;
 }
@@ -485,16 +467,16 @@ void STM32446RccLSelect(uint8_t lclock)
 	switch(lclock){
 		case 2:
 			ret.rcc.reg->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
-			break;
+		break;
 		case 1:
 			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
-			break;
+		break;
 		case 3:
 			ret.rcc.reg->BDCR |= ((1 << 8) | (1 << 9)); // HSE oscillator clock divided by a programmable prescaler
-			break;
+		break;
 		default:
 			ret.rcc.reg->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
-			break;
+		break;
 	}
 }
 
@@ -510,86 +492,86 @@ void STM32446Prescaler(unsigned int ahbpre, unsigned int ppre1, unsigned int ppr
 		case 2:
 			ret.rcc.reg->CFGR |= (4 << 13);
 			CLOCK_prescaler.APB2 = 2;
-			break;
+		break;
 		case 4:
 			ret.rcc.reg->CFGR |= (5 << 13);
 			CLOCK_prescaler.APB2 = 4;
-			break;
+		break;
 		case 8:
 			ret.rcc.reg->CFGR |= (6 << 13);
 			CLOCK_prescaler.APB2 = 8;
-			break;
+		break;
 		case 16:
 			ret.rcc.reg->CFGR |= (7 << 13);
 			CLOCK_prescaler.APB2 = 16;
-			break;
+		break;
 		default:
 			CLOCK_prescaler.APB2 = 1;
-			break;
+		break;
 	}
 
 	switch(ppre1){ // 10
 	case 2:
 		ret.rcc.reg->CFGR |= (4 << 10);
 		CLOCK_prescaler.APB1 = 2;
-		break;
+	break;
 	case 4:
 		ret.rcc.reg->CFGR |= (5 << 10);
 		CLOCK_prescaler.APB1 = 4;
-		break;
+	break;
 	case 8:
 		ret.rcc.reg->CFGR |= (6 << 10);
 		CLOCK_prescaler.APB1 = 8;
-		break;
+	break;
 	case 16:
 		ret.rcc.reg->CFGR |= (7 << 10);
 		CLOCK_prescaler.APB1 = 16;
-		break;
+	break;
 	default:
 		CLOCK_prescaler.APB1 = 1;
-		break;
+	break;
 	}
 
 	switch(ahbpre){ // 4
 	case 2:
 		ret.rcc.reg->CFGR |= (8 << 4);
 		CLOCK_prescaler.AHB = 2;
-		break;
+	break;
 	case 4:
 		ret.rcc.reg->CFGR |= (9 << 4);
 		CLOCK_prescaler.AHB = 4;
-		break;
+	break;
 	case 8:
 		ret.rcc.reg->CFGR |= (10 << 4);
 		CLOCK_prescaler.AHB = 8;
-		break;
+	break;
 	case 16:
 		ret.rcc.reg->CFGR |= (11 << 4);
 		CLOCK_prescaler.AHB = 16;
-		break;
+	break;
 	case 64:
 		ret.rcc.reg->CFGR |= (12 << 4);
 		CLOCK_prescaler.AHB = 64;
-		break;
+	break;
 	case 128:
 		ret.rcc.reg->CFGR |= (13 << 4);
 		CLOCK_prescaler.AHB = 128;
-		break;
+	break;
 	case 256:
 		ret.rcc.reg->CFGR |= (14 << 4);
 		CLOCK_prescaler.AHB = 256;
-		break;
+	break;
 	case 512:
 		ret.rcc.reg->CFGR |= (15 << 4);
 		CLOCK_prescaler.AHB = 512;
-		break;
+	break;
 	default:
 		CLOCK_prescaler.AHB = 1;
-		break;
+	break;
 	}
 }
 
-/****PLL****/
+// PLL
 
 void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int plln, unsigned int pllp, unsigned int pllq, unsigned int pllr)
 {
@@ -617,23 +599,23 @@ void STM32446PLLDivision(unsigned int pllsrc, unsigned int pllm, unsigned int pl
 	switch(pllp){ // PLLP[16]: Main PLL (PLL) division factor for main system clock
 		case 2:
 			PLL_parameter.P = pllp;
-			break;
+		break;
 		case 4:
 			ret.rcc.reg->PLLCFGR |= (1 << 16);
 			PLL_parameter.P = pllp;
-			break;
+		break;
 		case 6:
 			ret.rcc.reg->PLLCFGR |= (2 << 16);
 			PLL_parameter.P = pllp;
-			break;
+		break;
 		case 8:
 			ret.rcc.reg->PLLCFGR |= (3 << 16);
 			PLL_parameter.P = pllp;
-			break;
+		break;
 		default:
 			ret.rcc.reg->PLLCFGR |= (1 << 16);
 			PLL_parameter.P = 4;
-			break;
+		break;
 	}
 
 	if(plln > 49 && plln < 433){ // PLLN[6]: Main PLL (PLL) multiplication factor for VCO
@@ -680,25 +662,25 @@ uint32_t SystemClock(void)
 		case 0: // 00: HSI oscillator used as the system clock
 			PLL_parameter.Source = 16000000;
 			sysclk= 16000000;
-			break;
+		break;
 		case 1: // 01: HSE oscillator used as the system clock
 			PLL_parameter.Source = 25000000;
 			sysclk = 25000000;
-			break;
+		break;
 		case 2: // 10: PLL used as the system clock
 			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.P );
-			break;
+		break;
 		case 3: // 11: PLL_R used as the system clock
 			sysclk = ( PLL_parameter.Source / PLL_parameter.M ) * ( PLL_parameter.N / PLL_parameter.R );
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 	return sysclk;
 }
 
 // GPIO
-/** To much resources **/
+// To much resources
 void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
 {
 	uint8_t i;
@@ -712,19 +694,19 @@ void STM32446GpioSetpins( GPIO_TypeDef* regs, int n_pin, ... )
 		va_end(list);
 	}
 }
-/** disabled **/
+// disabled
 
 void STM32446GpioSetpin( GPIO_TypeDef* regs, int pin )
 {
-			regs->BSRR = (1 << pin);
+	regs->BSRR = (1 << pin);
 }
 
 void STM32446GpioSet( GPIO_TypeDef* regs, int data )
 {
-			regs->BSRR = (unsigned int) data;
+	regs->BSRR = (unsigned int) data;
 }
 
-/** To much resources **/
+// To much resources
 void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
 { // slow
 	uint8_t i;
@@ -738,19 +720,19 @@ void STM32446GpioResetpins( GPIO_TypeDef* regs, int n_pin, ... )
 		va_end(list);
 	}
 }
-/** disabled **/
+// disabled
 
 void STM32446GpioResetpin( GPIO_TypeDef* regs, int pin )
 {
-			regs->BSRR = (unsigned int)((1 << pin) << 16);
+	regs->BSRR = (unsigned int)((1 << pin) << 16);
 }
 
 void STM32446GpioReset( GPIO_TypeDef* regs, int data )
 {
-			regs->BSRR = (unsigned int)(data << 16);
+	regs->BSRR = (unsigned int)(data << 16);
 }
 
-/***generic***/
+// generic
 void STM32446Gpiosetupreg( volatile uint32_t* reg, unsigned int size_block, unsigned int data, unsigned int pin )
 {
 	unsigned int mask = (unsigned int)(pow(2, size_block) - 1);
@@ -788,8 +770,8 @@ void STM32446PinBlock( volatile uint32_t* dest, uint32_t size_block, uint32_t da
 	*dest &= ~(mask << pin);
 	*dest |= (data << pin);
 }
-/***generic***/
 
+//generic
 // GPIOA
 void STM32446GpioAmoder( unsigned int data, unsigned int pin )
 {
@@ -1105,42 +1087,42 @@ uint8_t STM32446RtcInic(uint8_t clock)
 	
 	status = STM32446RtcAccess(clock);
 	
-	//Some help from youtube vids
+	// Some help from youtube vids
 	//ret.rcc.reg->CFGR &= (uint32_t) ~((1 << 0) | (1 << 1)); // RCC_CFGR sw[2:0] 00 Bits 1:0
 	//ret.rcc.reg->CFGR &= (uint32_t) ~((1 << 20) | (1 << 19) | (1 << 18) | (1 << 17) | (1 << 16)); // RCC_CFGR RTCPRE[4:0] 00010: HSE/2 Bits 20:16
 	//ret.rcc.reg->CFGR |= (uint32_t) (1 << 17); // RCC_CFGR RTCPRE[4:0] 00010: HSE/2 Bits
 	
 	ret.rcc.reg->BDCR |= (1 << 15); // RTCEN: RTC clock enable
 	
-	//5 - Enter the "key" to unlock write protection
+	// 5 - Enter the "key" to unlock write protection
 	ret.rtc.reg->WPR |= 0xCA;
 	ret.rtc.reg->WPR |= 0x53;
 	//ret.rtc.reg->ISR &= (uint32_t) ~((1 << 3) | (1 << 5) | (1 << 7));
 
-	//6 - Set INIT bit and wait for ready flag
+	// 6 - Set INIT bit and wait for ready flag
 	ret.rtc.reg->ISR |= (1 << 7); // INIT: Initialization mode
 	while( !(ret.rtc.reg->ISR & (1 << 6)) ); // INITF: Initialization flag
 	status = 6;
 
-	//7 - Adjust prescaler values for RTC to obtain 1 Hz
+	// 7 - Adjust prescaler values for RTC to obtain 1 Hz
 	//ret.rtc-reg->PRER |= 0xF9;
 	//ret.rtc.reg->PRER |= (0x7F << 16);
 	
-	//8 - Write Time and Date values
+	// 8 - Write Time and Date values
 	//ret.rtc.reg->TR |= 0x130000;
 	//ret.rtc.reg->TR |= 0x5700;
 	//ret.rtc.reg->DR |= 0x215124;
 	
-	//9 - Set BYPSHAD bit
+	// 9 - Set BYPSHAD bit
 	// must read twice
 	//ret.rtc.reg->CR |= (1 << 5); // BYPSHAD: Bypass the shadow registers
 	// read only once
 	ret.rtc.reg->CR &= (uint32_t) ~(1 << 5); // BYPSHAD: Disable Bypass the shadow registers
 	
-	//10 - Clear INIT bit
+	// 10 - Clear INIT bit
 	ret.rtc.reg->ISR &= (uint32_t) ~(1 << 7);
 	
-	//11 - Disable access to RTC registers
+	// 11 - Disable access to RTC registers
 	ret.pwr.reg->CR &= (uint32_t) ~(1 << 8);
 
 	return status;
@@ -1311,13 +1293,13 @@ void STM32446Rtctr2vec(char* vect)
 	}
 }
 
-//ADC1
+// ADC1
 void STM32446Adc1Inic(void)
 {
-	/***ADC Clock***/
-	//ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
+	// ADC Clock
+	// ret.rcc.reg->APB1ENR |= (1 << 29); // DACEN: DAC interface clock enable
 	ret.rcc.reg->APB2ENR |= (1 << 8); // ADC1EN: ADC1 clock enable
-	/***ADC CONFIG***/
+	// ADC CONFIG
 	ret.adc1.reg->CR2 |= (1 << 10); // EOCS: End of conversion selection
 	ret.adc1.common.reg->CCR |= (3 << 16); // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 	ret.adc1.reg->SMPR1 |= (7 << 24); // SMPx[2:0]: Channel x sampling time selection
@@ -1332,7 +1314,7 @@ void STM32446Adc1VBAT(void) // vbat overrides temperature
 
 void STM32446Adc1TEMP(void)
 {
-	//Temperature (in ºC) = {(VSENSE V25) / Avg_Slope} + 25
+	// Temperature (in ºC) = {(VSENSE V25) / Avg_Slope} + 25
 	ret.adc1.common.reg->CCR |= (1 << 23); // TSVREFE: Temperature sensor and VREFINT enable
 }
 
@@ -1367,72 +1349,62 @@ void STM32446Adc1Stop(void)
 	ret.adc1.reg->CR2 |= (1 << 0); // ADON: A/D Converter ON / OFF
 }
 
-//USART1
+// USART1
 void STM32446Usart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 {
 	// RCC
 	ret.rcc.reg->APB2ENR |= (1 << 4); // USART1EN: USART1 clock enable
 	// Choose GPIO
-	/*****************************************************************
-		PA9 - TX		PA10 - RX
-		PA11 - CTS		PA12 - RTS
-
-		AF7 and AF8, activation. therefore
-	 *****************************************************************/
+	// PA9 - TX		PA10 - RX
+	// PA11 - CTS		PA12 - RTS
+	// AF7 and AF8, activation. therefore
 	ret.gpioa.moder(2,9);
 	ret.gpioa.moder(2,10);
 	ret.gpioa.afr(7,9);
 	ret.gpioa.afr(7,10);
-	/******************************************************************************
-		Procedure:
-	1. Enable the USART by writing the UE bit in USART_CR1 register to 1.
-	2. Program the M bit in USART_CR1 to define the word length.
-	3. Program the number of stop bits in USART_CR2.
-	4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
-	   place. Configure the DMA register as explained in multibuffer communication.
-	5. Select the desired baud rate using the USART_BRR register.
-	*******************************************************************************/
+	//	Procedure:
+	// 1. Enable the USART by writing the UE bit in USART_CR1 register to 1.
+	// 2. Program the M bit in USART_CR1 to define the word length.
+	// 3. Program the number of stop bits in USART_CR2.
+	// 4. Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take
+	//   place. Configure the DMA register as explained in multibuffer communication.
+	// 5. Select the desired baud rate using the USART_BRR register.
+
 	ret.usart1.reg->CR1 |= (1 << 13); // UE: USART enable
 	STM32446Usart1Parameters( wordlength, samplingmode, stopbits, baudrate ); // Default
 
 }
-void STM32446Usart1Transmit(void) //RM0390 pg801
+void STM32446Usart1Transmit(void) // RM0390 pg801
 {
-	/******************************************************************************
-		Procedure:
-	6. Set the TE bit in USART_CR1 to send an idle frame as first transmission.
-	7. Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
-		for each data to be transmitted in case of single buffer.
-	8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
-		that the transmission of the last frame is complete. This is required for instance when
-		the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
-	*******************************************************************************/
+	//	Procedure:
+	// 6. Set the TE bit in USART_CR1 to send an idle frame as first transmission.
+	// 7. Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this
+	//	for each data to be transmitted in case of single buffer.
+	// 8. After writing the last data into the USART_DR register, wait until TC=1. This indicates
+	//	that the transmission of the last frame is complete. This is required for instance when
+	//	the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 7); // DMAT: DMA enable transmitter - disabled
 	ret.usart1.reg->CR1 |= (1 << 3); // TE: Transmitter enable
-	//ret.usart1.reg->DR = 'A';
-	//on real application, use fall threw method in main
-	//for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
+	// ret.usart1.reg->DR = 'A';
+	// on real application, use fall threw method in main
+	// for( ; ret.usart1.reg->SR & (1 << 6); ); // TC: Transmission complete
 	// added this as disable after confirmed end of transmission [9]
-	//ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
+	// ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
 	ret.usart1.reg->SR &= ~(1 << 6); // TC: Transmission complete
 }
 
-void STM32446Usart1Receive(void) //RM0390 pg804
+void STM32446Usart1Receive(void) // RM0390 pg804
 {
-	/******************************************************************************
-		Procedure: baud rate register USART_BRR
-	6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
-		bit.
-	 *******************************************************************************/
+	//	Procedure: baud rate register USART_BRR
+	// 6.	Set the RE bit USART_CR1. This enables the receiver that begins searching for a start
+	//	bit.
 	ret.usart1.reg->CR3 &= (uint32_t) ~(1 << 6); // DMAR: DMA enable receiver - disabled
 	ret.usart1.reg->CR1 |= (1 << 2); // RE: Receiver enable
 	ret.usart1.reg->SR &= ~(1 << 5); // RXNE: Read data register not empty
 }
 
 void STM32446Usart1Parameters( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
-/******************************************************************************
-Sets the usart parameters, using real values.
-*******************************************************************************/
+// Sets the usart parameters, using real values.
 {
 	uint8_t sampling;
 	double value, fracpart, intpart;
@@ -1485,8 +1457,8 @@ void STM32446Usart1Stop(void){
 	// added this as disable after confirmed end of transmission [9]
 	ret.usart1.reg->CR1 &= (uint32_t) ~(1 << 13); // UE: USART disable
 }
-//MISCELLANEOUS
 
+//MISCELLANEOUS
 // Convert Binary Coded Decimal (BCD) to Decimal
 char STM32446bcd2dec(char num)
 {
@@ -1510,7 +1482,7 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
 				mem[1] = counter;
 				mem[0] = 1;
 			}
-			break;
+		break;
 		case 1:
 			if(hllh_io & (1 << pin)){
 				mem[2] = counter;
@@ -1521,9 +1493,9 @@ uint32_t STM32446triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter)
 				}
 				mem[0] = 0;
 			}
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 	return mem[3];
 }
@@ -1539,7 +1511,7 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
 				nen[1] = counter;
 				nen[0] = 1;
 			}
-			break;
+		break;
 		case 1:
 			if(lh_io & (1 << pin)){
 				nen[2] = counter;
@@ -1550,9 +1522,9 @@ uint32_t STM32446triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t 
 				}
 				nen[0] = 0;
 			}
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 	return nen[3];
 }
@@ -1586,7 +1558,7 @@ uint16_t STM32SwapByte(uint16_t num)
 	return (num >> 8) | tp;
 }
 
-/***ftoa***/
+// ftoa
 char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint)
 {
 	uint32_t ipart;
@@ -1615,7 +1587,7 @@ char* STM32446FUNCftoa(double num, char* res, uint8_t afterpoint)
 	return res;
 }
 
-/***print***/
+// print
 char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... )
 {
 	va_list aptr;
@@ -1633,9 +1605,7 @@ char* STM32446FUNCprint( char* str, uint8_t size_str, const char* format, ... )
 		return str;
 }
 
-/********************************/
-/***********FILE FUNC************/
-/********************************/
+// FILE FUNC
 //RTC
 void STM32446RtcSetTr(void)
 {
@@ -1680,8 +1650,8 @@ void STM32446RtcSetDr(void)
 uint8_t STM32446RtcAccess(uint8_t clock)
 {
 	uint8_t status;
-	//RM0390 pg 94
-	//RTC access
+	// RM0390 pg 94
+	// RTC access
 	//1 - Enable the power interface clock by setting the PWREN bits in the RCC_APB1ENR
 	ret.rcc.reg->APB1ENR |= (1 << 28); // Power interface clock enable
 	//RCC->APB1ENR |= ((1 << 11) | (1 << 28));
@@ -1697,24 +1667,24 @@ uint8_t STM32446RtcAccess(uint8_t clock)
 }
 
 
-//SRAM
+// SRAM
 void STM32446SramAccess(void)
 {
-	//RM0390 pg 94
-	//SRAM access
-	//0 - Power Up SRAM
+	// RM0390 pg 94
+	// SRAM access
+	// 0 - Power Up SRAM
 	ret.pwr.reg->CSR |= (1 << 9); // BRE: Backup regulator enable
-	//Check ready flag Bit 3 BRR: Backup regulator ready
+	// Check ready flag Bit 3 BRR: Backup regulator ready
 	for( ; !(ret.pwr.reg->CSR & (1 << 3) )  ; ); // BRR: Backup regulator ready
 	
-	//1 - Enable the power interface clock by setting the PWREN bits in the RCC_APB1ENR
+	// 1 - Enable the power interface clock by setting the PWREN bits in the RCC_APB1ENR
 	ret.rcc.reg->APB1ENR |= (1 << 28); // Power interface clock enable
 	//RCC->APB1ENR |= ((1 << 11) | (1 << 28));
 
-	//2 - Set the DBP bit in the PWR power control register (PWR_CR)
+	// 2 - Set the DBP bit in the PWR power control register (PWR_CR)
 	ret.pwr.reg->CR |= (1 << 8); // Disable backup domain write protection
 
-	//3 - Enable the backup SRAM clock by setting BKPSRAMEN bit in the RCC_AHB1ENR
+	// 3 - Enable the backup SRAM clock by setting BKPSRAMEN bit in the RCC_AHB1ENR
 	ret.rcc.reg->AHB1ENR |= (1 << 18); // BKPSRAMEN: Backup SRAM interface clock enable
 }
 
@@ -1744,7 +1714,7 @@ void STM32446Reverse(char s[])
 	}
 }
 
-/***intinvstr***/
+// intinvstr
 uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 {
 	uint8_t k = 0;
@@ -1753,10 +1723,7 @@ uint8_t STM32446FUNCintinvstr(int32_t num, char* res, uint8_t n_digit)
 	res[k] = '\0';
 	return k;
 }
-/***/
 
-/*******************************************************************************/
-/*******************************************************************************/
 // SYSTICK
 void SystickInic(void)
 {
@@ -1764,6 +1731,7 @@ void SystickInic(void)
 	ret.systick.reg->VAL = 0UL;
 	ret.systick.reg->CTRL |= ((1 << 1) | (1 << 2));
 }
+
 void STM32446delay_ms(uint32_t ms)
 {
 	ret.systick.reg->LOAD = (uint32_t)((SystemClock() / 1000) - 1);
@@ -1775,6 +1743,7 @@ void STM32446delay_ms(uint32_t ms)
 	// Disable the SysTick timer
 	ret.systick.reg->CTRL &= (uint32_t) ~(1 << 0);
 }
+
 void STM32446delay_10us(uint32_t ten_us)
 {
 	ret.systick.reg->LOAD = (uint32_t)((SystemClock() / 100000) - 1);
@@ -1799,20 +1768,11 @@ void STM32446delay_us(uint32_t us)
 	ret.systick.reg->CTRL &= (uint32_t) ~(1 << 0);
 }
 
-/***Interrupt Procedure***/
+/*** File Interrupt ***/
 void SysTick_Handler(void)
 { // count down to zero systick interrupt and reload.
 	DelayCounter++;
 }
-/********************************COMMENT****************************************
-On all periferals, always have to take in cosideration the POWER [pwr] rail, the CLOCK rail [rcc] 
-then the pin configuration.
 
-Also be aware of the interrupt flags have to be cleared after being fired and the interrupt been
-received.
-
-uvision trial limitation to 32Kb.
-
-Can do anything.
-*******************************************************************************/
+/***EOF***/
 

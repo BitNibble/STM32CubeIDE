@@ -9,24 +9,28 @@ Comment:
 	Pin Analysis
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ********************************************************************/
-/***Library***/
+/*** File Library ***/
 #include <stdlib.h>
 #include"explode.h"
-/***Constant & Macro***/
+
+/*** File Constant & Macro ***/
 #ifndef ZERO
 	#define ZERO 0
 #endif
 #ifndef ONE
 	#define ONE 1
 #endif
-/***Global File Variable***/
-/***File Function Header***/
+
+/*** File Variable ***/
+
+/*** File Header ***/
 void EXPLODEupdate(EXPLODE* self, uint32_t x);
 uint32_t EXPLODEhh(EXPLODE* self);
 uint32_t EXPLODEll(EXPLODE* self);
 uint32_t EXPLODElh(EXPLODE* self);
 uint32_t EXPLODEhl(EXPLODE* self);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 EXPLODE EXPLODEenable( void )
 {
 	// struct object
@@ -40,9 +44,10 @@ EXPLODE EXPLODEenable( void )
 	explode.XF=ZERO;
 	// function pointers
 	explode.update = EXPLODEupdate;
-	/******/
+	
 	return explode;
 }
+
 // boot
 void EXPLODEupdate(EXPLODE* self, uint32_t x)
 {
@@ -53,6 +58,7 @@ void EXPLODEupdate(EXPLODE* self, uint32_t x)
 	self->LH = EXPLODElh(self);
 	self->HL = EXPLODEhl(self);
 }
+
 // hh
 uint32_t EXPLODEhh(EXPLODE* self)
 {
@@ -60,6 +66,7 @@ uint32_t EXPLODEhh(EXPLODE* self)
 	i = self->XI & self->XF;
 	return i;
 }
+
 // ll
 uint32_t EXPLODEll(EXPLODE* self)
 {
@@ -67,6 +74,7 @@ uint32_t EXPLODEll(EXPLODE* self)
 	i = self->XI | self->XF;
 	return ~i;
 }
+
 // lh
 uint32_t EXPLODElh(EXPLODE* self)
 {
@@ -75,6 +83,7 @@ uint32_t EXPLODElh(EXPLODE* self)
 	i &= self->XF;
 	return i;
 }
+
 // hl
 uint32_t EXPLODEhl(EXPLODE* self)
 {
@@ -83,8 +92,7 @@ uint32_t EXPLODEhl(EXPLODE* self)
 	i &= self->XI;
 	return i;
 }
-/***Interrupt***/
-/***comment***
-**************/
+
+/*** File Interrupt***/
 /***EOF***/
 

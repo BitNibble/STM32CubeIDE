@@ -14,24 +14,18 @@ Comment:
 #ifndef _STM32446MAPPING_H_
 	#define _STM32446MAPPING_H_
 
-/*
-*** Libraries
-*/
-
+/*** Global Libraries ***/
 #include <inttypes.h>
-
 #include "stm32f4xx.h"
 #include "stm32f446xx.h"
 #include "core_cm4.h"
 
-/******************************************************************************/
-/******************************************************************************/
-
+/*** Global Variable ***/
 // Low Byte High Byte
 typedef struct
 {
-	uint8_t H;
 	uint8_t L;
+	uint8_t H;
 } STM32HighLowByte;
 
 // Low Word High Word
@@ -41,10 +35,7 @@ typedef struct
 //	uint16_t L;
 //}STM32446HighLowWord;
 
-/*
-*** STM32446 OBJECTS
-*/
-
+// STM32446 OBJECTS
 // FLASH
 typedef struct
 {
@@ -141,6 +132,7 @@ typedef struct
 	void (*reset)( unsigned int data );
 	void (*set)( unsigned int data );
 }STM32446GpioDobj;
+
 // GPIOE
 typedef struct
 {
@@ -152,16 +144,19 @@ typedef struct
 	void (*reset)( unsigned int data );
 	void (*set)( unsigned int data );
 }STM32446GpioEobj;
+
 // GPIOF
 typedef struct
 {
 	GPIO_TypeDef* reg;
 }STM32446GpioFobj;
+
 // GPIOG
 typedef struct
 {
 	GPIO_TypeDef* reg;
 }STM32446GpioGobj;
+
 // GPIOH
 typedef struct
 {
@@ -232,22 +227,21 @@ typedef struct
 	void (*delay_us)(uint32_t us);
 }STM32446SysTickobj;
 
-/**random order**/
-
-//TIM9
+// random order
+// TIM9
 typedef struct
 {
 	TIM_TypeDef* reg;
 }STM32446TIM9obj;
 
-//ADC COMMON
+// ADC COMMON
 typedef struct
 {
 	ADC_Common_TypeDef* reg;
 }STM32446ADCCOMMONobj;
 
-//ADC1
-/*** types of ADC1 applications ***/
+// ADC1
+// types of ADC1 applications
 typedef struct
 {
 	void (*inic)(void);
@@ -259,7 +253,7 @@ typedef struct
 	void (*stop)(void);
 }STM32446ADC1single;
 
-/*** Registry structs ***/
+// Registry structs
 typedef struct
 {
 	ADC_TypeDef* reg;
@@ -267,7 +261,7 @@ typedef struct
 	STM32446ADC1single single;
 }STM32446ADC1obj;
 
-//USART1
+// USART1
 typedef struct
 {
 	USART_TypeDef* reg;
@@ -278,16 +272,13 @@ typedef struct
 	void (*stop)(void);
 }STM32446USART1obj;
 
-/*
-*** INIC
-*/
+// INIC
 typedef struct
 {
 	uint8_t (*peripheral)(void);
 }STM32446inic;
-/*
-*** FUNC
-*/
+
+// FUNC
 typedef struct
 {
 	char (*bcd2dec)(char num);
@@ -313,18 +304,10 @@ typedef struct
 	void (*test)(void);
 }STM32446function;
 
-/******************************************************************************/
-/******************************************************************************/
-
-/*
-*** STM32446 IMAGE Linker
-*/
-
+// STM32446 IMAGE Linker
 typedef struct
 {
-	/*****************************/
-	/*******STM32446 STRUCTS******/
-	/*****************************/
+	// STM32446 STRUCTS
 	// STM32446 FLASH OBJECT
 	STM32446FLASHobj flash;
 	// STM32446 CRC OBJECT
@@ -357,33 +340,23 @@ typedef struct
 	STM32446NVICobj nvic;
 	// STM32446 SysTick OBJECT
 	STM32446SysTickobj systick;
-	/**random order**/
-	//STM32446 TIM9 OBJECT
+	// random order
+	// STM32446 TIM9 OBJECT
 	STM32446TIM9obj tim9;
-	//STM32446 ADC1 OBJECT
+	// STM32446 ADC1 OBJECT
 	STM32446ADC1obj adc1;
-	//STM32446 USART1 OBJECT
+	// STM32446 USART1 OBJECT
 	STM32446USART1obj usart1;
 	
-	/*****************************/
-	/********INIC STRUCT**********/
-	/*****************************/
+	// INIC STRUCT
 	STM32446inic inic;
-	/*****************************/
-	/******FUNCTION STRUCT********/
-	/*****************************/
+	//FUNCTION STRUCT
 	STM32446function func;
-	/****************************************************************************/
 }STM32446;
-/*
-*** Procedure and Function Prototype
-*/
+
+/*** Global Procedure & Function ***/
 STM32446 STM32446enable(void);
 
 #endif
-/***Interrupt Prototype***/
-
-/********************************COMMENT****************************************
-
-*******************************************************************************/
+/***EOF***/
 

@@ -8,21 +8,24 @@ Date: 12112022
 Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ************************************************************************/
-/***Library***/
+/*** File Library ***/
 #include "lcd.h"
-/***Constant & Macro***/
+
+/*** File Constant & Macro ***/
 #define LCD_N_TICKS 0 // 512
 #define BIT_N_TICKS 0 // 32
-//CMD RS
+// CMD RS
 #define INST 0
 #define DATA 1
-//ticks depends on CPU frequency this case 16Mhz
+// ticks depends on CPU frequency this case 16Mhz
 #define LCDCMDMASK ((1 << RS) | (1 << RW) | (1 << EN))
-/***Global File Variable***/
+
+/*** File Variable ***/
 static STM32446 stm;
 static GPIO_TypeDef* ireg;
 static uint32_t lcd0_detect;
-/***Header***/
+
+/*** File Header ***/
 void LCD0_inic(void);
 void LCD0_write(char c, unsigned short D_I);
 char LCD0_read(unsigned short D_I);
@@ -37,17 +40,18 @@ void LCD0_gotoxy(unsigned int y, unsigned int x);
 void LCD0_strobe(uint16_t num);
 void LCD0_reboot(void);
 void LCD_ticks(uint16_t num);
-/***Procedure & Function***/
+
+/*** Procedure & Function ***/
 LCD0 LCD0enable(GPIO_TypeDef* reg)
 {
-	//ALLOCA??O MEMORIA PARA Estrutura
+	// ALLOCA??O MEMORIA PARA Estrutura
 	LCD0 lcd0;
 	stm = STM32446enable(); // The entire stm32446
-	//LOCAL VARIABLES
-	//import parameters
+	// LOCAL VARIABLES
+	// import parameters
 	ireg = reg;
-	//initialize variables
-	//Direccionar apontadores para PROTOTIPOS
+	// initialize variables
+	// Direccionar apontadores para PROTOTIPOS
 	lcd0.write = LCD0_write;
 	lcd0.read = LCD0_read;
 	lcd0.BF = LCD0_BF;
@@ -59,15 +63,16 @@ LCD0 LCD0enable(GPIO_TypeDef* reg)
 	lcd0.clear = LCD0_clear;
 	lcd0.gotoxy = LCD0_gotoxy;
 	lcd0.reboot = LCD0_reboot;
-	//LCD INIC
+	// LCD INIC
 	LCD0_inic();
-	//
+	
 	return lcd0;
 }
+
 void LCD0_inic(void)
 {
-	//uint8_t repeat;
-	//LCD INIC
+	// uint8_t repeat;
+	// LCD INIC
 	ireg->MODER &= (uint32_t) ~((3 << (RS * 2)) | (3 << (RW * 2)) | (3 << (EN * 2))); // control pins as output
 	ireg->MODER |= ((1 << (RS * 2)) | (1 << (RW * 2)) | (1 << (EN * 2))); // control pins as output
 	
@@ -84,46 +89,46 @@ void LCD0_inic(void)
 	 
 	lcd0_detect = ireg->IDR & (1 << NC);
 	
-	/***INICIALIZACAO LCD**datasheet******/
+	// INICIALIZACAO LCD datasheet
 	stm.systick.delay_ms(20); // using clock at 16Mhz
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
 	stm.systick.delay_10us(4);
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
 	stm.systick.delay_10us(10);
-	LCD0_write(0x38, INST); //function set
+	LCD0_write(0x38, INST); // function set
 	stm.systick.delay_10us(4);
-	LCD0_write(0x28, INST); //function set 2B
+	LCD0_write(0x28, INST); // function set 2B
 	stm.systick.delay_10us(4);
-	LCD0_write(0x28, INST); //function set 2B
+	LCD0_write(0x28, INST); // function set 2B
 	stm.systick.delay_10us(4);
-	/**************************************/
-	//for(repeat = 2 ; repeat ; repeat--){
+	
+	// for(repeat = 2 ; repeat ; repeat--){
 		// repeat twice in 4 bit length
-		LCD0_write(0x28, INST); //function set 2B
+		LCD0_write(0x28, INST); // function set 2B
 		LCD0_BF();
-		LCD0_write(0x28, INST); //function set 2B
-		LCD0_BF();
-
-		LCD0_write(0x0C, INST);// display on/off control
-		LCD0_BF();
-		LCD0_write(0x0C, INST);// display on/off control
+		LCD0_write(0x28, INST); // function set 2B
 		LCD0_BF();
 
-		LCD0_write(0x01, INST);// clear display
+		LCD0_write(0x0C, INST); // display on/off control
 		LCD0_BF();
-		LCD0_write(0x01, INST);// clear display
+		LCD0_write(0x0C, INST); // display on/off control
 		LCD0_BF();
 
-		LCD0_write(0x06, INST);// entry mode set (crazy settings)
+		LCD0_write(0x01, INST); // clear display
 		LCD0_BF();
-		LCD0_write(0x06, INST);// entry mode set (crazy settings)
+		LCD0_write(0x01, INST); // clear display
 		LCD0_BF();
-	//}
-	/**********INICIALIZATION END**********/
-	//LCD0_write(0x1F, INST);// cursor or display shift
-	//stm.systick.delay_10us(4);
-	//LCD0_write(0x03, INST);// return home
-	//stm.systick.delay_ms(2);
+
+		LCD0_write(0x06, INST); // entry mode set (crazy settings)
+		LCD0_BF();
+		LCD0_write(0x06, INST); // entry mode set (crazy settings)
+		LCD0_BF();
+	// }
+	// INICIALIZATION END
+	// LCD0_write(0x1F, INST); // cursor or display shift
+	// stm.systick.delay_10us(4);
+	// LCD0_write(0x03, INST); // return home
+	// stm.systick.delay_ms(2);
 	LCD0_gotoxy(0,0);
 }
 void LCD0_write(char c, unsigned short D_I)
@@ -150,6 +155,7 @@ void LCD0_write(char c, unsigned short D_I)
 	
 	stm.func.resetpin(ireg, EN); LCD_ticks(BIT_N_TICKS);
 }
+
 char LCD0_read(unsigned short D_I)
 { // Read from LCD
 	uint32_t data = 0;
@@ -179,6 +185,7 @@ char LCD0_read(unsigned short D_I)
 
 	return c;
 }
+
 void LCD0_BF(void)
 //	It has to read at minimum one equal and exit
 //	immediately if not equal, weird property.
@@ -191,6 +198,7 @@ void LCD0_BF(void)
 			break;
 	}
 }
+
 char LCD0_getch(void)
 {
 	char c;
@@ -198,11 +206,13 @@ char LCD0_getch(void)
 	LCD0_BF();
 	return c;
 }
+
 void LCD0_putch(char c)
 {
 	LCD0_write(c, DATA);
 	LCD0_BF();
 }
+
 void LCD0_string(const char* s)
 {
 	char tmp;
@@ -211,6 +221,7 @@ void LCD0_string(const char* s)
 		LCD0_putch(tmp);
 	}
 }
+
 void LCD0_string_size(const char* s, uint32_t size)
 {
 	char tmp;
@@ -227,49 +238,54 @@ void LCD0_string_size(const char* s, uint32_t size)
 		pos++;
 	}
 }
+
 void LCD0_hspace(uint32_t n)
 {
 	for(; n; n--){
 		LCD0_putch(' ');
 	}
 }
+
 void LCD0_clear(void)
 {
 	LCD0_write(0x01, INST);
 	stm.systick.delay_ms(2);
 }
+
 void LCD0_gotoxy(unsigned int y, unsigned int x)
 {
 	switch(y){
 		case 0:
 			LCD0_write((char)(0x80 + x), INST);
 			LCD0_BF();
-			break;
+		break;
 		case 1:
 			LCD0_write((char)(0xC0 + x), INST);
 			LCD0_BF();
-			break;
+		break;
 		case 2:
 			LCD0_write((char)(0x94 + x), INST); // 0x94
 			LCD0_BF();
-			break;
+		break;
 		case 3:
 			LCD0_write((char)(0xD4 + x), INST); // 0xD4
 			LCD0_BF();
-			break;
+		break;
 		default:
-			break;
+		break;
 	}
 }
+
 void LCD0_strobe(uint16_t num)
 {
 	stm.func.resetpin(ireg, EN);
 	LCD_ticks(num);
 	stm.func.setpin(ireg, EN);
 }
+
 void LCD0_reboot(void)
 {
-	//low high detect pin NC
+	// low high detect pin NC
 	uint32_t i;
 	uint32_t tmp;
 	tmp = ireg->IDR & (1 << NC);
@@ -279,14 +295,14 @@ void LCD0_reboot(void)
 		LCD0_inic();
 	lcd0_detect = tmp;
 }
+
 void LCD_ticks(uint16_t num)
 {
 	uint16_t count;
 	for(count = 0; count < num; count++) ;
 }
-/***Interrupt***/
-/******************************************************************************
-*******************************************************************************/
+
+/*** File Interrupt ***/
 /******************************************************************************
 void LCD0_BF(void)
 //	It has to read at minimum one equal and exit
@@ -308,8 +324,8 @@ void LCD0_BF(void)
 	}
 }
 *******************************************************************************/
-/******************************************************************************
-	In search of perfection
-*******************************************************************************/
+
+/*** File Interrupt ***/
+
 /***EOF***/
 
